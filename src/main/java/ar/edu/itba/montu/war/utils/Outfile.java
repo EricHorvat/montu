@@ -17,7 +17,7 @@ public class Outfile {
     }
 
     public void addInit(Integer s, Integer i){
-        addLine(s+8);
+        addLine(s+4);
         addLine(i);
         addLine("0\t0\t0\t0");
         addLine("0\t200\t0\t0");
