@@ -23,10 +23,6 @@ public class Outfile {
         addLine("0\t200\t0\t0");
         addLine("200\t0\t0\t0");
         addLine("200\t200\t0\t0");
-        addLine("75\t75\t200\t2");
-        addLine("75\t125\t200\t2");
-        addLine("125\t75\t200\t2");
-        addLine("125\t125\t200\t2");
     }
 
     public String getValue() {

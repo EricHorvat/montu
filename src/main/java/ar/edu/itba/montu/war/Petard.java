@@ -31,11 +31,8 @@ public class Petard extends WarObject implements IWarrior{
                 setDelay(getDamageSkill().getDelay());
             } else {
                 Coordinate desiredCoordinate;
-                double noise = 0.1;
-                do{
-                    desiredCoordinate = Coordinate.sum(getCoordinate(), Coordinate.getNoisyDirection(getCoordinate(), destination.getCoordinate(), noise));
-                    noise += 0.1;
-                }while (desiredCoordinate.in(new Coordinate(75,75),new Coordinate(125,125)));
+                double noise = 0.3;
+                desiredCoordinate = Coordinate.sum(getCoordinate(), Coordinate.getNoisyDirection(getCoordinate(), destination.getCoordinate(), noise));
                 setCoordinate(desiredCoordinate);
                 setDelay(getSpeedDelay());
             }

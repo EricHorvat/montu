@@ -33,8 +33,6 @@ public class Test implements WarAgent {
         kingdomList.get(0).getCastles().get(0).setRival(kingdomList.get(1).getCastles().get(0));
         objects.add(kingdomList.get(0).getCastles().get(0));
         objects.add(kingdomList.get(1).getCastles().get(0));
-        kingdomList.get(0).getCastles().get(0).setCoordinate(new Coordinate(100, 25));
-        kingdomList.get(1).getCastles().get(0).setCoordinate(new Coordinate(100, 175));
     }
 
     public Outfile outfile = new Outfile();

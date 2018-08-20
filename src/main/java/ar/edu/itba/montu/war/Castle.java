@@ -14,9 +14,7 @@ public class Castle extends WarObject implements ICastle {
 
     public Castle(double hp, Test t) {
         super(hp, 0, new DamageSkill(300, 30, 0, 50), t);
-        do{
-            coordinate = new Coordinate(Math.random()*200,Math.random()*200);
-        }while (coordinate.in(new Coordinate(75,75),new Coordinate(125,125)));
+        coordinate = new Coordinate(Math.random()*200,Math.random()*200);
     }
 
     public Castle(Test t) {
