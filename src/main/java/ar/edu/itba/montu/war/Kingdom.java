@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ar.edu.itba.montu.interfaces.IKingdom;
+
 public class Kingdom implements IKingdom {
     private String name;
     private List<Castle> castles;
