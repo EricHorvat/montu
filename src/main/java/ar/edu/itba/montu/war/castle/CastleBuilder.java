@@ -9,6 +9,8 @@ public class CastleBuilder {
 	private final Coordinate coords;
 	
 	private CastleCharacteristics characteristics;
+	private int warriors = 0;
+	private int healers = 0; 
 	
 	private CastleBuilder(final String name, final Coordinate coords) {
 		this.name = name;
@@ -25,10 +27,20 @@ public class CastleBuilder {
 		return this;
 	}
 	
+	public CastleBuilder warriors(final int warriors)  {
+		this.warriors = warriors;
+		return this;
+	}
+	
+	public CastleBuilder healers(final int healers) {
+		this.healers = healers;
+		return this;
+	}
+	
 	public ICastle build() {
 		if (characteristics == null) {
 			characteristics = CastleCharacteristics.standardCharacteristics();
 		}
-		return new Castle(name, characteristics, coords);
+		return new Castle(name, characteristics, coords, warriors, healers);
 	}
 }

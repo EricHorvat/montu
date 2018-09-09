@@ -1,6 +1,10 @@
 package ar.edu.itba.montu.war.castle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.edu.itba.montu.interfaces.ICastle;
+import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class Castle implements ICastle {
@@ -9,10 +13,14 @@ public class Castle implements ICastle {
 	final CastleCharacteristics characteristics;
 	final Coordinate coordinate;
 	
-	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords) {
+	final List<IWarrior> warriors = new ArrayList<>();
+	
+	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords, final int warriors, final int healers) {
 		this.name = name;
 		this.characteristics = characteristics;
 		this.coordinate = coords;
+		
+		
 	}
 
 //    private Castle rival;
