@@ -2,6 +2,7 @@ package ar.edu.itba.montu.war;
 
 import ar.edu.itba.montu.Test;
 import ar.edu.itba.montu.interfaces.IWarrior;
+import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.DamageSkill;
 import ar.edu.itba.montu.war.utils.WarObject;

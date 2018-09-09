@@ -1,0 +1,71 @@
+package ar.edu.itba.montu.war.castle;
+
+import ar.edu.itba.montu.Test;
+import ar.edu.itba.montu.interfaces.ICastle;
+import ar.edu.itba.montu.interfaces.IKingdom;
+import ar.edu.itba.montu.war.Petard;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.DamageSkill;
+import ar.edu.itba.montu.war.utils.WarObject;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+
+public class Castle extends WarObject implements ICastle {
+
+	Optional<IKingdom> kingdom;
+	
+	public Castle(double hp, double speedDelay, DamageSkill damageSkill, Kingdom kingdom, Test test) {
+		super(hp, speedDelay, damageSkill, kingdom, test);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void move() {
+		// TODO Auto-generated method stub
+		
+	}
+
+//    private Castle rival;
+//
+//    public Castle(double hp, Test t) {
+//        super(hp, 0, new DamageSkill(300, 30, 0, 50), t);
+//        coordinate = new Coordinate(Math.random()*200,Math.random()*200);
+//    }
+//
+//    public Castle(Test t) {
+//        this(1000, t);
+//    }
+//
+//    @Override
+//    public void move() {
+//        if (getDelay() == 0){
+//            if (false /*EnemyInRange*/){
+//                //Attack
+//            }else{
+//                generatePetard();
+//            }
+//        }else{
+//            setDelay(getDelay()-1);
+//        }
+//    }
+//
+//    public void generatePetard(){
+//        Petard p = new Petard(rival,test);
+//        p.setCoordinate(new Coordinate(this.coordinate.X + Math.random() - 0.5,this.coordinate.Y + Math.random() - 0.5));
+//        test.newWarObject(p,kingdom);
+//        setDelay(1000);
+//    }
+//
+//    public void setRival(Castle rival) {
+//        this.rival = rival;
+//    }
+//
+//    @Override
+//    public String outfileFormat() {
+//        return super.outfileFormat() + "\t" + "5";
+//    }
+
+}

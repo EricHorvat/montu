@@ -1,7 +1,7 @@
 package ar.edu.itba.montu.war.utils;
 
 import ar.edu.itba.montu.Test;
-import ar.edu.itba.montu.war.Kingdom;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 
 import java.util.Objects;
 
