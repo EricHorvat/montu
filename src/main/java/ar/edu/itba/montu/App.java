@@ -1,16 +1,17 @@
 package ar.edu.itba.montu;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import ar.edu.itba.montu.interfaces.ICastle;
 import ar.edu.itba.montu.interfaces.IKingdom;
+import ar.edu.itba.montu.war.castle.CastleBuilder;
+import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.scene.WarScene;
+import ar.edu.itba.montu.war.scene.WarStrategy;
+import ar.edu.itba.montu.war.utils.Coordinate;
 
 /**
  * Hello world!
@@ -19,6 +20,12 @@ import ar.edu.itba.montu.war.scene.WarScene;
 public class App {
 	public static void main( String[] args ) {
 		
+		final List<ICastle> castles = Arrays.asList(
+			CastleBuilder
+				.withName("Castle1", new Coordinate(10, 10))
+				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
+				.build()
+		);
 		
 		final List<IKingdom> kingdoms = Arrays.asList(
 				KingdomBuilder
@@ -26,6 +33,7 @@ public class App {
 					.withKingdomCharacteristics(
 						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4, 0.6, 0.1)
 					)
+					.andCastles(castles)
 					.build()
 		);
 		

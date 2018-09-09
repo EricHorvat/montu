@@ -1,31 +1,18 @@
 package ar.edu.itba.montu.war.castle;
 
-import ar.edu.itba.montu.Test;
 import ar.edu.itba.montu.interfaces.ICastle;
-import ar.edu.itba.montu.interfaces.IKingdom;
-import ar.edu.itba.montu.war.Petard;
-import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
-import ar.edu.itba.montu.war.utils.DamageSkill;
-import ar.edu.itba.montu.war.utils.WarObject;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-
-public class Castle extends WarObject implements ICastle {
-
-	Optional<IKingdom> kingdom;
+public class Castle implements ICastle {
 	
-	public Castle(double hp, double speedDelay, DamageSkill damageSkill, Kingdom kingdom, Test test) {
-		super(hp, speedDelay, damageSkill, kingdom, test);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-		
+	final String name;
+	final CastleCharacteristics characteristics;
+	final Coordinate coordinate;
+	
+	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords) {
+		this.name = name;
+		this.characteristics = characteristics;
+		this.coordinate = coords;
 	}
 
 //    private Castle rival;

@@ -1,4 +1,4 @@
-package ar.edu.itba.montu;
+package ar.edu.itba.montu.war.scene;
 
 public enum WarStrategy {
 	CAPTURE_THE_FLAG,

@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import ar.edu.itba.montu.WarStrategy;
 import ar.edu.itba.montu.interfaces.IKingdom;
 import ar.edu.itba.montu.interfaces.IScene;
 
@@ -17,7 +16,6 @@ public class WarScene implements IScene {
 	
 	private WarScene(final WarStrategy strategy, final List<IKingdom> kingdoms) {
 		kingdoms.forEach(kingdom -> {
-			kingdom.attachToSceneIfNotAttached(this);
 			kingdom.enforceStrategy(strategy);
 		});
 		this.kingdoms = kingdoms;

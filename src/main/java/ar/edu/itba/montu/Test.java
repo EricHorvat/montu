@@ -1,14 +1,6 @@
 package ar.edu.itba.montu;
 
 import ar.edu.itba.montu.abstraction.WarAgent;
-import ar.edu.itba.montu.war.castle.Castle;
-import ar.edu.itba.montu.war.kingdom.Kingdom;
-import ar.edu.itba.montu.war.utils.Coordinate;
-import ar.edu.itba.montu.war.utils.Outfile;
-import ar.edu.itba.montu.war.utils.WarObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Test implements WarAgent {
 
