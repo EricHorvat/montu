@@ -3,10 +3,10 @@ package ar.edu.itba.montu;
 import java.util.Arrays;
 import java.util.List;
 
-import ar.edu.itba.montu.interfaces.ICastle;
-import ar.edu.itba.montu.interfaces.IKingdom;
+import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.scene.WarScene;
@@ -20,14 +20,15 @@ import ar.edu.itba.montu.war.utils.Coordinate;
 public class App {
 	public static void main( String[] args ) {
 		
-		final List<ICastle> castles = Arrays.asList(
+		final List<Castle> castles = Arrays.asList(
 			CastleBuilder
 				.withName("Castle1", new Coordinate(10, 10))
 				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
-				.build()
+				.build(),
+			CastleBuilder.defenseCastle("DefenseCastle", new Coordinate(20, 30))
 		);
 		
-		final List<IKingdom> kingdoms = Arrays.asList(
+		final List<Kingdom> kingdoms = Arrays.asList(
 				KingdomBuilder
 					.withName("Kingdom1")
 					.withKingdomCharacteristics(

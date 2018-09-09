@@ -2,12 +2,13 @@ package ar.edu.itba.montu.war.castle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-import ar.edu.itba.montu.interfaces.ICastle;
+import ar.edu.itba.montu.abstraction.WarAgent;
 import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
-public class Castle implements ICastle {
+public class Castle implements WarAgent {
 	
 	final String name;
 	final CastleCharacteristics characteristics;
@@ -20,7 +21,11 @@ public class Castle implements ICastle {
 		this.characteristics = characteristics;
 		this.coordinate = coords;
 		
-		
+//		this.warriors = IntStream.range(0, warriors).map(mapper)
+	}
+	
+	private IWarrior buildWarriorWithCharateristics(final CastleCharacteristics characteristics) {
+		return null;
 	}
 
 //    private Castle rival;

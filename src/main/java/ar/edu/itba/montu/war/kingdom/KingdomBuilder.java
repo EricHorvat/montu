@@ -3,8 +3,7 @@ package ar.edu.itba.montu.war.kingdom;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.edu.itba.montu.interfaces.ICastle;
-import ar.edu.itba.montu.interfaces.IKingdom;
+import ar.edu.itba.montu.war.castle.Castle;
 
 public class KingdomBuilder {
 	
@@ -12,7 +11,7 @@ public class KingdomBuilder {
 	
 	private KingdomCharacteristics kingdomCharacteristics;
 	
-	private final List<ICastle> castles = new ArrayList<>();
+	private final List<Castle> castles = new ArrayList<>();
 	
 	private KingdomBuilder(final String name) {
 		this.name = name;
@@ -28,12 +27,12 @@ public class KingdomBuilder {
 		return this;
 	}
 	
-	public KingdomBuilder andCastles(final List<ICastle> castles) {
+	public KingdomBuilder andCastles(final List<Castle> castles) {
 		this.castles.addAll(castles);
 		return this;
 	}
 	
-	public IKingdom build() {
+	public Kingdom build() {
 		return new Kingdom(name, kingdomCharacteristics, castles);
 	}
 }

@@ -1,6 +1,5 @@
 package ar.edu.itba.montu.war.castle;
 
-import ar.edu.itba.montu.interfaces.ICastle;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class CastleBuilder {
@@ -15,6 +14,14 @@ public class CastleBuilder {
 	private CastleBuilder(final String name, final Coordinate coords) {
 		this.name = name;
 		this.coords = coords;
+	}
+	
+	public static Castle defenseCastle(final String name, final Coordinate coords) {
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coords, 0, 0);
+	}
+	
+	public static Castle defenseCastle(final String name, final Coordinate coords, final int warriors, final int healers) {
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coords, warriors, healers);
 	}
 	
 	public static CastleBuilder withName(final String name, final Coordinate coords) {
@@ -37,7 +44,7 @@ public class CastleBuilder {
 		return this;
 	}
 	
-	public ICastle build() {
+	public Castle build() {
 		if (characteristics == null) {
 			characteristics = CastleCharacteristics.standardCharacteristics();
 		}

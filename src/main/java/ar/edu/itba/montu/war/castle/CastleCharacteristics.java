@@ -18,6 +18,10 @@ public class CastleCharacteristics {
 		return new CastleCharacteristics(100, 20, new DamageSkill(20, 30, 40, 50));
 	}
 	
+	public static CastleCharacteristics defenseCharacteristics() {
+		return new CastleCharacteristics(100, 20, new DamageSkill(20, 30, 40, 50));
+	}
+	
 	public static CastleCharacteristics withHpSpeedDelayAndDamageSkill(final double hp, final double speedDelay, final DamageSkill damageSkill) {
 		return new CastleCharacteristics(hp, speedDelay, damageSkill);
 	}
