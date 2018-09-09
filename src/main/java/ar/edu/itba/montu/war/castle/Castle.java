@@ -27,6 +27,10 @@ public class Castle implements WarAgent {
 	private IWarrior buildWarriorWithCharateristics(final CastleCharacteristics characteristics) {
 		return null;
 	}
+	
+	private void reallocateWarriors() {
+		
+	}
 
 //    private Castle rival;
 //

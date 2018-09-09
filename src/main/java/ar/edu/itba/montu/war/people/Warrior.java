@@ -18,6 +18,4 @@ public abstract class Warrior implements IWarrior {
 		return target;
 	}
 	
-	
-	
 }
