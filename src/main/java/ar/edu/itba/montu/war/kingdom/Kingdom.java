@@ -19,6 +19,8 @@ public class Kingdom implements IKingdom {
 	private Optional<IScene> scene;
 	private Optional<WarStrategy> strategy;
 	
+	private KingdomStatus status = KingdomStatus.ALIVE;
+	
 	private final List<ICastle> castles;
 
 	/* package */Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<ICastle> castles) {
@@ -37,6 +39,16 @@ public class Kingdom implements IKingdom {
 	@Override
 	public void enforceStrategy(final WarStrategy strategy) {
 		this.strategy = Optional.of(strategy);
+	}
+
+	@Override
+	public KingdomStatus getCurrentStatus() {
+		return status;
+	}
+
+	@Override
+	public void actOnTurn(final long timeEllapsed, final IScene scene, final List<IKingdom> otherKingdoms) {
+		
 	}
 	
 	
