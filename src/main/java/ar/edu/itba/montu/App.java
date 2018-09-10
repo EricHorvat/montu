@@ -12,6 +12,7 @@ import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.scene.WarScene;
 import ar.edu.itba.montu.war.scene.WarStrategy;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 /**
  * Hello world!
@@ -19,13 +20,24 @@ import ar.edu.itba.montu.war.utils.Coordinate;
  */
 public class App {
 	public static void main( String[] args ) {
-		
-		final List<Castle> castles = Arrays.asList(
+
+		/*TODO GET SEED*/
+		RandomUtil.setRandom(1);
+
+		final List<Castle> castles1 = Arrays.asList(
 			CastleBuilder
 				.withName("Castle1", new Coordinate(10, 10))
 				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
 				.build(),
 			CastleBuilder.defenseCastle("DefenseCastle", new Coordinate(20, 30))
+		);
+
+
+		final List<Castle> castles2 = Arrays.asList(
+			CastleBuilder
+				.withName("Castle3", new Coordinate(40, 40))
+				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
+				.build()
 		);
 		
 		final List<Kingdom> kingdoms = Arrays.asList(
@@ -34,7 +46,14 @@ public class App {
 					.withKingdomCharacteristics(
 						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4, 0.6, 0.1)
 					)
-					.andCastles(castles)
+					.andCastles(castles1)
+					.build(),
+				KingdomBuilder
+					.withName("Kindom2")
+					.withKingdomCharacteristics(
+						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4,0.6,0.1)
+					)
+					.andCastles(castles2)
 					.build()
 		);
 		

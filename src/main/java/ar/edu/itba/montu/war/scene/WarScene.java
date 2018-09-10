@@ -8,6 +8,7 @@ import java.util.stream.LongStream;
 
 import ar.edu.itba.montu.interfaces.IScene;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class WarScene implements IScene {
 	
@@ -29,7 +30,7 @@ public class WarScene implements IScene {
 	
 	private static List<Kingdom> shuffledKingdoms(final List<Kingdom> kingdoms) {
 		final List<Integer> indexList = IntStream.range(0, kingdoms.size()).boxed().collect(Collectors.toList());
-		Collections.shuffle(indexList);
+		Collections.shuffle(indexList, RandomUtil.getRandom());
 		return indexList.stream().map(index -> kingdoms.get(index)).collect(Collectors.toList());
 	}
 	
