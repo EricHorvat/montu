@@ -25,6 +25,11 @@ public class Coordinate {
         return sum(getDirection(from, to), new Coordinate(Math.random()*noise-noise/2.0,Math.random()*noise-noise/2.0));
     }
 
+    public static boolean sees(Coordinate looker, Coordinate looked, double lookerViewDistance){
+        double distance = getDistance(looker,looked);
+        return distance < lookerViewDistance && RandomUtil.getRandom().nextDouble() > Math.pow(distance,2);
+    }
+
     public static Coordinate sum(Coordinate a, Coordinate b){
         return new Coordinate(a.X + b.X, a.Y + b.Y);
     }

@@ -6,9 +6,10 @@ import java.util.Optional;
 import ar.edu.itba.montu.abstraction.WarAgent;
 import ar.edu.itba.montu.interfaces.IScene;
 import ar.edu.itba.montu.war.castle.Castle;
+import ar.edu.itba.montu.war.scene.WarScene;
 import ar.edu.itba.montu.war.scene.WarStrategy;
 
-public class Kingdom implements WarAgent {
+public class Kingdom implements WarAgent /* TODO SHOULD IMPLEMENT WarFieldAgent?*/ {
 	
 	private final String name;
 	private final KingdomCharacteristics characteristics;
@@ -33,8 +34,16 @@ public class Kingdom implements WarAgent {
 		return status;
 	}
 
-	public void actOnTurn(final long timeEllapsed, final IScene scene, final List<Kingdom> otherKingdoms) {
+	public void actOn(final long timeEllapsed, final IScene scene) {
 		
 	}
-	
+
+	public void negociate(final IScene scene, final List<Kingdom> otherKingdoms){
+
+	}
+
+	public void loop(WarScene warScene){
+
+	}
+
 }

@@ -1,4 +1,6 @@
 package ar.edu.itba.montu.abstraction;
 
-public interface Agent {
+import ar.edu.itba.montu.interfaces.ICoordinable;
+
+public interface Agent extends ICoordinable {
 }
