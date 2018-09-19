@@ -5,16 +5,21 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.WarAgent;
+import ar.edu.itba.montu.abstraction.WarFieldAgent;
+import ar.edu.itba.montu.interfaces.IBuilding;
 import ar.edu.itba.montu.interfaces.IWarrior;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.scene.WarScene;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
-public class Castle implements WarAgent {
+public class Castle implements IBuilding {
 	
 	final String name;
 	final CastleCharacteristics characteristics;
 	final Coordinate coordinate;
 	
 	final List<IWarrior> warriors = new ArrayList<>();
+	private List<WarAgent> visibleAgents = new ArrayList<>();
 	
 	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords, final int warriors, final int healers) {
 		this.name = name;
@@ -32,7 +37,31 @@ public class Castle implements WarAgent {
 		
 	}
 
-//    private Castle rival;
+	@Override
+	public Coordinate getCoordinate() {
+		return coordinate;
+	}
+
+	@Override
+	public void loop(WarScene warScene) {
+
+	}
+
+	@Override
+	public Kingdom getKingdom() {
+		return null;
+	}
+
+	public List<WarAgent> getVisibleAgents(WarScene scene) {
+		/* TODO scene should be Singleton?*/
+		if (true){
+			/* TODO CHECK TIME, OR STH LIKE THAT TO ONLY UPDATE ONE PER LOOP*/
+			visibleAgents = scene.getAgentsFromCoordinate(getCoordinate(),50);
+		}
+		return visibleAgents;
+	}
+
+	//    private Castle rival;
 //
 //    public Castle(double hp, Test t) {
 //        super(hp, 0, new DamageSkill(300, 30, 0, 50), t);

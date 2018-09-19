@@ -1,4 +1,4 @@
-package ar.edu.itba.montu.interfaces;
+package ar.edu.itba.montu.abstraction;
 
 import ar.edu.itba.montu.war.utils.Coordinate;
 
