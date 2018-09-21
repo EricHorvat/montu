@@ -6,7 +6,7 @@ import ar.edu.itba.montu.interfaces.IPerson;
 import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.people.WarriorStatus;
 
-public class Petard  implements IWarrior{
+public class Petard implements IWarrior{
 
 
 	@Override
@@ -28,7 +28,6 @@ public class Petard  implements IWarrior{
 	}
 
 //    // based on http://ageofempires.wikia.com/wiki/Petard_(Age_of_Empires_II)
-//		// gracias por el link!
 //    private Castle destination;
 //
 //

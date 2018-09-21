@@ -18,17 +18,17 @@ public class Castle extends WarFieldAgent implements IBuilding {
 	final Coordinate coordinate;
 	
 	final List<IWarrior> warriors = new ArrayList<>();
-	private List<IWarAgent> visibleAgents = new ArrayList<>();
+	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
 	
-	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords, final int warriors, final int healers) {
+	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers) {
 		this.name = name;
 		this.characteristics = characteristics;
-		this.coordinate = coords;
+		this.coordinate = coordinate;
 		
 //		this.warriors = IntStream.range(0, warriors).map(mapper)
 	}
 	
-	private IWarrior buildWarriorWithCharateristics(final CastleCharacteristics characteristics) {
+	private IWarrior buildWarriorWithCharacteristics(final CastleCharacteristics characteristics) {
 		return null;
 	}
 	
@@ -57,7 +57,7 @@ public class Castle extends WarFieldAgent implements IBuilding {
 		return null;
 	}
 
-	public List<IWarAgent> getVisibleAgents() {
+	public List<WarFieldAgent> getVisibleAgents() {
 		/* TODO environment should be Singleton?*/
 		if (true){
 			/* TODO CHECK TIME, OR STH LIKE THAT TO ONLY UPDATE ONE PER LOOP*/

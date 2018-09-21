@@ -20,10 +20,6 @@ public class WarEnvironment implements IEnvironment {
 	private final List<Kingdom> kingdoms;
 	private final List<WarFieldAgent> agents;
 	private final WarStrategy strategy;
-	private final int kingdomTurns = 1000;
-	private final float kingdomNegociatePercetage = 0.1f;
-
-	/*(a1) TODO SHOULD SET A PUBLIC VARIABLE time? Other objects must sense/see their enviroment once per dt*/
 
 	private long time;
 
@@ -64,8 +60,8 @@ public class WarEnvironment implements IEnvironment {
 		LongStream.rangeClosed(1, time).forEach(this::loop);
 	}
 
-	public void loop(final long timeEllapsed){
-		time = timeEllapsed;
+	public void loop(final long timeElapsed){
+		time = timeElapsed;
 		final List<Kingdom> shuffledKingdoms = shuffledKingdoms(kingdoms);
 		final List<WarFieldAgent> shuffledAgents = shuffledAgents(agents);
 

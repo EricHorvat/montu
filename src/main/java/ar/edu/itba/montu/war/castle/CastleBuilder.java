@@ -5,27 +5,27 @@ import ar.edu.itba.montu.war.utils.Coordinate;
 public class CastleBuilder {
 	
 	private final String name;
-	private final Coordinate coords;
+	private final Coordinate coordinate;
 	
 	private CastleCharacteristics characteristics;
 	private int warriors = 0;
 	private int healers = 0; 
 	
-	private CastleBuilder(final String name, final Coordinate coords) {
+	private CastleBuilder(final String name, final Coordinate coordinate) {
 		this.name = name;
-		this.coords = coords;
+		this.coordinate = coordinate;
 	}
 	
-	public static Castle defenseCastle(final String name, final Coordinate coords) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coords, 0, 0);
+	public static Castle defenseCastle(final String name, final Coordinate coordinate) {
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0);
 	}
 	
-	public static Castle defenseCastle(final String name, final Coordinate coords, final int warriors, final int healers) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coords, warriors, healers);
+	public static Castle defenseCastle(final String name, final Coordinate coordinate, final int warriors, final int healers) {
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers);
 	}
 	
-	public static CastleBuilder withName(final String name, final Coordinate coords) {
-		final CastleBuilder builder = new CastleBuilder(name, coords);
+	public static CastleBuilder withName(final String name, final Coordinate coordinate) {
+		final CastleBuilder builder = new CastleBuilder(name, coordinate);
 		return builder;
 	}
 	
@@ -48,6 +48,6 @@ public class CastleBuilder {
 		if (characteristics == null) {
 			characteristics = CastleCharacteristics.standardCharacteristics();
 		}
-		return new Castle(name, characteristics, coords, warriors, healers);
+		return new Castle(name, characteristics, coordinate, warriors, healers);
 	}
 }

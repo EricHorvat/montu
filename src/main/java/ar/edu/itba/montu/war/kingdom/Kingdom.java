@@ -49,7 +49,7 @@ public class Kingdom implements IWarAgent {
 		Map<Kingdom,List<Coordinate>> kingdomCastleCoordinates = kingdoms.stream().collect(Collectors.toMap(Kingdom::getKingdom,Kingdom::getCastleCoordinates));
 		List<IWarAgent> visibleAgents = castles.stream().map(castle -> castle.getVisibleAgents()).flatMap(List::stream).collect(Collectors.toList());
 
-		/*TODO Now I got castle & warriors, with my castles status -> Objetive list*/
+		/*TODO Now I got castle & warriors, with my castles status -> Objective list*/
 		PriorityQueue<IObjective> newObjectives = findObjectives(kingdomCastleCoordinates, visibleAgents);
 		/*TODO compare new Objectives with old, equals for not error, must define*/
 		if(!newObjectives.equals(objectives)){

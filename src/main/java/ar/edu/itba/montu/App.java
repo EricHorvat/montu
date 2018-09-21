@@ -49,16 +49,17 @@ public class App {
 					.andCastles(castles1)
 					.build(),
 				KingdomBuilder
-					.withName("Kindom2")
+					.withName("Kingdom2")
 					.withKingdomCharacteristics(
 						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4,0.6,0.1)
 					)
 					.andCastles(castles2)
 					.build()
 		);
-		
-		final WarEnvironment warScene = WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
-		
+
+		WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
+		final WarEnvironment warScene = WarEnvironment.getInstance();
+
 		final long time = 5000;
 		
 		warScene.start(time);
