@@ -1,6 +1,6 @@
 package ar.edu.itba.montu.interfaces;
 
-import ar.edu.itba.montu.abstraction.WarFieldAgent;
+import ar.edu.itba.montu.abstraction.IWarFieldAgent;
 
-public interface IBuilding extends WarFieldAgent {
+public interface IBuilding extends IWarFieldAgent {
 }

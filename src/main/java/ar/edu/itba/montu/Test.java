@@ -1,8 +1,8 @@
 package ar.edu.itba.montu;
 
-import ar.edu.itba.montu.abstraction.WarAgent;
+import ar.edu.itba.montu.abstraction.IWarAgent;
 
-public class Test implements WarAgent {
+public class Test implements IWarAgent {
 
 //    private List<Kingdom> kingdomList;
 //    private List<WarObject> objects;

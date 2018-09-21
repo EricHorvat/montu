@@ -9,8 +9,8 @@ import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
-import ar.edu.itba.montu.war.scene.WarScene;
-import ar.edu.itba.montu.war.scene.WarStrategy;
+import ar.edu.itba.montu.war.environment.WarEnvironment;
+import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
@@ -57,7 +57,7 @@ public class App {
 					.build()
 		);
 		
-		final WarScene warScene = WarScene.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
+		final WarEnvironment warScene = WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
 		
 		final long time = 5000;
 		

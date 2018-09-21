@@ -2,24 +2,23 @@ package ar.edu.itba.montu.war.castle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
-import ar.edu.itba.montu.abstraction.WarAgent;
+import ar.edu.itba.montu.abstraction.IWarAgent;
 import ar.edu.itba.montu.abstraction.WarFieldAgent;
 import ar.edu.itba.montu.interfaces.IBuilding;
 import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
-import ar.edu.itba.montu.war.scene.WarScene;
+import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
-public class Castle implements IBuilding {
+public class Castle extends WarFieldAgent implements IBuilding {
 	
 	final String name;
 	final CastleCharacteristics characteristics;
 	final Coordinate coordinate;
 	
 	final List<IWarrior> warriors = new ArrayList<>();
-	private List<WarAgent> visibleAgents = new ArrayList<>();
+	private List<IWarAgent> visibleAgents = new ArrayList<>();
 	
 	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coords, final int warriors, final int healers) {
 		this.name = name;
@@ -37,26 +36,33 @@ public class Castle implements IBuilding {
 		
 	}
 
-	@Override
+  @Override
+  public void act() {
+
+  }
+
+  @Override
 	public Coordinate getCoordinate() {
 		return coordinate;
 	}
 
-	@Override
-	public void loop(WarScene warScene) {
 
-	}
+	@Override
+  public CastleCharacteristics getCharacteristics() {
+    return characteristics;
+  }
 
 	@Override
 	public Kingdom getKingdom() {
 		return null;
 	}
 
-	public List<WarAgent> getVisibleAgents(WarScene scene) {
-		/* TODO scene should be Singleton?*/
+	public List<IWarAgent> getVisibleAgents() {
+		/* TODO environment should be Singleton?*/
 		if (true){
 			/* TODO CHECK TIME, OR STH LIKE THAT TO ONLY UPDATE ONE PER LOOP*/
-			visibleAgents = scene.getAgentsFromCoordinate(getCoordinate(),50);
+      WarEnvironment environment = WarEnvironment.getInstance();
+      visibleAgents = environment.getAgentsFromCoordinate(getCoordinate(),50);
 		}
 		return visibleAgents;
 	}
@@ -83,13 +89,6 @@ public class Castle implements IBuilding {
 //        }else{
 //            setDelay(getDelay()-1);
 //        }
-//    }
-//
-//    public void generatePetard(){
-//        Petard p = new Petard(rival,test);
-//        p.setCoordinate(new Coordinate(this.coordinate.X + Math.random() - 0.5,this.coordinate.Y + Math.random() - 0.5));
-//        test.newWarObject(p,kingdom);
-//        setDelay(1000);
 //    }
 //
 //    public void setRival(Castle rival) {
