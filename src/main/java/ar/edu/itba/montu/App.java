@@ -58,11 +58,11 @@ public class App {
 		);
 
 		WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
-		final WarEnvironment warScene = WarEnvironment.getInstance();
+		final WarEnvironment warEnvironment = WarEnvironment.getInstance();
 
 		final long time = 5000;
 		
-		warScene.start(time);
+		warEnvironment.start(time);
 		
 //        System.out.println( "Hello World!" );
 //        Test t = new Test();

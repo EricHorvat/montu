@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.IWarAgent;
+import ar.edu.itba.montu.abstraction.WarFieldAgent;
 import ar.edu.itba.montu.interfaces.IObjective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
@@ -40,6 +41,8 @@ public class Kingdom implements IWarAgent {
 	private void negotiate(){
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> otherKingdoms = environment.getKingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
+		// TODO Should negotiate based on PQ, that should modify strategies or new actions but MUSTN'T edit PQ
+    // TODO MUST DEFINE HOW ACTIONS WILL BE TAKEN AND THEN FILL
 
 	}
 
@@ -47,13 +50,12 @@ public class Kingdom implements IWarAgent {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> kingdoms = environment.getKingdoms();
 		Map<Kingdom,List<Coordinate>> kingdomCastleCoordinates = kingdoms.stream().collect(Collectors.toMap(Kingdom::getKingdom,Kingdom::getCastleCoordinates));
-		List<IWarAgent> visibleAgents = castles.stream().map(castle -> castle.getVisibleAgents()).flatMap(List::stream).collect(Collectors.toList());
+		List<WarFieldAgent> visibleAgents = castles.stream().map(Castle::getVisibleAgents).flatMap(List::stream).collect(Collectors.toList());
 
 		/*TODO Now I got castle & warriors, with my castles status -> Objective list*/
 		PriorityQueue<IObjective> newObjectives = findObjectives(kingdomCastleCoordinates, visibleAgents);
-		/*TODO compare new Objectives with old, equals for not error, must define*/
+		// Compare new Objectives with old, relies in PQ equals so relies in Objective equals (and hashCode)
 		if(!newObjectives.equals(objectives)){
-			/*TODO See & negotiate*/
 			negotiate();
 		}
 
@@ -63,12 +65,12 @@ public class Kingdom implements IWarAgent {
 		return castles.stream().map(Castle::getCoordinate).collect(Collectors.toList());
 	}
 
+	@Override
 	public void loop(){
-		final WarEnvironment environment = WarEnvironment.getInstance();
 		sense();
 	}
 
-	private PriorityQueue<IObjective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<IWarAgent> visibleAgents){
+	private PriorityQueue<IObjective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
 		/*TODO */
 		return new PriorityQueue<>();
 	}
