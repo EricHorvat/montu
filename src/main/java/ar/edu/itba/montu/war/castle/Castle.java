@@ -1,15 +1,19 @@
 package ar.edu.itba.montu.war.castle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.IWarAgent;
 import ar.edu.itba.montu.abstraction.WarFieldAgent;
 import ar.edu.itba.montu.interfaces.IBuilding;
+import ar.edu.itba.montu.interfaces.IPerson;
 import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Castle extends WarFieldAgent implements IBuilding {
 	
@@ -38,7 +42,29 @@ public class Castle extends WarFieldAgent implements IBuilding {
 
   @Override
   public void act() {
+	  // Decide to attack or spawn
+    // if attack
+    List<WarFieldAgent> enemyAgentsOnRange;
+    Collections.shuffle(enemyAgentsOnRange,RandomUtil.getRandom());
+    for(int i = 0; i < characteristics.getConcurrentAttackCount; i++){
+      enemyAgentsOnRange.get(i % enemyAgentsOnRange.size()).attacked()
+    }
+    // if spawn
+    buildWarriorWithCharacteristics(this.characteristics);
 
+  }
+
+  @Override
+  public void loop() {
+    super.loop();
+    //if Kingdom has decided
+    List<WarFieldAgent> ownAgents =
+        getVisibleAgents().stream().filter(
+            warFieldAgent ->  warFieldAgent.getKingdom().equals(getKingdom())
+                && warFieldAgent instanceof IPerson
+                && ((IPerson)warFieldAgent).isIdle())
+            .collect(Collectors.toList());
+    // for each agent set work
   }
 
   @Override
