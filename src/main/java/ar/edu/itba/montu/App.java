@@ -1,11 +1,14 @@
 package ar.edu.itba.montu;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
+import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
@@ -24,40 +27,9 @@ public class App {
 		/*TODO GET SEED*/
 		RandomUtil.setRandom(1);
 
-		final List<Castle> castles1 = Arrays.asList(
-			CastleBuilder
-				.withName("Castle1", new Coordinate(10, 10))
-				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
-				.build(),
-			CastleBuilder.defenseCastle("DefenseCastle", new Coordinate(20, 30))
-		);
+		//TODO ADD ARGUMENTS
+    WarEnviromentGenerator.generate();
 
-
-		final List<Castle> castles2 = Arrays.asList(
-			CastleBuilder
-				.withName("Castle3", new Coordinate(40, 40))
-				.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
-				.build()
-		);
-		
-		final List<Kingdom> kingdoms = Arrays.asList(
-				KingdomBuilder
-					.withName("Kingdom1")
-					.withKingdomCharacteristics(
-						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4, 0.6, 0.1)
-					)
-					.andCastles(castles1)
-					.build(),
-				KingdomBuilder
-					.withName("Kingdom2")
-					.withKingdomCharacteristics(
-						KingdomCharacteristics.withSpeedLifespanAndAttack(0.4,0.6,0.1)
-					)
-					.andCastles(castles2)
-					.build()
-		);
-
-		WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
 		final WarEnvironment warEnvironment = WarEnvironment.getInstance();
 
 		final long time = 5000;

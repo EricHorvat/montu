@@ -45,10 +45,10 @@ public class Castle extends WarFieldAgent implements IBuilding {
 	  // Decide to attack or spawn
     // if attack
     List<WarFieldAgent> enemyAgentsOnRange;
-    Collections.shuffle(enemyAgentsOnRange,RandomUtil.getRandom());
-    for(int i = 0; i < characteristics.getConcurrentAttackCount; i++){
+    //Collections.shuffle(enemyAgentsOnRange,RandomUtil.getRandom());
+    /*for(int i = 0; i < characteristics.getConcurrentAttackCount; i++){
       enemyAgentsOnRange.get(i % enemyAgentsOnRange.size()).attacked()
-    }
+    }*/
     // if spawn
     buildWarriorWithCharacteristics(this.characteristics);
 

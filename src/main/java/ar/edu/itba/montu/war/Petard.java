@@ -6,22 +6,19 @@ import ar.edu.itba.montu.interfaces.IPerson;
 import ar.edu.itba.montu.interfaces.IWarrior;
 import ar.edu.itba.montu.war.people.WarriorStatus;
 
-public class Petard implements IWarrior{
+public class Petard {
 
 
-	@Override
 	public WarriorStatus getStatus() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Optional<IPerson> getTarget() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void assignTarget(IPerson person) {
 		// TODO Auto-generated method stub
 		

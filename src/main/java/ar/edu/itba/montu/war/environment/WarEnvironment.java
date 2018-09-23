@@ -32,7 +32,7 @@ public class WarEnvironment implements IEnvironment {
 		this.agents = new ArrayList<>();
 	}
 	
-	public static void withKingdomsAndStrategy(final WarStrategy strategy, final List<Kingdom> kingdoms) {
+	/*package*/ static void withKingdomsAndStrategy(final WarStrategy strategy, final List<Kingdom> kingdoms) {
 		if (environment == null) {
 			environment = new WarEnvironment(strategy, kingdoms);
 		} else {
