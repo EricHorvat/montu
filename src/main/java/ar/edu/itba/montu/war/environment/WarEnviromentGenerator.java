@@ -12,35 +12,32 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class WarEnviromentGenerator {
-  public static void generate(){
-    Random random = RandomUtil.getRandom();
-    double L = 500;
-
-    long kingdomCount = RandomUtil.getIntExponentialDistribution(0.5) + 2;
-    List<Kingdom> kingdoms = new ArrayList<>();
-
-    for(int i = 0; i < kingdomCount; i++){
-      String kname = random.nextGaussian() + "";
-      List<Castle> castles = new ArrayList<>();
-      long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
-      for(int j = 0; j < castleCount; j++){
-        Coordinate coordinate = new Coordinate(random.nextDouble() * L, random.nextDouble() * L);
-        castles.add(
-            CastleBuilder.withName(kname + " " + j, coordinate)
-                .withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
-                .build()
-        );
-      }
-      kingdoms.add(
-          KingdomBuilder
-              .withName(kname)
-              .withKingdomCharacteristics(KingdomCharacteristics.withSpeedLifespanAndAttack(random.nextDouble(),random.nextDouble(),random.nextDouble()))
-              .andCastles(castles)
-              .build()
-      );
-    }
+	public static void generate() {
+		final Random random = RandomUtil.getRandom();
+		final double L = 500;
+		
+		final long kingdomCount = RandomUtil.getIntExponentialDistribution(0.5) + 2;
+		final List<Kingdom> kingdoms = LongStream.range(0, kingdomCount).mapToObj(i -> {
+			final String kindomName = String.format("Kingdom %d", random.nextGaussian());
+			final long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
+			final List<Castle> castles = LongStream.range(0, castleCount).mapToObj(j -> {
+				final Coordinate coordinate = new Coordinate(random.nextDouble() * L, random.nextDouble() * L);
+				return CastleBuilder
+						.withName(String.format("%s %d", kindomName, j), coordinate)
+						.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
+						.build();
+			}).collect(Collectors.toList());
+			return KingdomBuilder
+					.withName(kindomName)
+					.withKingdomCharacteristics(KingdomCharacteristics.withSpeedLifespanAndAttack(random.nextDouble(), random.nextDouble(), random.nextDouble()))
+					.andCastles(castles)
+					.build();
+		}).collect(Collectors.toList());
 
     WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
   }
