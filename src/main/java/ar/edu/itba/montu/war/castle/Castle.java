@@ -15,6 +15,10 @@ public class Castle extends LocatableAgent {
 	final String name;
 	final CastleCharacteristics characteristics;
 	final Coordinate coordinate;
+	/**
+	 * The height of the castle is a measure of how
+	 * far away it can see
+	 */
 	final double height;
 	
 	final List<Warrior> warriors = new ArrayList<>();
@@ -51,6 +55,10 @@ public class Castle extends LocatableAgent {
   }
 
   public void tick(final long timeEllapsed) {
+  	/// TODO: template what a castle does on each tick
+  	
+  	
+  	
 //    super.tick(timeEllapsed);
     //if Kingdom has decided
 //    List<WarFieldAgent> ownAgents =
@@ -78,52 +86,10 @@ public class Castle extends LocatableAgent {
 		
 		///TODO: make the proper calculations to get the value of radius
 		return environment.agentsWithinRadiusOfCoordinate(location, 1000);
-		
-		
-		/* TODO environment should be Singleton?*/
-//		if (true){
-			/* TODO CHECK TIME, OR STH LIKE THAT TO ONLY UPDATE ONE PER LOOP*/
-//      WarEnvironment environment = WarEnvironment.getInstance();
-//      visibleAgents = environment.getAgentsFromCoordinate(getCoordinate(),50);
-//		}
-//		return visibleAgents;
 	}
 	
 	public List<LocatableAgent> agents() {
 		return warriors.stream().map(w -> (LocatableAgent)w).collect(Collectors.toList());
 	}
-
-	//    private Castle rival;
-//
-//    public Castle(double hp, Test t) {
-//        super(hp, 0, new DamageSkill(300, 30, 0, 50), t);
-//        coordinate = new Coordinate(Math.random()*200,Math.random()*200);
-//    }
-//
-//    public Castle(Test t) {
-//        this(1000, t);
-//    }
-//
-//    @Override
-//    public void move() {
-//        if (getDelay() == 0){
-//            if (false /*EnemyInRange*/){
-//                //Attack
-//            }else{
-//                generatePetard();
-//            }
-//        }else{
-//            setDelay(getDelay()-1);
-//        }
-//    }
-//
-//    public void setRival(Castle rival) {
-//        this.rival = rival;
-//    }
-//
-//    @Override
-//    public String outfileFormat() {
-//        return super.outfileFormat() + "\t" + "5";
-//    }
 
 }

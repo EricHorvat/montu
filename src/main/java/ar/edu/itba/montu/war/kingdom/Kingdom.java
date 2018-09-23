@@ -38,7 +38,7 @@ public class Kingdom extends Agent {
 		this.strategy = Optional.of(strategy);
 	}
 
-	public KingdomStatus getCurrentStatus() {
+	public KingdomStatus currentStatus() {
 		return status;
 	}
 
@@ -88,6 +88,7 @@ public class Kingdom extends Agent {
 	}
 
 	public void tick(final long timeEllapsed) {
+		/// TODO: template what a kingdom does on each tick
 		sense();
 	}
 
