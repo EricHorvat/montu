@@ -9,7 +9,8 @@ public class CastleBuilder {
 	
 	private CastleCharacteristics characteristics;
 	private int warriors = 0;
-	private int healers = 0; 
+	private int healers = 0;
+	private double height = CastleHeight.GROUND_LEVEL.height();
 	
 	private CastleBuilder(final String name, final Coordinate coordinate) {
 		this.name = name;
@@ -17,11 +18,11 @@ public class CastleBuilder {
 	}
 	
 	public static Castle defenseCastle(final String name, final Coordinate coordinate) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0);
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0, CastleHeight.GROUND_LEVEL.height());
 	}
 	
 	public static Castle defenseCastle(final String name, final Coordinate coordinate, final int warriors, final int healers) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers);
+		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers, CastleHeight.GROUND_LEVEL.height());
 	}
 	
 	public static CastleBuilder withName(final String name, final Coordinate coordinate) {
@@ -44,10 +45,15 @@ public class CastleBuilder {
 		return this;
 	}
 	
+	public CastleBuilder height(final double height) {
+		this.height = height;
+		return this;
+	}
+	
 	public Castle build() {
 		if (characteristics == null) {
 			characteristics = CastleCharacteristics.standardCharacteristics();
 		}
-		return new Castle(name, characteristics, coordinate, warriors, healers);
+		return new Castle(name, characteristics, coordinate, warriors, healers, height);
 	}
 }

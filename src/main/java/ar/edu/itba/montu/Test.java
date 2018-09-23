@@ -1,7 +1,5 @@
 package ar.edu.itba.montu;
 
-import ar.edu.itba.montu.abstraction.IWarAgent;
-
 public class Test {
 
 //    private List<Kingdom> kingdomList;

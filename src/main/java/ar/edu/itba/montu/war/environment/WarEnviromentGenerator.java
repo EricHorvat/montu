@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class WarEnviromentGenerator {
+	
 	public static void generate() {
 		final Random random = RandomUtil.getRandom();
 		final double L = 500;
@@ -26,7 +27,7 @@ public class WarEnviromentGenerator {
 			final String kindomName = String.format("Kingdom %d", random.nextGaussian());
 			final long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
 			final List<Castle> castles = LongStream.range(0, castleCount).mapToObj(j -> {
-				final Coordinate coordinate = new Coordinate(random.nextDouble() * L, random.nextDouble() * L);
+				final Coordinate coordinate = Coordinate.at(random.nextDouble() * L, random.nextDouble() * L);
 				return CastleBuilder
 						.withName(String.format("%s %d", kindomName, j), coordinate)
 						.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics())
@@ -41,4 +42,5 @@ public class WarEnviromentGenerator {
 
     WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
   }
+	
 }

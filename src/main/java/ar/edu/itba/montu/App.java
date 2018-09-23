@@ -1,20 +1,7 @@
 package ar.edu.itba.montu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
-import ar.edu.itba.montu.war.castle.Castle;
-import ar.edu.itba.montu.war.castle.CastleBuilder;
-import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
-import ar.edu.itba.montu.war.kingdom.Kingdom;
-import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
-import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
-import ar.edu.itba.montu.war.environment.WarStrategy;
-import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 /**
@@ -22,7 +9,7 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
  *
  */
 public class App {
-	public static void main( String[] args ) {
+	public static void main(String[] args) throws Exception {
 
 		/*TODO GET SEED*/
 		RandomUtil.setRandom(1);
@@ -32,6 +19,10 @@ public class App {
 
 		final WarEnvironment warEnvironment = WarEnvironment.getInstance();
 
+		if (warEnvironment == null) {
+			throw new Exception("Run WarEnviromentGenerator.generate before getting an instance of WarEnvironment");
+		}
+		
 		final long time = 5000;
 		
 		warEnvironment.start(time);
