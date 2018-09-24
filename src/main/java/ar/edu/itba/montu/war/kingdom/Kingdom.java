@@ -11,10 +11,9 @@ import java.util.stream.Stream;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
-import ar.edu.itba.montu.abstraction.WarFieldAgent;
-import ar.edu.itba.montu.interfaces.IObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
+import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.objective.AttackObjective;
@@ -33,10 +32,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
 
-	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<Castle> castles) {
+	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<CastleBuilder> castles) {
 		this.name = name;
 		this.characteristics = kingdomCharacteristics;
-		this.castles = castles;
+		this.castles = castles.stream().map(c -> c.kingdom(this).build()).collect(Collectors.toList());
 	}
 
 	public void enforceStrategy(final WarStrategy strategy) {
@@ -84,7 +83,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
 		
 		objectives.add(NegotiateObjective.withOtherToIntentTargets(friendKingdoms, Intention.ATTACK, enemyKingdoms));
-		status = KingdomStatus.ATTACKING;
+		status = KingdomStatus.NEGOTIATING;
 	}
 
 	private void sense() {
@@ -115,6 +114,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			case IDLE:
 				this.sense();
 				break;
+			case ATTACKING:
+				break;
+			case NEGOTIATING:
+				break;
 			default:
 				break;
 		}
@@ -124,10 +127,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		sense();
 	}
 
-	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
+//	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
 		/*TODO */
-		return new PriorityQueue<>();
-	}
+//		return new PriorityQueue<>();
+//	}
 	
 	public List<LocatableAgent> agents() {
 		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), castles.stream().map(Castle::agents).flatMap(List::stream)).collect(Collectors.toList());

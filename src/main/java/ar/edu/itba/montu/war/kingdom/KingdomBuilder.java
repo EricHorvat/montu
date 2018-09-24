@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.itba.montu.war.castle.Castle;
+import ar.edu.itba.montu.war.castle.CastleBuilder;
 
 public class KingdomBuilder {
 	
@@ -11,7 +12,7 @@ public class KingdomBuilder {
 	
 	private KingdomCharacteristics kingdomCharacteristics;
 	
-	private final List<Castle> castles = new ArrayList<>();
+	private final List<CastleBuilder> castles = new ArrayList<>();
 	
 	private KingdomBuilder(final String name) {
 		this.name = name;
@@ -27,7 +28,7 @@ public class KingdomBuilder {
 		return this;
 	}
 	
-	public KingdomBuilder andCastles(final List<Castle> castles) {
+	public KingdomBuilder andCastles(final List<CastleBuilder> castles) {
 		this.castles.addAll(castles);
 		return this;
 	}

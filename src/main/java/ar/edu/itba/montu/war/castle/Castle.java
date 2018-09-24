@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.abstraction.WarFieldAgent;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
@@ -21,14 +21,17 @@ public class Castle extends LocatableAgent {
 	 */
 	final double height;
 	
+	final Kingdom kingdom;
+	
 	final List<Warrior> warriors = new ArrayList<>();
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
 	
-	/* package */ Castle(final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers, final double height) {
+	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers, final double height) {
 		this.name = name;
 		this.characteristics = characteristics;
 		this.coordinate = coordinate;
 		this.height = height;
+		this.kingdom = kingdom;
 		
 //		this.warriors = IntStream.range(0, warriors).map(mapper)
 	}
@@ -44,7 +47,7 @@ public class Castle extends LocatableAgent {
   public void act() {
 	  // Decide to attack or spawn
     // if attack
-    List<WarFieldAgent> enemyAgentsOnRange;
+//    List<WarFieldAgent> enemyAgentsOnRange;
     //Collections.shuffle(enemyAgentsOnRange,RandomUtil.getRandom());
     /*for(int i = 0; i < characteristics.getConcurrentAttackCount; i++){
       enemyAgentsOnRange.get(i % enemyAgentsOnRange.size()).attacked()

@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.castle;
 
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class CastleBuilder {
@@ -8,6 +9,7 @@ public class CastleBuilder {
 	private final Coordinate coordinate;
 	
 	private CastleCharacteristics characteristics;
+	private Kingdom kingdom;
 	private int warriors = 0;
 	private int healers = 0;
 	private double height = CastleHeight.GROUND_LEVEL.height();
@@ -17,12 +19,14 @@ public class CastleBuilder {
 		this.coordinate = coordinate;
 	}
 	
-	public static Castle defenseCastle(final String name, final Coordinate coordinate) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0, CastleHeight.GROUND_LEVEL.height());
+	public static CastleBuilder defenseCastle(final String name, final Coordinate coordinate) {
+		return new CastleBuilder(name, coordinate).withCastleCharacteristics(CastleCharacteristics.defenseCharacteristics());
+//		return new Castle(null, name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0, CastleHeight.GROUND_LEVEL.height());
 	}
 	
-	public static Castle defenseCastle(final String name, final Coordinate coordinate, final int warriors, final int healers) {
-		return new Castle(name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers, CastleHeight.GROUND_LEVEL.height());
+	public static CastleBuilder defenseCastle(final String name, final Coordinate coordinate, final int warriors, final int healers) {
+		return new CastleBuilder(name, coordinate).warriors(warriors).healers(healers).withCastleCharacteristics(CastleCharacteristics.defenseCharacteristics());
+//		return new Castle(null, name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers, CastleHeight.GROUND_LEVEL.height());
 	}
 	
 	public static CastleBuilder withName(final String name, final Coordinate coordinate) {
@@ -50,10 +54,15 @@ public class CastleBuilder {
 		return this;
 	}
 	
+	public CastleBuilder kingdom(final Kingdom kingdom) {
+		this.kingdom = kingdom;
+		return this;
+	}
+	
 	public Castle build() {
 		if (characteristics == null) {
 			characteristics = CastleCharacteristics.standardCharacteristics();
 		}
-		return new Castle(name, characteristics, coordinate, warriors, healers, height);
+		return new Castle(kingdom, name, characteristics, coordinate, warriors, healers, height);
 	}
 }
