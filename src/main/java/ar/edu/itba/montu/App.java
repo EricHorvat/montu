@@ -12,7 +12,7 @@ public class App {
 	public static void main(String[] args) throws Exception {
 
 		/*TODO GET SEED*/
-		RandomUtil.setRandom(1);
+		RandomUtil.initializeWithSeed(1);
 
 		//TODO ADD ARGUMENTS
     WarEnviromentGenerator.generate();

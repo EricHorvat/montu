@@ -10,23 +10,28 @@ import java.util.stream.Stream;
 
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.abstraction.WarFieldAgent;
 import ar.edu.itba.montu.interfaces.IObjective;
+import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.objective.AttackObjective;
+import ar.edu.itba.montu.war.objective.NegotiateObjective;
+import ar.edu.itba.montu.war.objective.NegotiateObjective.Intention;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
-public class Kingdom extends Agent {
+public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	private final String name;
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
-	private final PriorityQueue<IObjective> objectives = new PriorityQueue<>();
+	private final PriorityQueue<Objective> objectives = new PriorityQueue<>();
 	
 	private Optional<WarStrategy> strategy;
-	private KingdomStatus status = KingdomStatus.ALIVE;
+	private KingdomStatus status = KingdomStatus.IDLE;
 
 	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<Castle> castles) {
 		this.name = name;
@@ -64,8 +69,22 @@ public class Kingdom extends Agent {
 		
 		///TODO: algorithm to build initial strategy
 		
-		/// attack first agent
-		objectives.add(AttackObjective.headedTo(visibleAgents.get(0)));
+		double d = RandomUtil.getRandom().nextDouble();
+		
+		if (d > 0.5) {
+			/// attack first agent
+			objectives.add(AttackObjective.headedTo(visibleAgents.get(0)));
+			status = KingdomStatus.ATTACKING;
+			return;
+		}
+		
+		final Map<Boolean, List<Kingdom>> otherKingdoms = kingdoms.stream().filter(k -> !k.equals(this)).collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
+		
+		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
+		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
+		
+		objectives.add(NegotiateObjective.withOtherToIntentTargets(friendKingdoms, Intention.ATTACK, enemyKingdoms));
+		status = KingdomStatus.ATTACKING;
 	}
 
 	private void sense() {
@@ -89,10 +108,23 @@ public class Kingdom extends Agent {
 
 	public void tick(final long timeEllapsed) {
 		/// TODO: template what a kingdom does on each tick
+		
+		Objective objective = objectives.peek();
+		
+		switch (status) {
+			case IDLE:
+				this.sense();
+				break;
+			default:
+				break;
+		}
+		
+		
+		
 		sense();
 	}
 
-	private PriorityQueue<IObjective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
+	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
 		/*TODO */
 		return new PriorityQueue<>();
 	}

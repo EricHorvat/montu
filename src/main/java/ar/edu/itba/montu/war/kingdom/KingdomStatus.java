@@ -1,7 +1,7 @@
 package ar.edu.itba.montu.war.kingdom;
 
 public enum KingdomStatus {
-	ALIVE,
+	IDLE,
 	DECIDING,
 	ATTACKING,
 	DEFENDING,

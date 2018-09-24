@@ -1,9 +1,9 @@
 package ar.edu.itba.montu.war.objective;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.interfaces.IObjective;
+import ar.edu.itba.montu.interfaces.Objective;
 
-public class DefendObjective implements IObjective {
+public class DefendObjective implements Objective {
 	
 	final LocatableAgent target;
 	
@@ -13,5 +13,9 @@ public class DefendObjective implements IObjective {
 	
 	public static DefendObjective from(final LocatableAgent target) {
 		return new DefendObjective(target);
+	}
+	
+	public void enforce() {
+		
 	}
 }
