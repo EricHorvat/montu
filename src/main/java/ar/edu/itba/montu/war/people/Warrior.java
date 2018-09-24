@@ -10,6 +10,8 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
 
 public class Warrior extends MovingAgent {
 
+	final static long SPAWN_TIME = 10;
+	
 	/**
 	 * Expressed in metres/delta time
 	 */
@@ -19,6 +21,18 @@ public class Warrior extends MovingAgent {
 	private double defense;
 	
 	private double health;
+	
+	private long spawn;
+	
+	private Warrior() {
+		this.spawn = SPAWN_TIME;
+	}
+	
+	public static Warrior createWithCharacteristics() {
+		final Warrior w = new Warrior();
+		
+		return w;
+	}
 	
 	/**
 	 * Warrior applies simple logic to movement
@@ -69,9 +83,31 @@ public class Warrior extends MovingAgent {
 		this.assignTarget(enemy);
 	}
 	
+	private void spawning() {
+		if (--spawn == 0) {
+			status = WarriorStatus.UNASSIGNED;
+		}
+	}
+	
+	public void assignToTarget(final LocatableAgent target) {
+		
+		if (status == WarriorStatus.SPAWNING) {
+			return;
+		}
+		
+		if (status == WarriorStatus.DEAD) {
+			return;
+		}
+		
+		super.assignTarget(target);
+	}
+	
 	public void tick(final long timeElapsed) {
 		
 		switch (status) {
+			case WarriorStatus.SPAWNING:
+				this.spawning();
+				break;
 			case WarriorStatus.UNASSIGNED:
 				this.unassigned(timeElapsed);
 				return;

@@ -45,6 +45,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public KingdomStatus currentStatus() {
 		return status;
 	}
+	
+	public Optional<Objective> currentObjective() {
+		return Optional.of(objectives.peek());
+	}
 
 	private void negotiate() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
@@ -77,7 +81,11 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			return;
 		}
 		
-		final Map<Boolean, List<Kingdom>> otherKingdoms = kingdoms.stream().filter(k -> !k.equals(this)).collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
+		final Map<Boolean, List<Kingdom>> otherKingdoms =
+				kingdoms
+				.stream()
+				.filter(k -> !k.equals(this))
+				.collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
 		
 		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
 		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
