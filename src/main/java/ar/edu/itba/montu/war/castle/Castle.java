@@ -21,12 +21,6 @@ public class Castle extends LocatableAgent {
 	 * far away it can see
 	 */
 	final private double height;
-	/**
-	 * Kingdom it belongs to
-	 */
-	final private Kingdom kingdom;
-	
-	
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -38,7 +32,10 @@ public class Castle extends LocatableAgent {
 		this.height = height;
 		this.kingdom = kingdom;
 		
-		this.warriors = IntStream.range(0, warriors).mapToObj(i -> Warrior.createWithCharacteristics()).collect(Collectors.toList());
+		this.warriors = IntStream
+				.range(0, warriors)
+				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdom(kingdom))
+				.collect(Collectors.toList());
 	}
 	
 	private Warrior buildWarriorWithCharacteristics(final CastleCharacteristics characteristics) {

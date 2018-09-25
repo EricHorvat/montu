@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 
 public class Warrior extends MovingAgent {
 
@@ -24,12 +25,13 @@ public class Warrior extends MovingAgent {
 	
 	private long spawn;
 	
-	private Warrior() {
+	private Warrior(final Kingdom kingdom) {
 		this.spawn = SPAWN_TIME;
+		this.kingdom = kingdom;
 	}
 	
-	public static Warrior createWithCharacteristics() {
-		final Warrior w = new Warrior();
+	public static Warrior createWithCharacteristicsInKingdom(final Kingdom kingdom) {
+		final Warrior w = new Warrior(kingdom);
 		
 		return w;
 	}
