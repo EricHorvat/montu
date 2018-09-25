@@ -9,6 +9,9 @@ import java.util.UUID;
 public class ProcessingVisualAgent extends VisualAgent{
 
   private static List<ProcessingVisualAgent> visualAgents = new ArrayList<>();
+  static float MAX_R = 10;
+  float x;
+  float y;
 
   public ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
@@ -16,11 +19,10 @@ public class ProcessingVisualAgent extends VisualAgent{
   }
 
   /*package*/ void draw(ProcessingApplet applet){
-    float x = (float) locatableAgent.location().X;
-    float y = (float) locatableAgent.location().Y;
-    float r = 10;
-    applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,100);
-    applet.ellipse(x-r,y-r,2*r,2*r);
+    x = (float) locatableAgent.location().X + MAX_R;
+    y = (float) locatableAgent.location().Y + MAX_R;
+    int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,100);
+    applet.fill(c);
   }
 
   /*package*/ static List<ProcessingVisualAgent> getAgents(){

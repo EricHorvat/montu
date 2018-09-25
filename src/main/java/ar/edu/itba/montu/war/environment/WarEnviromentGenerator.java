@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import ar.edu.itba.montu.visual.KingdomColorGetter;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
@@ -37,6 +38,7 @@ public class WarEnviromentGenerator {
 		}).collect(Collectors.toList());
 
     WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
+		KingdomColorGetter.putKingdoms(kingdoms);
   }
 	
 }

@@ -9,12 +9,12 @@ public class ProcessingApplet extends PApplet {
   public ProcessingApplet(int L) {
     this.L = L;
     setSize(L,L);
-    colorMode(HSB, 360,100,100);
   }
 
   @Override
   public void draw() {
     clear();
+    colorMode(HSB, 360,100,100);
     super.draw();
     ProcessingVisualAgent.getAgents().forEach(visualAgent -> visualAgent.draw(this));
     noLoop();

@@ -11,7 +11,7 @@ public class KingdomColorGetter {
   static Map<Kingdom,Integer> kingdomOrder = new HashMap<>();
   static int last = 0;
 
-  static void putKingdoms(List<Kingdom> kingdoms){
+  public static void putKingdoms(List<Kingdom> kingdoms){
     kingdoms.forEach( kingdom -> kingdomOrder.put(kingdom,last++));
   }
 
