@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -18,6 +19,7 @@ public class WarEnvironment {
 	private final List<Kingdom> kingdoms;
 	private final List<LocatableAgent> agents;
 	private final WarStrategy strategy;
+	ProcessingApplet processingApplet;
 
 	private WarEnvironment(final WarStrategy strategy, final List<Kingdom> kingdoms) {
 		kingdoms.forEach(kingdom -> {
@@ -26,6 +28,10 @@ public class WarEnvironment {
 		this.kingdoms = kingdoms;
 		this.strategy = strategy;
 		this.agents = kingdoms.stream().map(Kingdom::agents).flatMap(List::stream).collect(Collectors.toList());
+		String[] processingArgs = {"MySketch"};
+		this.processingApplet = new ProcessingApplet();
+		ProcessingApplet.runSketch(processingArgs,processingApplet);
+
 	}
 	
 	/*package*/ static WarEnvironment withKingdomsAndStrategy(final WarStrategy strategy, final List<Kingdom> kingdoms) {
@@ -67,6 +73,7 @@ public class WarEnvironment {
 
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
+		this.processingApplet.loop();
 	}
 
 //	public List<WarFieldAgent> getAgentsFromCoordinate(Coordinate coordinate, int viewDistance){

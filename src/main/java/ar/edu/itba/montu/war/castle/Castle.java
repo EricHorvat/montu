@@ -14,7 +14,6 @@ public class Castle extends LocatableAgent {
 	
 	final String name;
 	final CastleCharacteristics characteristics;
-	final Coordinate coordinate;
 	/**
 	 * The height of the castle is a measure of how
 	 * far away it can see
@@ -27,9 +26,10 @@ public class Castle extends LocatableAgent {
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
 	
 	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers, final double height) {
+		super();
 		this.name = name;
 		this.characteristics = characteristics;
-		this.coordinate = coordinate;
+		this.location = coordinate;
 		this.height = height;
 		this.kingdom = kingdom;
 		
@@ -74,7 +74,7 @@ public class Castle extends LocatableAgent {
   }
 
 	public Coordinate location() {
-		return coordinate;
+		return location;
 	}
 
 

@@ -21,7 +21,7 @@ public class WarEnviromentGenerator {
 		
 		final long kingdomCount = RandomUtil.getIntExponentialDistribution(0.5) + 2;
 		final List<Kingdom> kingdoms = LongStream.range(0, kingdomCount).mapToObj(i -> {
-			final String kindomName = String.format("Kingdom %d", random.nextGaussian());
+			final String kindomName = String.format("Kingdom %d", random.nextInt());
 			final long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
 			final List<CastleBuilder> castles = LongStream.range(0, castleCount).mapToObj(j -> {
 				final Coordinate coordinate = Coordinate.at(random.nextDouble() * L, random.nextDouble() * L);

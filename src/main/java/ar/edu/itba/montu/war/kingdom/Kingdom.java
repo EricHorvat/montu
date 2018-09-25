@@ -33,7 +33,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private KingdomStatus status = KingdomStatus.IDLE;
 
 	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<CastleBuilder> castles) {
-		this.name = name;
+	  super();
+	  this.name = name;
 		this.characteristics = kingdomCharacteristics;
 		this.castles = castles.stream().map(c -> c.kingdom(this).build()).collect(Collectors.toList());
 	}
