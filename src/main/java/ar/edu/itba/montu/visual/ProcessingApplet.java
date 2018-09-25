@@ -8,7 +8,7 @@ public class ProcessingApplet extends PApplet {
   public void draw() {
     clear();
     super.draw();
-    VisualAgent.getAgents().forEach(visualAgent -> visualAgent.draw(this));
+    ProcessingVisualAgent.getAgents().forEach(visualAgent -> visualAgent.draw(this));
     noLoop();
   }
 }

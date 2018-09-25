@@ -9,7 +9,7 @@ public abstract class LocatableAgent extends Agent {
 
 	public LocatableAgent() {
 		super();
-		visualAgent = new VisualAgent(getUid(),this);
+		visualAgent = VisualAgent.buildNew(getUid(),this);
 	}
 
 	protected Coordinate location;
