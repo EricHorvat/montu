@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.people;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class Warrior extends MovingAgent {
 
@@ -26,13 +28,15 @@ public class Warrior extends MovingAgent {
 	
 	private long spawn;
 	
-	private Warrior(final Kingdom kingdom) {
+	private Warrior(final Kingdom kingdom, final Coordinate xy) {
+		super();
 		this.spawn = SPAWN_TIME;
 		this.kingdom = kingdom;
+		this.location = xy;
 	}
 	
-	public static Warrior createWithCharacteristicsInKingdom(final CastleCharacteristics characteristics, final Kingdom kingdom) {
-		final Warrior w = new Warrior(kingdom);
+	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Kingdom kingdom) {
+		final Warrior w = new Warrior(kingdom, xy);
 		
 		return w;
 	}
@@ -130,8 +134,8 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public int attackers() {
-		return 1;
+	public List<Warrior> attackers() {
+		return Arrays.asList(this);
 	}
 
 	@Override
@@ -140,7 +144,7 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public int availableAttackers() {
-		return 1;
+	public List<Warrior> availableAttackers() {
+		return Arrays.asList(this);
 	}
 }

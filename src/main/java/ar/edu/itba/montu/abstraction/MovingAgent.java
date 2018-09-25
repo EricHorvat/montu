@@ -23,7 +23,9 @@ public abstract class MovingAgent extends LocatableAgent {
 	}
 	
 	public void assignTarget(LocatableAgent target) {
-		this.target = Optional.ofNullable(target);
+		Optional<LocatableAgent> nextTarget = Optional.ofNullable(target); 
+		if (this.target.equals(nextTarget)) return;
+		this.target = nextTarget;
 		if (this.target.isPresent()) {
 			this.status = MovingAgentStatus.MOVING;
 		} else {

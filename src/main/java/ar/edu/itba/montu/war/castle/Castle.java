@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
@@ -37,12 +38,8 @@ public class Castle extends LocatableAgent {
 		
 		this.warriors = IntStream
 				.range(0, warriors)
-				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdom(characteristics, kingdom))
+				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdomAtLocation(coordinate, characteristics, kingdom))
 				.collect(Collectors.toList());
-	}
-	
-	private void reallocateWarriors() {
-		
 	}
 
   public void act() {
@@ -111,12 +108,12 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public int attackers() {
-		return warriors.size();
+	public List<Warrior> attackers() {
+		return warriors;
 	}
 	
 	private Warrior buildWarrior() {
-		return Warrior.createWithCharacteristicsInKingdom(characteristics, kingdom);
+		return Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, kingdom);
 	}
 
 	@Override
@@ -126,8 +123,11 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public int availableAttackers() {
-		return (int)warriors.stream().filter(w -> w.status() != WarriorStatus.SPAWNING && w.status() != WarriorStatus.DEAD).count();
+	public List<Warrior> availableAttackers() {
+		return warriors
+				.stream()
+				.filter(w -> w.status() != WarriorStatus.SPAWNING && w.status() != WarriorStatus.DEAD)
+				.collect(Collectors.toList());
 	}
 
 }

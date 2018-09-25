@@ -1,5 +1,8 @@
 package ar.edu.itba.montu.war.people;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ar.edu.itba.montu.abstraction.MovingAgent;
 
 public class Messenger extends MovingAgent {
@@ -41,9 +44,8 @@ public class Messenger extends MovingAgent {
 	}
 
 	@Override
-	public int attackers() {
-		// TODO Auto-generated method stub
-		return 1;
+	public List<Messenger> attackers() {
+		return Arrays.asList(this);
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class Messenger extends MovingAgent {
 	}
 
 	@Override
-	public int availableAttackers() {
-		return 1;
+	public List<Messenger> availableAttackers() {
+		return Arrays.asList(this);
 	}
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.montu.war.objective;
 
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
 public class AttackObjective implements Objective {
@@ -21,13 +22,16 @@ public class AttackObjective implements Objective {
 	@Override
 	public void enforce(final Attacker attacker) {
 		
-		final int requiredAttackers = target.availableAttackers() + 50;
+		final int requiredAttackers = target.availableAttackers().size() + 50;
 		
-		if (attacker.attackers() < requiredAttackers) {
-			attacker.createAttackers(requiredAttackers - attacker.attackers());
+		if (attacker.attackers().size() < requiredAttackers) {
+			attacker.createAttackers(requiredAttackers - attacker.attackers().size());
 		}
 		
-		if (attacker.availableAttackers() >= requiredAttackers) {
+		if (attacker.availableAttackers().size() >= requiredAttackers) {
+			attacker.availableAttackers().forEach(a -> {
+				((MovingAgent)a).assignTarget((LocatableAgent)target);
+			});
 			// I don't what happens now
 		}
 		
