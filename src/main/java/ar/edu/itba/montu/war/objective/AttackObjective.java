@@ -1,24 +1,35 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
 public class AttackObjective implements Objective {
 	
-	final LocatableAgent target;
+	final Attacker target;
 	final int priority;
 	
-	private AttackObjective(final LocatableAgent target, final int priority) {
+	private AttackObjective(final Attacker target, final int priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static AttackObjective headedToWithPriority(final LocatableAgent target, final int priority) {
+	public static AttackObjective headedToWithPriority(final Attacker target, final int priority) {
 		return new AttackObjective(target, priority);
 	}
 	
 	@Override
-	public void enforce() {
+	public void enforce(final Attacker attacker) {
+		
+		final int requiredAttackers = target.availableAttackers() + 50;
+		
+		if (attacker.attackers() < requiredAttackers) {
+			attacker.createAttackers(requiredAttackers - attacker.attackers());
+		}
+		
+		if (attacker.availableAttackers() >= requiredAttackers) {
+			// I don't what happens now
+		}
 		
 	}
 

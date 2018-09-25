@@ -39,4 +39,20 @@ public class Messenger extends MovingAgent {
 		}
 		
 	}
+
+	@Override
+	public int attackers() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public void createAttackers(int attackers) {
+		throw new UnsupportedOperationException("a warrior cant create attackers");
+	}
+
+	@Override
+	public int availableAttackers() {
+		return 1;
+	}
 }

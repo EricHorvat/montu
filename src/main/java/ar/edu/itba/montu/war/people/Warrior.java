@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
+import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 
@@ -30,7 +31,7 @@ public class Warrior extends MovingAgent {
 		this.kingdom = kingdom;
 	}
 	
-	public static Warrior createWithCharacteristicsInKingdom(final Kingdom kingdom) {
+	public static Warrior createWithCharacteristicsInKingdom(final CastleCharacteristics characteristics, final Kingdom kingdom) {
 		final Warrior w = new Warrior(kingdom);
 		
 		return w;
@@ -126,5 +127,20 @@ public class Warrior extends MovingAgent {
 				break;
 		}
 		
+	}
+
+	@Override
+	public int attackers() {
+		return 1;
+	}
+
+	@Override
+	public void createAttackers(final int attackers) {
+		throw new UnsupportedOperationException("a warrior cant create attackers");
+	}
+
+	@Override
+	public int availableAttackers() {
+		return 1;
 	}
 }
