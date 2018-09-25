@@ -18,11 +18,15 @@ public class ProcessingVisualAgent extends VisualAgent{
   /*package*/ void draw(ProcessingApplet applet){
     float x = (float) locatableAgent.location().X;
     float y = (float) locatableAgent.location().Y;
-    applet.ellipse(x-1,y-1,x+1,y+1);
+    float r = 10;
+    applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,100);
+    applet.ellipse(x-r,y-r,2*r,2*r);
   }
 
   /*package*/ static List<ProcessingVisualAgent> getAgents(){
     /*If dead print animation or not print*/
     return visualAgents;
   }
+
+
 }

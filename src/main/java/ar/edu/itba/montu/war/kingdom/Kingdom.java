@@ -77,7 +77,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		
 		if (d > 0.5) {
 			/// attack first agent
-			objectives.add(AttackObjective.headedTo(visibleAgents.get(0)));
+			objectives.add(AttackObjective.headedToWithPriority(visibleAgents.get(0), 100));
 			status = KingdomStatus.ATTACKING;
 			return;
 		}
@@ -91,7 +91,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
 		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
 		
-		objectives.add(NegotiateObjective.withOtherToIntentTargets(friendKingdoms, Intention.ATTACK, enemyKingdoms));
+		objectives.add(NegotiateObjective.withOtherToIntentTargetsAndPriority(friendKingdoms, Intention.ATTACK, enemyKingdoms, 100));
 		status = KingdomStatus.NEGOTIATING;
 	}
 

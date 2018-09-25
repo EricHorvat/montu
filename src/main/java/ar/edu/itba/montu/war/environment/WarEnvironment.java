@@ -29,7 +29,7 @@ public class WarEnvironment {
 		this.strategy = strategy;
 		this.agents = kingdoms.stream().map(Kingdom::agents).flatMap(List::stream).collect(Collectors.toList());
 		String[] processingArgs = {"MySketch"};
-		this.processingApplet = new ProcessingApplet();
+		this.processingApplet = new ProcessingApplet(520);
 		ProcessingApplet.runSketch(processingArgs,processingApplet);
 
 	}
