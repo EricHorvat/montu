@@ -5,17 +5,29 @@ import ar.edu.itba.montu.interfaces.Objective;
 
 public class DefendObjective implements Objective {
 	
-	final LocatableAgent target;
+	final private LocatableAgent target;
+	final private int priority;
 	
-	private DefendObjective(final LocatableAgent target) {
+	private DefendObjective(final LocatableAgent target, final int priority) {
 		this.target = target;
+		this.priority = priority;
 	}
 	
-	public static DefendObjective from(final LocatableAgent target) {
-		return new DefendObjective(target);
+	public static DefendObjective fromWithPriority(final LocatableAgent target, final int priority) {
+		return new DefendObjective(target, priority);
 	}
 	
 	public void enforce() {
 		
+	}
+
+	@Override
+	public int compareTo(Objective o) {
+		return priority - o.priority();
+	}
+
+	@Override
+	public int priority() {
+		return priority;
 	}
 }

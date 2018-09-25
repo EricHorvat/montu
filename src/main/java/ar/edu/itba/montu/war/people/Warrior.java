@@ -84,9 +84,7 @@ public class Warrior extends MovingAgent {
 	}
 	
 	private void spawning() {
-		if (--spawn == 0) {
-			status = WarriorStatus.UNASSIGNED;
-		}
+		if (--spawn == 0) status = WarriorStatus.UNASSIGNED;
 	}
 	
 	public void assignToTarget(final LocatableAgent target) {

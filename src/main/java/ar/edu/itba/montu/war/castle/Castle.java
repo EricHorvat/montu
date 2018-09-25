@@ -3,6 +3,7 @@ package ar.edu.itba.montu.war.castle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
@@ -12,18 +13,22 @@ import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class Castle extends LocatableAgent {
 	
-	final String name;
-	final CastleCharacteristics characteristics;
-	final Coordinate coordinate;
+	final private String name;
+	final private CastleCharacteristics characteristics;
+	final private Coordinate coordinate;
 	/**
 	 * The height of the castle is a measure of how
 	 * far away it can see
 	 */
-	final double height;
+	final private double height;
+	/**
+	 * Kingdom it belongs to
+	 */
+	final private Kingdom kingdom;
 	
-	final Kingdom kingdom;
 	
-	final List<Warrior> warriors = new ArrayList<>();
+	
+	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
 	
 	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers, final double height) {
@@ -33,7 +38,7 @@ public class Castle extends LocatableAgent {
 		this.height = height;
 		this.kingdom = kingdom;
 		
-//		this.warriors = IntStream.range(0, warriors).map(mapper)
+		this.warriors = IntStream.range(0, warriors).mapToObj(i -> Warrior.createWithCharacteristics()).collect(Collectors.toList());
 	}
 	
 	private Warrior buildWarriorWithCharacteristics(final CastleCharacteristics characteristics) {
@@ -78,13 +83,11 @@ public class Castle extends LocatableAgent {
 	}
 
 
-  public CastleCharacteristics getCharacteristics() {
+  public CastleCharacteristics characteristics() {
     return characteristics;
   }
 
 	public List<LocatableAgent> visibleAgents() {
-		
-		
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		
 		///TODO: make the proper calculations to get the value of radius
