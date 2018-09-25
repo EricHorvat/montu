@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.people.Warrior;
@@ -21,6 +22,8 @@ public class Castle extends LocatableAgent {
 	 * far away it can see
 	 */
 	final private double height;
+	
+	private Objective currentObjective;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -62,7 +65,17 @@ public class Castle extends LocatableAgent {
   public void tick(final long timeEllapsed) {
   	/// TODO: template what a castle does on each tick
   	
+  	final Objective kingdomObjective = kingdom.currentObjective().get();
   	
+  	if (kingdomObjective == null) {
+  		return;
+  	}
+  	
+  	if (kingdomObjective.equals(currentObjective)) {
+  		return;
+  	}
+  	
+  	currentObjective = kingdomObjective;
   	
 //    super.tick(timeEllapsed);
     //if Kingdom has decided

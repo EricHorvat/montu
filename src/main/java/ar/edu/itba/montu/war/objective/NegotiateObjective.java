@@ -43,4 +43,41 @@ public class NegotiateObjective implements Objective {
 	public int priority() {
 		return priority;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((intention == null) ? 0 : intention.hashCode());
+		result = prime * result + priority;
+		result = prime * result + ((targets == null) ? 0 : targets.hashCode());
+		result = prime * result + ((with == null) ? 0 : with.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NegotiateObjective other = (NegotiateObjective) obj;
+		if (intention != other.intention)
+			return false;
+		if (priority != other.priority)
+			return false;
+		if (targets == null) {
+			if (other.targets != null)
+				return false;
+		} else if (!targets.equals(other.targets))
+			return false;
+		if (with == null) {
+			if (other.with != null)
+				return false;
+		} else if (!with.equals(other.with))
+			return false;
+		return true;
+	}
 }
