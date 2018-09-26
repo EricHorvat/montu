@@ -3,6 +3,7 @@ package ar.edu.itba.montu.war.people;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
@@ -11,15 +12,16 @@ import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Warrior extends MovingAgent {
 
-	final static long SPAWN_TIME = 10;
+	final static long SPAWN_TIME = 100000;
 	
 	/**
 	 * Expressed in metres/delta time
 	 */
-	private double speed;
+	private double speed = 1;
 	
 	private double attack;
 	private double defense;
@@ -108,7 +110,7 @@ public class Warrior extends MovingAgent {
 	}
 	
 	public void tick(final long timeElapsed) {
-		
+
 		switch (status) {
 			case WarriorStatus.SPAWNING:
 				this.spawning();
@@ -119,7 +121,7 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
-				
+
 				this.move();
 				break;
 			case WarriorStatus.ATTACKING:
@@ -130,7 +132,7 @@ public class Warrior extends MovingAgent {
 				// I'm f*ing dead
 				break;
 		}
-		
+
 	}
 
 	@Override

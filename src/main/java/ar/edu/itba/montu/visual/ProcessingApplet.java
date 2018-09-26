@@ -2,9 +2,17 @@ package ar.edu.itba.montu.visual;
 
 import processing.core.PApplet;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class ProcessingApplet extends PApplet {
 
   int L;
+
+  @Override
+  public void setup() {
+    super.setup();
+  }
 
   public ProcessingApplet(int L) {
     this.L = L;
@@ -15,8 +23,10 @@ public class ProcessingApplet extends PApplet {
   public void draw() {
     clear();
     colorMode(HSB, 360,100,100);
-    super.draw();
-    ProcessingVisualAgent.getAgents().forEach(visualAgent -> visualAgent.draw(this));
+    List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
+    for(int i = a.size() - 1; i >=0; i-- ){
+      a.get(i).draw(this);
+    }
     noLoop();
   }
 }

@@ -22,7 +22,7 @@ public class AttackObjective implements Objective {
 	@Override
 	public void enforce(final Attacker attacker) {
 		
-		final int requiredAttackers = target.availableAttackers().size() + 50;
+		final int requiredAttackers = target.availableAttackers().size() + 1;
 		
 		if (attacker.attackers().size() < requiredAttackers) {
 			attacker.createAttackers(requiredAttackers - attacker.attackers().size());

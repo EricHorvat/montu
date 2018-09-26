@@ -27,7 +27,7 @@ public class Coordinate {
 	public Coordinate applyingDeltaInDirectionTo(final double delta, final Coordinate to) {
 		final Coordinate dir = Coordinate.direction(this, to);
 		final double angle = Math.atan2(dir.Y, dir.X);
-		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.cos(angle)));
+		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.sin(angle)));
 	}
 	
 	public static Coordinate direction(final Coordinate from, final Coordinate to) {

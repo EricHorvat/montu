@@ -71,7 +71,11 @@ public class WarEnvironment {
 
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
-		this.processingApplet.loop();
+		this.processingApplet.noLoop();
+		this.processingApplet.redraw();
+		if (shuffledAgents.size() > 1e6){
+			int a = 5;
+		};
 	}
 
 //	public List<WarFieldAgent> getAgentsFromCoordinate(Coordinate coordinate, int viewDistance){
