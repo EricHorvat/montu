@@ -73,7 +73,7 @@ public class Castle extends LocatableAgent {
   		this.enforceCurrentObjective();
   		return;
   	}
-  	
+
   	currentObjective = kingdomObjective;
   	
 //    super.tick(timeEllapsed);

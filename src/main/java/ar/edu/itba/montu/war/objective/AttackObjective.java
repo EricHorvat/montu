@@ -4,6 +4,7 @@ import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class AttackObjective implements Objective {
 	
@@ -23,9 +24,10 @@ public class AttackObjective implements Objective {
 	public void enforce(final Attacker attacker) {
 		
 		final int requiredAttackers = target.availableAttackers().size() + 1;
-		
-		if (attacker.attackers().size() < requiredAttackers) {
-			attacker.createAttackers(requiredAttackers - attacker.attackers().size());
+
+		double r = RandomUtil.getRandom().nextDouble();
+		if (attacker.attackers().size() < requiredAttackers || r < 0.01) {
+			attacker.createAttackers(1);
 		}
 		
 		if (attacker.availableAttackers().size() >= requiredAttackers) {
