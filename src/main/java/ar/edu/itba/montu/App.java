@@ -18,12 +18,12 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 
-		final long seed = 1;
+		final long seed = 6;
 		
 		logger.info("Initializing RandomUtil with seed={}", seed);
 		
 		/*TODO GET SEED*/
-		RandomUtil.initializeWithSeed(6);
+		RandomUtil.initializeWithSeed(seed);
 
 		logger.info("Generating war environment");
 		

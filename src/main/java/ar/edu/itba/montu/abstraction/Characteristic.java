@@ -30,6 +30,6 @@ public class Characteristic<T extends Comparable>{
   }
 
   public T maxValue() {
-    return value;
+    return maxValue;
   }
 }
