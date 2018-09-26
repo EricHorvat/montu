@@ -16,8 +16,10 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Warrior extends MovingAgent {
 
-	final static long SPAWN_TIME = 100000;
-	
+	final static long SPAWN_TIME = 10;
+
+	final WarriorCharacteristics warriorCharacteristics;
+
 	/**
 	 * Expressed in metres/delta time
 	 */
@@ -35,6 +37,7 @@ public class Warrior extends MovingAgent {
 		this.spawn = SPAWN_TIME;
 		this.kingdom = kingdom;
 		this.location = xy;
+		this.warriorCharacteristics = WarriorCharacteristics.standardCharacteristics();
 	}
 	
 	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Kingdom kingdom) {
@@ -121,11 +124,16 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
-
-				this.move();
+				if(Coordinate.distanceBetween(location,target.get().location()) < warriorCharacteristics.getAttackDistance()){
+					status = WarriorStatus.ATTACKING;
+				}else {
+					this.move();
+				}
 				break;
 			case WarriorStatus.ATTACKING:
-				break;
+				if(Coordinate.distanceBetween(location,target.get().location()) < warriorCharacteristics.getAttackDistance()){
+					target.get().defend(warriorCharacteristics.getDamageSkill().getDamage());
+				}
 			case WarriorStatus.DEFENDING:
 				break;
 			case WarriorStatus.DEAD:
@@ -148,5 +156,20 @@ public class Warrior extends MovingAgent {
 	@Override
 	public List<Warrior> availableAttackers() {
 		return Arrays.asList(this);
+	}
+
+	@Override
+	public void defend(float damageSkill) {
+		double hp = warriorCharacteristics.getHealthPoints() - damageSkill;
+		if (hp < 0){
+			status = WarriorStatus.DEAD;
+			hp = 0;
+		}
+		warriorCharacteristics.setHealthPoints(hp);
+	}
+
+	@Override
+	public int getHealthPointPercentage() {
+		return (int)(100*warriorCharacteristics.getHealthPercentage());
 	}
 }

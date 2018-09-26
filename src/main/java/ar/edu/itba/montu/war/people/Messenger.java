@@ -57,4 +57,14 @@ public class Messenger extends MovingAgent {
 	public List<Messenger> availableAttackers() {
 		return Arrays.asList(this);
 	}
+
+	@Override
+	public int getHealthPointPercentage() {
+		return 0;
+	}
+
+	@Override
+	public void defend(float damageSkill) {
+
+	}
 }

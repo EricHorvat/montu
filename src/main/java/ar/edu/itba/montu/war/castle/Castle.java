@@ -130,4 +130,18 @@ public class Castle extends LocatableAgent {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public void defend(float damageSkill) {
+		double hp = characteristics.getHealthPoints() - damageSkill;
+		if (hp < 0){
+			//TODO STATUS = DEAD
+			hp = 0;
+		}
+		characteristics.setHealthPoints(hp);
+	}
+
+	@Override
+	public int getHealthPointPercentage() {
+		return (int)(100*characteristics.getHealthPercentage());
+	}
 }

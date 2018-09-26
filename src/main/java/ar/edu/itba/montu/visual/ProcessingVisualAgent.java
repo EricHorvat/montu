@@ -21,7 +21,7 @@ public class ProcessingVisualAgent extends VisualAgent{
   /*package*/ void draw(ProcessingApplet applet){
     x = (float) locatableAgent.location().X + MAX_R;
     y = (float) locatableAgent.location().Y + MAX_R;
-    int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,100);
+    int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,locatableAgent.getHealthPointPercentage());
     applet.fill(c);
   }
 

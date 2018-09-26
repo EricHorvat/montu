@@ -73,9 +73,7 @@ public class WarEnvironment {
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
 		this.processingApplet.noLoop();
 		this.processingApplet.redraw();
-		if (shuffledAgents.size() > 1e6){
-			int a = 5;
-		};
+		try{Thread.sleep(100L);}catch (InterruptedException e){}
 	}
 
 //	public List<WarFieldAgent> getAgentsFromCoordinate(Coordinate coordinate, int viewDistance){

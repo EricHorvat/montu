@@ -1,14 +1,14 @@
 package ar.edu.itba.montu.war.kingdom;
 
-import ar.edu.itba.montu.abstraction.WarAgentCharacteristics;
+import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 
-public class KingdomCharacteristics extends WarAgentCharacteristics {
+public class KingdomCharacteristics{
 	
 	final double speed;
 	final double lifespan;
 	final double attack;
-	
-	private KingdomCharacteristics(final double speed, final double lifespan, final double attack) {
+
+	public KingdomCharacteristics(double speed, double lifespan, double attack) {
 		this.speed = speed;
 		this.lifespan = lifespan;
 		this.attack = attack;
