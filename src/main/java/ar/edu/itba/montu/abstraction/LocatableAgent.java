@@ -13,7 +13,7 @@ public abstract class LocatableAgent extends Agent implements Attacker {
     
     public LocatableAgent() {
         super();
-        visualAgent = VisualAgent.buildNew(getUid(),this);
+        visualAgent = VisualAgent.buildNew(uid(),this);
     }
     
 	public Coordinate location() {
