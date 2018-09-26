@@ -59,4 +59,9 @@ public class DefendObjective implements Objective {
 			return false;
 		return true;
 	}
+
+	@Override
+	public boolean involves(final LocatableAgent agent) {
+		return target.equals(agent);
+	}
 }

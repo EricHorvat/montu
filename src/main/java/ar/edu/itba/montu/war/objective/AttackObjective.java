@@ -76,6 +76,11 @@ public class AttackObjective implements Objective {
 			return false;
 		return true;
 	}
+
+	@Override
+	public boolean involves(final LocatableAgent agent) {
+		return ((LocatableAgent)target).equals(agent);
+	}
 	
 	
 }

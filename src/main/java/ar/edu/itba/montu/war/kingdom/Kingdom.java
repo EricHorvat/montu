@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.kingdom;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -157,5 +158,16 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public List<LocatableAgent> agents() {
 		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), castles.stream().map(Castle::agents).flatMap(List::stream)).collect(Collectors.toList());
+	}
+
+	public void onCastleDeath(final Castle castle) {
+		castles.remove(castle);
+		final Iterator<Objective> it = objectives.iterator();
+		while (it.hasNext()) {
+			final Objective o = it.next();
+			if (o.involves(castle)) {
+				it.remove();
+			}
+		}
 	}
 }

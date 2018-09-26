@@ -8,6 +8,7 @@ import java.util.stream.LongStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.visual.ProcessingApplet;
+import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -90,6 +91,10 @@ public class WarEnvironment {
 	
 	public List<LocatableAgent> agentsWithinRadiusOfCoordinate(final Coordinate coordinate, final double radius) {
 		return locatableAgents().stream().filter(agent -> coordinate.distanceTo(agent.location()) <= radius).collect(Collectors.toList());
+	}
+
+	public void onCastleDeath(final Castle castle) {
+		kingdoms.forEach(k -> k.onCastleDeath(castle));
 	}
 	
 

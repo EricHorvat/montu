@@ -3,6 +3,7 @@ package ar.edu.itba.montu.war.objective;
 import java.util.List;
 
 import ar.edu.itba.montu.abstraction.Attacker;
+import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
@@ -80,5 +81,10 @@ public class NegotiateObjective implements Objective {
 		} else if (!with.equals(other.with))
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean involves(final LocatableAgent agent) {
+		return targets.contains(agent);
 	}
 }
