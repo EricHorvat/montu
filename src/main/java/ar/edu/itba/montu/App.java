@@ -1,5 +1,9 @@
 package ar.edu.itba.montu;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -9,8 +13,15 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
  *
  */
 public class App {
+	
+	private static final Logger logger = LogManager.getLogger(App.class);
+	
 	public static void main(String[] args) throws Exception {
 
+		final long seed = 1;
+		
+		logger.debug("Initializing RandomUtil with seed={}", seed);
+		
 		/*TODO GET SEED*/
 		RandomUtil.initializeWithSeed(1);
 
