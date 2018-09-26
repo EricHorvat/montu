@@ -20,11 +20,13 @@ public class App {
 
 		final long seed = 1;
 		
-		logger.debug("Initializing RandomUtil with seed={}", seed);
+		logger.info("Initializing RandomUtil with seed={}", seed);
 		
 		/*TODO GET SEED*/
 		RandomUtil.initializeWithSeed(1);
 
+		logger.info("Generating war environment");
+		
 		//TODO ADD ARGUMENTS
     WarEnviromentGenerator.generate();
 
@@ -35,6 +37,8 @@ public class App {
 		}
 		
 		final long time = 5000;
+		
+		logger.info("Starting war environment for {} minutes", time);
 		
 		warEnvironment.start(time);
 		

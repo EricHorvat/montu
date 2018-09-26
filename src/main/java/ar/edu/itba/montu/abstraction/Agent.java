@@ -11,7 +11,7 @@ public abstract class Agent {
 		uid = UUID.randomUUID();
 	}
 
-	public UUID getUid() {
+	public UUID uid() {
 		return uid;
 	}
 

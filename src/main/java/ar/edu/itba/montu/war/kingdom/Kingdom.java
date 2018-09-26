@@ -8,12 +8,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ar.edu.itba.montu.abstraction.Agent;
+import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
+import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.objective.AttackObjective;
@@ -23,6 +28,8 @@ import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Kingdom extends Agent implements NonLocatableAgent {
+	
+	private static final Logger logger = LogManager.getLogger(Kingdom.class);
 	
 	private final String name;
 	private final KingdomCharacteristics characteristics;
@@ -66,6 +73,9 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	 * This has to be done based on characteristics
 	 */
 	public void buildInitialStrategy() {
+		
+		logger.debug("[{}] {} is building initial strategy", uid(), name);
+		
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> kingdoms = environment.kingdoms();
 		final Map<Kingdom, List<Coordinate>> kingdomCastleCoordinates = kingdoms.stream().collect(Collectors.toMap(Function.identity(), Kingdom::castleCoordinates));
@@ -77,10 +87,14 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		
 		if (d > 0.5) {
 			/// attack first agent
-			objectives.add(AttackObjective.headedToWithPriority(visibleAgents.get(0), 100));
+			final Attacker enemy = visibleAgents.get(0);
+			logger.debug("[{}] {} will attack {}", uid(), name, ((Agent)enemy).uid());
+			objectives.add(AttackObjective.headedToWithPriority(enemy, 100));
 			status = KingdomStatus.ATTACKING;
 			return;
 		}
+		
+		logger.debug("[{}] {} will negotiate", uid(), name);
 		
 		final Map<Boolean, List<Kingdom>> otherKingdoms =
 				kingdoms
