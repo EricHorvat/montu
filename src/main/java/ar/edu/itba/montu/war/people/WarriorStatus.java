@@ -6,5 +6,4 @@ public interface WarriorStatus extends MovingAgentStatus {
 	final static String SPAWNING = "SPAWNING";
 	final static String ATTACKING = "ATTACKING";
 	final static String DEFENDING = "DEFENDING";
-	final static String DEAD = "DEAD";
 }

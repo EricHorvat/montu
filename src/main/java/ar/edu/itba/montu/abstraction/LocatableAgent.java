@@ -24,7 +24,9 @@ public abstract class LocatableAgent extends Agent implements Attacker {
 		return kingdom;
 	}
 
-  public abstract void defend(float damageSkill);
+	public abstract void defend(float damageSkill);
+
+	public abstract boolean isAlive();
 
   public abstract int getHealthPointPercentage();
 }

@@ -172,4 +172,9 @@ public class Warrior extends MovingAgent {
 	public int getHealthPointPercentage() {
 		return (int)(100*warriorCharacteristics.getHealthPercentage());
 	}
+
+	@Override
+	public boolean isAlive() {
+		return !status.equals(WarriorStatus.DEAD);
+	}
 }

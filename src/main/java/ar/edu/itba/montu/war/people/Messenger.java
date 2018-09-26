@@ -67,4 +67,9 @@ public class Messenger extends MovingAgent {
 	public void defend(float damageSkill) {
 
 	}
+
+	@Override
+	public boolean isAlive() {
+		return false;
+	}
 }

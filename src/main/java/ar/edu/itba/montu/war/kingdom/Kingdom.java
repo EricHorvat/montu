@@ -56,7 +56,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	}
 	
 	public Optional<Objective> currentObjective() {
-		return Optional.of(objectives.peek());
+		return Optional.ofNullable(objectives.peek());
 	}
 
 	private void negotiate() {

@@ -1,6 +1,7 @@
 package ar.edu.itba.montu.war.castle;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -62,19 +63,19 @@ public class Castle extends LocatableAgent {
   public void tick(final long timeEllapsed) {
   	/// TODO: template what a castle does on each tick
   	
-  	final Objective kingdomObjective = kingdom.currentObjective().get();
+  	final Optional<Objective> kingdomObjective = kingdom.currentObjective();
   	
-  	if (kingdomObjective == null) {
+  	if (!kingdomObjective.isPresent()) {
   		return;
   	}
   	
-  	if (kingdomObjective.equals(currentObjective)) {
+  	if (kingdomObjective.get().equals(currentObjective)) {
   		
   		this.enforceCurrentObjective();
   		return;
   	}
 
-  	currentObjective = kingdomObjective;
+  	currentObjective = kingdomObjective.get();
   	
 //    super.tick(timeEllapsed);
     //if Kingdom has decided
@@ -145,5 +146,11 @@ public class Castle extends LocatableAgent {
 	@Override
 	public int getHealthPointPercentage() {
 		return (int)(100*characteristics.getHealthPercentage());
+	}
+
+	@Override
+	public boolean isAlive() {
+		//TODO CHANGE
+		return characteristics.getHealthPoints() > 0;
 	}
 }
