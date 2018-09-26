@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public abstract class MovingAgent extends LocatableAgent {
 	
-	protected Optional<LocatableAgent> target;
+	protected Optional<LocatableAgent> target = Optional.empty();
 	protected String status = MovingAgentStatus.UNASSIGNED;
 	
 	/**

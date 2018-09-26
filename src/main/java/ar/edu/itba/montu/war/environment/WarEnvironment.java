@@ -17,7 +17,6 @@ public class WarEnvironment {
 	private static WarEnvironment environment;
 
 	private final List<Kingdom> kingdoms;
-	private final List<LocatableAgent> agents;
 	private final WarStrategy strategy;
 	ProcessingApplet processingApplet;
 
@@ -27,7 +26,6 @@ public class WarEnvironment {
 		});
 		this.kingdoms = kingdoms;
 		this.strategy = strategy;
-		this.agents = kingdoms.stream().map(Kingdom::agents).flatMap(List::stream).collect(Collectors.toList());
 		String[] processingArgs = {"MySketch"};
 		this.processingApplet = new ProcessingApplet(520);
 		ProcessingApplet.runSketch(processingArgs,processingApplet);
@@ -68,7 +66,7 @@ public class WarEnvironment {
 
 	private void tick(final long timeElapsed) {
 		final List<Kingdom> shuffledKingdoms = shuffledKingdoms(kingdoms);
-		final List<LocatableAgent> shuffledAgents = shuffledAgents(agents);
+		final List<LocatableAgent> shuffledAgents = shuffledAgents(locatableAgents());
 
 
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
@@ -84,8 +82,12 @@ public class WarEnvironment {
 		return kingdoms;
 	}
 	
+	public List<LocatableAgent> locatableAgents() {
+		return kingdoms.stream().map(Kingdom::agents).flatMap(List::stream).collect(Collectors.toList());
+	}
+	
 	public List<LocatableAgent> agentsWithinRadiusOfCoordinate(final Coordinate coordinate, final double radius) {
-		return agents.stream().filter(agent -> coordinate.distanceTo(agent.location()) <= radius).collect(Collectors.toList());
+		return locatableAgents().stream().filter(agent -> coordinate.distanceTo(agent.location()) <= radius).collect(Collectors.toList());
 	}
 	
 
