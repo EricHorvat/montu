@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
@@ -24,7 +25,9 @@ public class Castle extends LocatableAgent {
 	 */
 	final private double height;
 	
-	private Objective currentObjective;
+	private KingdomObjective currentObjective;
+	
+	private int spawnCapacity;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -57,13 +60,15 @@ public class Castle extends LocatableAgent {
   }
   
   private void enforceCurrentObjective() {
-  	currentObjective.enforce(this);
+  	currentObjective.translate().forEach(castleObjective -> {
+  		castleObjective.enforce(this);
+  	});
   }
 
   public void tick(final long timeEllapsed) {
   	/// TODO: template what a castle does on each tick
   	
-  	final Optional<Objective> kingdomObjective = kingdom.currentObjective();
+  	final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
   	
   	if (!kingdomObjective.isPresent()) {
   		return;
@@ -71,21 +76,13 @@ public class Castle extends LocatableAgent {
   	
   	if (kingdomObjective.get().equals(currentObjective)) {
   		
+  		spawnCapacity = characteristics.spawnCapacity();
+  		
   		this.enforceCurrentObjective();
   		return;
   	}
 
   	currentObjective = kingdomObjective.get();
-  	
-//    super.tick(timeEllapsed);
-    //if Kingdom has decided
-//    List<WarFieldAgent> ownAgents =
-//        getVisibleAgents().stream().filter(
-//            warFieldAgent ->  warFieldAgent.getKingdom().equals(getKingdom())
-//                && warFieldAgent instanceof IPerson
-//                && ((IPerson)warFieldAgent).isIdle())
-//            .collect(Collectors.toList());
-    // for each agent set work
   }
 
 	public Coordinate location() {
@@ -119,7 +116,12 @@ public class Castle extends LocatableAgent {
 
 	@Override
 	public void createAttackers(final int attackers) {
-		final List<Warrior> warriors = IntStream.range(0, attackers).mapToObj(i -> buildWarrior()).collect(Collectors.toList());
+		final int attackerCount = Math.min(attackers, spawnCapacity); 
+		final List<Warrior> warriors = IntStream
+				.range(0, attackerCount)
+				.mapToObj(i -> buildWarrior())
+				.collect(Collectors.toList());
+		spawnCapacity -= attackerCount;
 		this.warriors.addAll(warriors);
 	}
 
@@ -127,7 +129,7 @@ public class Castle extends LocatableAgent {
 	public List<Warrior> availableAttackers() {
 		return warriors
 				.stream()
-				.filter(w -> w.status() != WarriorStatus.SPAWNING && w.status() != WarriorStatus.DEAD)
+				.filter(Warrior::isAvailable)
 				.collect(Collectors.toList());
 	}
 
@@ -145,7 +147,7 @@ public class Castle extends LocatableAgent {
 
 	@Override
 	public int getHealthPointPercentage() {
-		return (int)(100*characteristics.getHealthPercentage());
+		return (int)(100 * characteristics.getHealthPercentage());
 	}
 
 	@Override

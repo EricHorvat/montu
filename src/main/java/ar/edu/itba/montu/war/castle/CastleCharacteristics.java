@@ -3,11 +3,14 @@ package ar.edu.itba.montu.war.castle;
 import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 import ar.edu.itba.montu.abstraction.MovingAgentCharacteristics;
 import ar.edu.itba.montu.war.utils.DamageSkill;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class CastleCharacteristics extends LocatableAgentCharacteristics {
 
 	private final double speedDelay;
 	private final DamageSkill damageSkill;
+	
+	private final int spawnCapacity = RandomUtil.getRandom().nextInt(10);
 
 	public CastleCharacteristics(double viewDistance, double attackDistance, double healthPoint, double speedDelay, DamageSkill damageSkill) {
 		super(viewDistance, attackDistance, healthPoint);
@@ -27,15 +30,17 @@ public class CastleCharacteristics extends LocatableAgentCharacteristics {
 		return new CastleCharacteristics(30,20,hp, speedDelay, damageSkill);
 	}
 
-	public double getSpeedDelay() {
+	public double speedDelay() {
 		return speedDelay;
 	}
 
-	public DamageSkill getDamageSkill() {
+	public DamageSkill damageSkill() {
 		return damageSkill;
 	}
 	
-	
+	public int spawnCapacity() {
+		return spawnCapacity;
+	}
 	
 	
 }

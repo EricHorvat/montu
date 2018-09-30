@@ -19,6 +19,10 @@ public abstract class MovingAgent extends LocatableAgent {
 			return;
 		}
 		
+		if (!target.get().isAlive()) {
+			this.unassign();
+		}
+		
 		this.displace();
 	}
 	
