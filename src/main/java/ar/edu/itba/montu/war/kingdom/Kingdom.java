@@ -180,6 +180,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		kingdoms.forEach(kingdom -> {
 			if (kingdom.equals(this)) return;
 			
+			final double coinFlip = RandomUtil.getRandom().nextDouble();
+			
+			if (coinFlip > 0.5) return;
+			
 			final List<KingdomObjective> objectiveIntersection = this.objectiveIntersectionWith(kingdom);
 			
 			if (objectiveIntersection.isEmpty()) return;
