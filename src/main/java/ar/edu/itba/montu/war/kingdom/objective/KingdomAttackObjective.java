@@ -14,8 +14,8 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class KingdomAttackObjective implements KingdomObjective {
 	
-	final Kingdom target;
-	final int priority;
+	final private Kingdom target;
+	private int priority;
 	
 	private KingdomAttackObjective(final Kingdom target, final int priority) {
 		this.target = target;
@@ -35,6 +35,11 @@ public class KingdomAttackObjective implements KingdomObjective {
 	public int priority() {
 		return priority;
 	}
+	
+	@Override
+	public void alterPriority(final int priority) {
+		this.priority = priority;
+	} 
 
 	@Override
 	public int compareTo(KingdomObjective o) {
@@ -45,7 +50,7 @@ public class KingdomAttackObjective implements KingdomObjective {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + priority;
+//		result = prime * result + priority;
 		result = prime * result + ((target == null) ? 0 : target.hashCode());
 		return result;
 	}
@@ -59,8 +64,8 @@ public class KingdomAttackObjective implements KingdomObjective {
 		if (getClass() != obj.getClass())
 			return false;
 		KingdomAttackObjective other = (KingdomAttackObjective) obj;
-		if (priority != other.priority)
-			return false;
+//		if (priority != other.priority)
+//			return false;
 		if (target == null) {
 			if (other.target != null)
 				return false;

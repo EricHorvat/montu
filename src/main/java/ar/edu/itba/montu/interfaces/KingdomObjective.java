@@ -9,6 +9,7 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 public interface KingdomObjective extends Comparable<KingdomObjective> {
 	<T extends Attacker> void enforce(T agent);
 	int priority();
+	void alterPriority(int priority);
 	boolean involves(final LocatableAgent agent);
 	
 	List<Objective> translate();

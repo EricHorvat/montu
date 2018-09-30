@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.kingdom;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -148,27 +149,48 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public List<Coordinate> castleCoordinates() {
 		return castles.stream().map(Castle::location).collect(Collectors.toList());
 	}
+	
+	public List<KingdomObjective> objectiveIntersectionWith(final Kingdom other) {
+    return objectives.stream()
+    		.filter(o-> other.objectives.contains(o))
+    		.collect(Collectors.toList());
+}
 
 	public void tick(final long timeEllapsed) {
 		/// TODO: template what a kingdom does on each tick
 		
-		KingdomObjective objective = objectives.peek();
+//		KingdomObjective objective = objectives.peek();
 		
-		switch (status) {
-			case IDLE:
-				this.sense();
-				break;
-			case ATTACKING:
-				break;
-			case NEGOTIATING:
-				break;
-			default:
-				break;
-		}
+//		switch (status) {
+//			case IDLE:
+//				this.sense();
+//				break;
+//			case ATTACKING:
+//				break;
+//			case NEGOTIATING:
+//				break;
+//			default:
+//				break;
+//		}
 		
 		
+		final WarEnvironment environment = WarEnvironment.getInstance();
+		final List<Kingdom> kingdoms = environment.kingdoms();
 		
-		sense();
+		kingdoms.forEach(kingdom -> {
+			if (kingdom.equals(this)) return;
+			
+			final List<KingdomObjective> objectiveIntersection = this.objectiveIntersectionWith(kingdom);
+			
+			if (objectiveIntersection.isEmpty()) return;
+			
+			objectiveIntersection.forEach(objective -> {
+				objective.alterPriority(objective.priority() / 2);
+			});
+		});
+		
+		
+//		sense();
 	}
 
 //	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
