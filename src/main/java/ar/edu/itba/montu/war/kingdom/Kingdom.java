@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.kingdom;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,14 @@ import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
+import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
+import ar.edu.itba.montu.war.kingdom.objective.KingdomAttackObjective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.NegotiateObjective;
 import ar.edu.itba.montu.war.objective.NegotiateObjective.Intention;
@@ -35,7 +38,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final String name;
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
-	private final PriorityQueue<Objective> objectives = new PriorityQueue<>();
+	private final PriorityQueue<KingdomObjective> objectives = new PriorityQueue<>();
 	
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
@@ -55,7 +58,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return status;
 	}
 	
-	public Optional<Objective> currentObjective() {
+	public Optional<KingdomObjective> currentObjective() {
 		return Optional.ofNullable(objectives.peek());
 	}
 
@@ -82,32 +85,50 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final Map<Kingdom, List<Coordinate>> kingdomCastleCoordinates = kingdoms.stream().collect(Collectors.toMap(Function.identity(), Kingdom::castleCoordinates));
 		final List<LocatableAgent> visibleAgents = castles.stream().map(Castle::visibleAgents).flatMap(List::stream).collect(Collectors.toList());
 		
+		kingdoms.forEach(kingdom -> {
+			if (kingdom.equals(this)) return;
+			
+			final double coinFlip = RandomUtil.getRandom().nextDouble();
+			
+			if (coinFlip > 0.5) {
+				final int priority = RandomUtil.getRandom().nextInt(100);
+				objectives.add(KingdomAttackObjective.headedToWithPriority(kingdom, priority));
+			}
+		});
+		
+		return;
+		
+		
+		
 		///TODO: algorithm to build initial strategy
 		
-		double d = RandomUtil.getRandom().nextDouble();
-		
-		if (d > 0.5) {
-			/// attack first agent
-			final Attacker enemy = visibleAgents.get(RandomUtil.getRandom().nextInt(kingdoms.size()));
-			logger.debug("[{}] {} will attack {}", uid(), name, ((Agent)enemy).uid());
-			objectives.add(AttackObjective.headedToWithPriority(enemy, 100));
-			status = KingdomStatus.ATTACKING;
-			return;
-		}
-		
-		logger.debug("[{}] {} will negotiate", uid(), name);
-		
-		final Map<Boolean, List<Kingdom>> otherKingdoms =
-				kingdoms
-				.stream()
-				.filter(k -> !k.equals(this))
-				.collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
-		
-		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
-		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
-		
-		objectives.add(NegotiateObjective.withOtherToIntentTargetsAndPriority(friendKingdoms, Intention.ATTACK, enemyKingdoms, 100));
-		status = KingdomStatus.NEGOTIATING;
+//		double d = RandomUtil.getRandom().nextDouble();
+//		
+//		
+//		
+//		
+//		if (d > 0.5) {
+//			/// attack first agent
+//			final Attacker enemy = visibleAgents.get(RandomUtil.getRandom().nextInt(kingdoms.size()));
+//			logger.debug("[{}] {} will attack {}", uid(), name, ((Agent)enemy).uid());
+//			objectives.add(AttackObjective.headedToWithPriority(enemy, 100));
+//			status = KingdomStatus.ATTACKING;
+//			return;
+//		}
+//		
+//		logger.debug("[{}] {} will negotiate", uid(), name);
+//		
+//		final Map<Boolean, List<Kingdom>> otherKingdoms =
+//				kingdoms
+//				.stream()
+//				.filter(k -> !k.equals(this))
+//				.collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
+//		
+//		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
+//		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
+//		
+//		objectives.add(NegotiateObjective.withOtherToIntentTargetsAndPriority(friendKingdoms, Intention.ATTACK, enemyKingdoms, 100));
+//		status = KingdomStatus.NEGOTIATING;
 	}
 
 	private void sense() {
@@ -128,27 +149,52 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public List<Coordinate> castleCoordinates() {
 		return castles.stream().map(Castle::location).collect(Collectors.toList());
 	}
+	
+	public List<KingdomObjective> objectiveIntersectionWith(final Kingdom other) {
+    return objectives.stream()
+    		.filter(o-> other.objectives.contains(o))
+    		.collect(Collectors.toList());
+}
 
 	public void tick(final long timeEllapsed) {
 		/// TODO: template what a kingdom does on each tick
 		
-		Objective objective = objectives.peek();
+//		KingdomObjective objective = objectives.peek();
 		
-		switch (status) {
-			case IDLE:
-				this.sense();
-				break;
-			case ATTACKING:
-				break;
-			case NEGOTIATING:
-				break;
-			default:
-				break;
-		}
+//		switch (status) {
+//			case IDLE:
+//				this.sense();
+//				break;
+//			case ATTACKING:
+//				break;
+//			case NEGOTIATING:
+//				break;
+//			default:
+//				break;
+//		}
 		
 		
+		final WarEnvironment environment = WarEnvironment.getInstance();
+		final List<Kingdom> kingdoms = environment.kingdoms();
 		
-		sense();
+		kingdoms.forEach(kingdom -> {
+			if (kingdom.equals(this)) return;
+			
+			final double coinFlip = RandomUtil.getRandom().nextDouble();
+			
+			if (coinFlip > 0.5) return;
+			
+			final List<KingdomObjective> objectiveIntersection = this.objectiveIntersectionWith(kingdom);
+			
+			if (objectiveIntersection.isEmpty()) return;
+			
+			objectiveIntersection.forEach(objective -> {
+				objective.alterPriority(objective.priority() / 2);
+			});
+		});
+		
+		
+//		sense();
 	}
 
 //	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
@@ -160,14 +206,21 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), castles.stream().map(Castle::agents).flatMap(List::stream)).collect(Collectors.toList());
 	}
 
-	public void onCastleDeath(final Castle castle) {
-		castles.remove(castle);
-		final Iterator<Objective> it = objectives.iterator();
+	public void castleWillDie(final Castle castle) {
+		final Iterator<KingdomObjective> it = objectives.iterator();
 		while (it.hasNext()) {
-			final Objective o = it.next();
-			if (o.involves(castle)) {
+			final KingdomObjective o = it.next();
+			if (o.target().castles.size() == 1 && o.target().castles.get(0).equals(castle)) {
 				it.remove();
 			}
 		}
+	}
+	
+	public void castleDidDie(final Castle castle) {
+		castles.remove(castle);
+	}
+	
+	public List<Castle> castles() {
+		return this.castles;
 	}
 }

@@ -124,14 +124,14 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
-				if(Coordinate.distanceBetween(location,target.get().location()) < warriorCharacteristics.getAttackDistance()){
+				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.getAttackDistance()) {
 					status = WarriorStatus.ATTACKING;
-				}else {
+				} else {
 					this.move();
 				}
 				break;
 			case WarriorStatus.ATTACKING:
-				if(Coordinate.distanceBetween(location,target.get().location()) < warriorCharacteristics.getAttackDistance()){
+				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.getAttackDistance()) {
 					target.get().defend(warriorCharacteristics.getDamageSkill().getDamage());
 				}
 			case WarriorStatus.DEFENDING:
@@ -170,7 +170,7 @@ public class Warrior extends MovingAgent {
 
 	@Override
 	public int getHealthPointPercentage() {
-		return (int)(100*warriorCharacteristics.getHealthPercentage());
+		return (int)(100 * warriorCharacteristics.getHealthPercentage());
 	}
 
 	public int getAttackD() {
@@ -180,5 +180,9 @@ public class Warrior extends MovingAgent {
 	@Override
 	public boolean isAlive() {
 		return !status.equals(WarriorStatus.DEAD);
+	}
+	
+	public boolean isAvailable() {
+		return status == WarriorStatus.UNASSIGNED; // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
 	}
 }
