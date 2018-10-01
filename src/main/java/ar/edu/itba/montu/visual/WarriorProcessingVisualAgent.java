@@ -1,19 +1,26 @@
 package ar.edu.itba.montu.visual;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.war.people.Warrior;
 
 import java.util.UUID;
 
-public class WarriorProcessingVisualAgent extends ProcessingVisualAgent{
-  static float R = 6;
+/*package*/ class WarriorProcessingVisualAgent extends ProcessingVisualAgent{
+  private static final float R = 6;
 
-  public WarriorProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
+  /*package*/ WarriorProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
   }
 
   @Override
   void draw(ProcessingApplet applet) {
     super.draw(applet);
-    applet.ellipse(x,y,2*R,2*R);
+    applet.ellipse(x-R,y-R,2*R,2*R);
+    /* See attack distance
+    float attackD = ((Warrior) locatableAgent).getAttackD();
+    applet.noFill();
+    applet.stroke(255);
+    applet.ellipse(x-R,y-R,attackD,attackD);
+    applet.noStroke();*/
   }
 }

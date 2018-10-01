@@ -138,7 +138,6 @@ public class Castle extends LocatableAgent {
 			//TODO STATUS = DEAD
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
-			return;
 		}
 		characteristics.setHealthPoints(hp);
 	}

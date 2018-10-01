@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProcessingVisualAgent extends VisualAgent{
+/*package*/ abstract class ProcessingVisualAgent extends VisualAgent{
 
   private static List<ProcessingVisualAgent> visualAgents = new ArrayList<>();
-  static float MAX_R = 10;
+  private static final float MAX_R = 10;
   float x;
   float y;
 
-  public ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
+  /*package*/ ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
     visualAgents.add(this);
   }
 
   /*package*/ void draw(ProcessingApplet applet){
-    x = (float) locatableAgent.location().X + MAX_R;
-    y = (float) locatableAgent.location().Y + MAX_R;
-    int sat = !locatableAgent.isAlive() ? 0 : 15 + locatableAgent.getHealthPointPercentage() * 85 / 100;
+    x = (float) locatableAgent.location().X+MAX_R;
+    y = (float) locatableAgent.location().Y+MAX_R;
+    int sat = !locatableAgent.isAlive() ? 0 : (15 + locatableAgent.getHealthPointPercentage() * 85 / 100);
     int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,sat);
     applet.fill(c);
   }
