@@ -19,16 +19,6 @@ public class CastleBuilder {
 		this.coordinate = coordinate;
 	}
 	
-	public static CastleBuilder defenseCastle(final String name, final Coordinate coordinate) {
-		return new CastleBuilder(name, coordinate).withCastleCharacteristics(CastleCharacteristics.defenseCharacteristics());
-//		return new Castle(null, name, CastleCharacteristics.defenseCharacteristics(), coordinate, 0, 0, CastleHeight.GROUND_LEVEL.height());
-	}
-	
-	public static CastleBuilder defenseCastle(final String name, final Coordinate coordinate, final int warriors, final int healers) {
-		return new CastleBuilder(name, coordinate).warriors(warriors).healers(healers).withCastleCharacteristics(CastleCharacteristics.defenseCharacteristics());
-//		return new Castle(null, name, CastleCharacteristics.defenseCharacteristics(), coordinate, warriors, healers, CastleHeight.GROUND_LEVEL.height());
-	}
-	
 	public static CastleBuilder withName(final String name, final Coordinate coordinate) {
 		final CastleBuilder builder = new CastleBuilder(name, coordinate);
 		return builder;
@@ -60,9 +50,6 @@ public class CastleBuilder {
 	}
 	
 	public Castle build() {
-		if (characteristics == null) {
-			characteristics = CastleCharacteristics.standardCharacteristics();
-		}
 		return new Castle(kingdom, name, characteristics, coordinate, warriors, healers, height);
 	}
 }

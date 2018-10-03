@@ -1,8 +1,8 @@
 package ar.edu.itba.montu.war.people;
 
-import ar.edu.itba.montu.abstraction.MovingAgentCharacteristics;
+import ar.edu.itba.montu.abstraction.MovingAgentCharacteristic;
 
-public class WarriorCharacteristics extends MovingAgentCharacteristics {
+public class WarriorCharacteristics extends MovingAgentCharacteristic {
 
 	public WarriorCharacteristics(double viewDistance, double attackDistance, double healthPoint, double attack) {
 		super(viewDistance, attackDistance, healthPoint, attack);

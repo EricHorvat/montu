@@ -3,6 +3,7 @@ package ar.edu.itba.montu.war.people;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
@@ -123,15 +124,15 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
-				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.getAttackDistance()) {
+				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
 					status = WarriorStatus.ATTACKING;
 				} else {
 					this.move();
 				}
 				break;
 			case WarriorStatus.ATTACKING:
-				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.getAttackDistance()) {
-					target.get().defend(warriorCharacteristics.getAttack());
+				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
+					target.get().defend(warriorCharacteristics.attack());
 				}
 			case WarriorStatus.DEFENDING:
 				break;
@@ -148,7 +149,7 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public void createAttackers(final int attackers) {
+	public List<Attacker> createAttackers(final int attackers) {
 		throw new UnsupportedOperationException("a warrior cant create attackers");
 	}
 
@@ -159,21 +160,21 @@ public class Warrior extends MovingAgent {
 
 	@Override
 	public void defend(double damageSkill) {
-		double hp = warriorCharacteristics.getHealthPoints() - damageSkill;
+		double hp = warriorCharacteristics.healthPoints() - damageSkill;
 		if (hp < 0){
 			status = WarriorStatus.DEAD;
 			hp = 0;
 		}
-		warriorCharacteristics.setHealthPoints(hp);
+		warriorCharacteristics.healthPoints(hp);
 	}
 
 	@Override
 	public int getHealthPointPercentage() {
-		return (int)(100 * warriorCharacteristics.getHealthPercentage());
+		return (int)(100 * warriorCharacteristics.healthPercentage());
 	}
 
 	public int getAttackD() {
-		return (int)(warriorCharacteristics.getAttackDistance());
+		return (int)(warriorCharacteristics.attackDistance());
 	}
 
 	@Override

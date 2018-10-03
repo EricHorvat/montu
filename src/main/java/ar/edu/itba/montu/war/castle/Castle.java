@@ -14,6 +14,7 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.people.WarriorStatus;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Castle extends LocatableAgent {
 
@@ -70,14 +71,26 @@ public class Castle extends LocatableAgent {
   	
   	final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
   	
+  	spawnCapacity = characteristics.spawnCapacity();
+  	
   	if (!kingdomObjective.isPresent()) {
   		return;
   	}
   	
+  	final double d = RandomUtil.getRandom().nextDouble() * 100;
+  	
+  	if (d < characteristics.defenseCapacity()) {
+  		// spawn defense warrior
+  		createAttackers(1);
+  		Optional.ofNullable(availableAttackers().get(0)).ifPresent(w -> {
+  			if (!visibleAgents().isEmpty()) {
+  				w.assignTarget(visibleAgents().get(0));
+  			}
+  		});
+  		return;
+  	}
+  	
   	if (kingdomObjective.get().equals(currentObjective)) {
-  		
-  		spawnCapacity = characteristics.spawnCapacity();
-  		
   		this.enforceCurrentObjective();
   		return;
   	}
@@ -98,7 +111,9 @@ public class Castle extends LocatableAgent {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		
 		///TODO: make the proper calculations to get the value of radius
-		return environment.agentsWithinRadiusOfCoordinate(location, 1000);
+		return environment.agentsWithinRadiusOfCoordinate(location, 1000).stream().filter(agent -> {
+			return !agent.kingdom().equals(kingdom);
+		}).collect(Collectors.toList());
 	}
 	
 	public List<LocatableAgent> agents() {
@@ -115,7 +130,7 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public void createAttackers(final int attackers) {
+	public List<Warrior> createAttackers(final int attackers) {
 		final int attackerCount = Math.min(attackers, spawnCapacity); 
 		final List<Warrior> warriors = IntStream
 				.range(0, attackerCount)
@@ -123,35 +138,33 @@ public class Castle extends LocatableAgent {
 				.collect(Collectors.toList());
 		spawnCapacity -= attackerCount;
 		this.warriors.addAll(warriors);
+		return warriors;
 	}
 
 	@Override
 	public List<Warrior> availableAttackers() {
-		return warriors
-				.stream()
-				.filter(Warrior::isAvailable)
-				.collect(Collectors.toList());
+		return warriors.stream().filter(Warrior::isAvailable).collect(Collectors.toList());
 	}
 
 	@Override
 	public void defend(double damageSkill) {
-		double hp = characteristics.getHealthPoints() - damageSkill;
+		double hp = characteristics.healthPoints() - damageSkill;
 		if (hp < 0) {
 			//TODO STATUS = DEAD
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
 		}
-		characteristics.setHealthPoints(hp);
+		characteristics.healthPoints(hp);
 	}
 
 	@Override
 	public int getHealthPointPercentage() {
-		return (int)(100 * characteristics.getHealthPercentage());
+		return (int)(100 * characteristics.healthPercentage());
 	}
 
 	@Override
 	public boolean isAlive() {
 		//TODO CHANGE
-		return characteristics.getHealthPoints() > 0;
+		return characteristics.healthPoints() > 0;
 	}
 }

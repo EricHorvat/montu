@@ -1,11 +1,11 @@
 package ar.edu.itba.montu.abstraction;
 
-public abstract class MovingAgentCharacteristics extends LocatableAgentCharacteristics {
+public abstract class MovingAgentCharacteristic extends LocatableAgentCharacteristic {
 
   private Characteristic<Double> timespan;
   private Characteristic<Double> actualDelay;
 
-  public MovingAgentCharacteristics(double viewDistance, double attackDistance, double healthPoint, double attack) {
+  public MovingAgentCharacteristic(double viewDistance, double attackDistance, double healthPoint, double attack) {
     super(viewDistance, attackDistance, healthPoint, attack);
   }
 

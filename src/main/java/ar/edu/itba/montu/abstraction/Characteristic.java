@@ -27,6 +27,10 @@ public class Characteristic<T extends Comparable<T>>{
   	return value;
   }
   
+  public T maxValue() {
+  	return valueRange.upperEndpoint();
+  }
+  
   public void updateValue(final T value) {
   	if (valueRange.contains(value)) {
   		this.value = value;
