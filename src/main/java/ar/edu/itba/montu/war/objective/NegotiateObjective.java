@@ -14,9 +14,9 @@ public class NegotiateObjective implements Objective {
 		DEFEND
 	}
 	
-	final List<? extends NonLocatableAgent> with;
-	final List<? extends NonLocatableAgent> targets;
-	final Intention intention;
+	final private List<? extends NonLocatableAgent> with;
+	final private List<? extends NonLocatableAgent> targets;
+	final private Intention intention;
 	
 	final int priority;
 	

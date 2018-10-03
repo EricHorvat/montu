@@ -3,7 +3,6 @@ package ar.edu.itba.montu.war.kingdom;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 
 public class KingdomBuilder {
