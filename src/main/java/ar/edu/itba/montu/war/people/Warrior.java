@@ -1,9 +1,6 @@
 package ar.edu.itba.montu.war.people;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
@@ -53,7 +50,9 @@ public class Warrior extends MovingAgent {
 	@Override
 	protected void displace() {
 		// Displace will get called only if target is no null
-		this.location = this.location.applyingDeltaInDirectionTo(speed, target.get().location());
+		if(target.isPresent()){
+			this.location = this.location.applyingDeltaInDirectionTo(speed, target.get().location());
+		}
 	}
 	
 	public String status() {
@@ -132,7 +131,7 @@ public class Warrior extends MovingAgent {
 				break;
 			case WarriorStatus.ATTACKING:
 				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.getAttackDistance()) {
-					target.get().defend(warriorCharacteristics.getDamageSkill().getDamage());
+					target.get().defend(warriorCharacteristics.getAttack());
 				}
 			case WarriorStatus.DEFENDING:
 				break;
@@ -159,7 +158,7 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public void defend(float damageSkill) {
+	public void defend(double damageSkill) {
 		double hp = warriorCharacteristics.getHealthPoints() - damageSkill;
 		if (hp < 0){
 			status = WarriorStatus.DEAD;

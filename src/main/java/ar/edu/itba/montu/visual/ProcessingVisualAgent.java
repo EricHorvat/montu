@@ -21,7 +21,7 @@ import java.util.UUID;
   /*package*/ void draw(ProcessingApplet applet){
     x = (float) locatableAgent.location().X+MAX_R;
     y = (float) locatableAgent.location().Y+MAX_R;
-    int sat = !locatableAgent.isAlive() ? 0 : (15 + locatableAgent.getHealthPointPercentage() * 85 / 100);
+    int sat = !locatableAgent.isAlive() ? 0 : (25 + locatableAgent.getHealthPointPercentage() * 75 / 100);
     int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()),100,sat);
     applet.fill(c);
   }

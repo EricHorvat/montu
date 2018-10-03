@@ -134,7 +134,7 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public void defend(float damageSkill) {
+	public void defend(double damageSkill) {
 		double hp = characteristics.getHealthPoints() - damageSkill;
 		if (hp < 0) {
 			//TODO STATUS = DEAD

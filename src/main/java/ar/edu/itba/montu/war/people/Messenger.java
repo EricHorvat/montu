@@ -64,7 +64,7 @@ public class Messenger extends MovingAgent {
 	}
 
 	@Override
-	public void defend(float damageSkill) {
+	public void defend(double damageSkill) {
 
 	}
 

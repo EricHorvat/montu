@@ -1,16 +1,14 @@
 package ar.edu.itba.montu.war.kingdom;
 
+import ar.edu.itba.montu.abstraction.Characteristic;
 import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 
 public class KingdomCharacteristics{
-	
-	final double speed;
-	final double lifespan;
-	final double attack;
+
+	final Double attack;
 
 	public KingdomCharacteristics(double speed, double lifespan, double attack) {
-		this.speed = speed;
-		this.lifespan = lifespan;
+		/*CONTROL 0.0 <= attack <= 1.0*/
 		this.attack = attack;
 	}
 	
