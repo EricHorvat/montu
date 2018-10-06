@@ -49,7 +49,7 @@ public class Messenger extends MovingAgent {
 	}
 
 	@Override
-	public void createAttackers(int attackers) {
+	public List<Warrior> createAttackers(int attackers) {
 		throw new UnsupportedOperationException("a warrior cant create attackers");
 	}
 

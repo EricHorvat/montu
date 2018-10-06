@@ -18,9 +18,13 @@ public class Characteristic<T extends Comparable<T>>{
   public static <T extends Comparable<T>> Characteristic<T> withFixedValue(final T value) {
   	return new Characteristic<T>(Range.closed(value, value), value);
   }
-  
+
   public static <T extends Comparable<T>> Characteristic<T> withChangingValue(final T minValue, final T maxValue, final T value) {
-  	return new Characteristic<>(Range.closed(minValue, maxValue), value);
+    return new Characteristic<>(Range.closed(minValue, maxValue), value);
+  }
+
+  public static <T extends Comparable<T>> Characteristic<T> withChangingValue(final T minValue, final T maxValue) {
+    return Characteristic.withChangingValue(minValue,maxValue,maxValue);
   }
 
   public T value() {

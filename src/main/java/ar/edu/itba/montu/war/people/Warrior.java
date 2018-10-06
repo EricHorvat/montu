@@ -14,25 +14,15 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Warrior extends MovingAgent {
 
-	final static long SPAWN_TIME = 10;
-
 	final WarriorCharacteristics warriorCharacteristics;
 
 	/**
 	 * Expressed in metres/delta time
 	 */
 	private double speed = 1;
-	
-	private double attack;
-	private double defense;
-	
-	private double health;
-	
-	private long spawn;
-	
+
 	private Warrior(final Kingdom kingdom, final Coordinate xy) {
 		super();
-		this.spawn = SPAWN_TIME;
 		this.kingdom = kingdom;
 		this.location = xy;
 		this.warriorCharacteristics = WarriorCharacteristics.standardCharacteristics();
@@ -95,15 +85,9 @@ public class Warrior extends MovingAgent {
 		this.assignTarget(enemy);
 	}
 	
-	private void spawning() {
-		if (--spawn == 0) status = WarriorStatus.UNASSIGNED;
-	}
-	
 	public void assignToTarget(final LocatableAgent target) {
-		
-		if (status == WarriorStatus.SPAWNING) {
-			return;
-		}
+
+		/*TODO IF ALREADY ASSIGNED?*/
 		
 		if (status == WarriorStatus.DEAD) {
 			return;
@@ -115,9 +99,6 @@ public class Warrior extends MovingAgent {
 	public void tick(final long timeElapsed) {
 
 		switch (status) {
-			case WarriorStatus.SPAWNING:
-				this.spawning();
-				break;
 			case WarriorStatus.UNASSIGNED:
 				this.unassigned(timeElapsed);
 				return;
@@ -183,6 +164,11 @@ public class Warrior extends MovingAgent {
 	}
 	
 	public boolean isAvailable() {
-		return status == WarriorStatus.UNASSIGNED; // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
+		return status.equals(WarriorStatus.UNASSIGNED); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
+	}
+
+	public int gasCost(){
+		/*TODO FORMULA*/
+		return 12;
 	}
 }

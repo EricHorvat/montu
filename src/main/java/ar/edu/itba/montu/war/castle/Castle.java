@@ -1,6 +1,7 @@
 package ar.edu.itba.montu.war.castle;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,8 +28,6 @@ public class Castle extends LocatableAgent {
 	final private double height;
 	
 	private KingdomObjective currentObjective;
-	
-	private int spawnCapacity;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -71,8 +70,6 @@ public class Castle extends LocatableAgent {
   	
   	final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
   	
-  	spawnCapacity = characteristics.spawnCapacity();
-  	
   	if (!kingdomObjective.isPresent()) {
   		return;
   	}
@@ -82,7 +79,7 @@ public class Castle extends LocatableAgent {
   	if (d < characteristics.defenseCapacity()) {
   		// spawn defense warrior
   		createAttackers(1);
-  		Optional.ofNullable(availableAttackers().get(0)).ifPresent(w -> {
+  		availableAttackers().stream().findFirst().ifPresent(w -> {
   			if (!visibleAgents().isEmpty()) {
   				w.assignTarget(visibleAgents().get(0));
   			}
@@ -124,20 +121,30 @@ public class Castle extends LocatableAgent {
 	public List<Warrior> attackers() {
 		return warriors;
 	}
-	
+
+	/*WARN CAN BE NULL*/
 	private Warrior buildWarrior() {
-		return Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, kingdom);
+		int populationGas = characteristics.populationGas();
+		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, kingdom);
+		if (populationGas - w.gasCost() < 0){
+			return null;
+		}
+		characteristics.populationGas(populationGas - w.gasCost());
+		return w;
 	}
 
 	@Override
 	public List<Warrior> createAttackers(final int attackers) {
-		final int attackerCount = Math.min(attackers, spawnCapacity); 
+		int population = characteristics.population();
+		int populationLimit = characteristics.maxPopulation() - population;
+		final int attackerCount = Math.min(populationLimit,Math.min(attackers, characteristics.spawnCapacity()));
 		final List<Warrior> warriors = IntStream
 				.range(0, attackerCount)
 				.mapToObj(i -> buildWarrior())
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
-		spawnCapacity -= attackerCount;
 		this.warriors.addAll(warriors);
+		characteristics.population(population + warriors.size());
 		return warriors;
 	}
 
