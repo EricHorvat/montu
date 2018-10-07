@@ -142,9 +142,31 @@ public final class Configuration {
 		}
 	}
 	
+	public final static class ViewportConfiguration {
+		private int width;
+		private int height;
+		public int getWidth() {
+			return width;
+		}
+		public void setWidth(int width) {
+			this.width = width;
+		}
+		public int getHeight() {
+			return height;
+		}
+		public void setHeight(int height) {
+			this.height = height;
+		}
+		@Override
+		public String toString() {
+			return "ViewportConfiguration [width=" + width + ", height=" + height + "]";
+		}
+	}
+	
 	
 	
 	private EnvironmentConfiguration environment;
+	private ViewportConfiguration viewport;
 	private List<KingdomConfiguration> kingdoms;
 	public EnvironmentConfiguration getEnvironment() {
 		return environment;
@@ -159,10 +181,17 @@ public final class Configuration {
 	public void setKingdoms(List<KingdomConfiguration> kingdoms) {
 		this.kingdoms = kingdoms;
 	}
+	public ViewportConfiguration getViewport() {
+		return viewport;
+	}
+	public void setViewport(ViewportConfiguration viewport) {
+		this.viewport = viewport;
+	}
 	@Override
 	public String toString() {
 		return new StringBuilder()
 				.append(String.format("Environment: %s\n", environment))
+				.append(String.format("Viewport: %s\n", viewport))
 				.append(String.format("Kingdoms: %s\n", kingdoms))
 				.toString();
 	}

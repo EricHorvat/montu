@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.castle.Castle;
@@ -15,6 +18,8 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class WarEnvironment {
 
+	private static final Logger logger = LogManager.getLogger(WarEnvironment.class);
+	
 	private static WarEnvironment environment;
 
 	private final List<Kingdom> kingdoms;
@@ -27,10 +32,6 @@ public class WarEnvironment {
 		});
 		this.kingdoms = kingdoms;
 		this.strategy = strategy;
-		String[] processingArgs = {"Montu"};
-		this.processingApplet = new ProcessingApplet(520);
-		ProcessingApplet.runSketch(processingArgs,processingApplet);
-
 	}
 	
 	/*package*/ static WarEnvironment withKingdomsAndStrategy(final WarStrategy strategy, final List<Kingdom> kingdoms) {
@@ -66,6 +67,8 @@ public class WarEnvironment {
 	}
 
 	private void tick(final long timeElapsed) {
+		logger.debug("environment ticking at={}", timeElapsed);
+		
 		final List<Kingdom> shuffledKingdoms = shuffledKingdoms(kingdoms);
 		final List<LocatableAgent> shuffledAgents = shuffledAgents(locatableAgents());
 
@@ -75,9 +78,8 @@ public class WarEnvironment {
 	}
 	
 	private void updateVisual(final long timeElapsed) {
-		this.processingApplet.noLoop();
-		this.processingApplet.redraw();
-		System.out.println(timeElapsed);
+		ProcessingApplet.instance().noLoop();
+		ProcessingApplet.instance().redraw();
 		try{Thread.sleep(20L);}catch (InterruptedException e){}
 	}
 

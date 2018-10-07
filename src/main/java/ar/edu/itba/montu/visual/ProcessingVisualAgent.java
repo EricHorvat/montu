@@ -1,11 +1,11 @@
 package ar.edu.itba.montu.visual;
 
-import ar.edu.itba.montu.abstraction.LocatableAgent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import ar.edu.itba.montu.abstraction.LocatableAgent;
 
 /*package*/ abstract class ProcessingVisualAgent extends VisualAgent{
 
@@ -13,18 +13,26 @@ import java.util.stream.Collectors;
   private static final float MAX_R = 10;
   float x;
   float y;
+  
+  private final static boolean DEBUG = false;
 
   /*package*/ ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
     visualAgents.add(this);
   }
-
-  /*package*/ void draw(ProcessingApplet applet){
-    x = (float) locatableAgent.location().X+MAX_R;
-    y = (float) locatableAgent.location().Y+MAX_R;
   
-    boolean DEBUG = false;
-    if(DEBUG) {
+  private static double linearMap(double x, int a, int b, int c, int d) {
+  	return (x - a) / (b - a) * (d - c) + c;
+  }
+
+  /*package*/ void draw(ProcessingApplet applet) {
+    x = (float)linearMap(locatableAgent.location().X, 0, applet.getL(), 0, applet.getW());
+    y = (float)linearMap(locatableAgent.location().Y, 0, applet.getL(), 0, applet.getH());
+    		
+    		//(float) locatableAgent.location().X + MAX_R;
+//    y = (float) locatableAgent.location().Y + MAX_R;
+  
+    if (DEBUG) {
       applet.fill(applet.color(255));
       applet.text(locatableAgent.toString(), x, y);
     }

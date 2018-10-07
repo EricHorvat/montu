@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import ar.edu.itba.montu.configuration.Configuration;
+import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -29,23 +30,20 @@ public class App {
 			return;
 		}
 		
-		Yaml yaml = new Yaml();  
+		final Yaml yaml = new Yaml();
+		final Configuration config;
     try (InputStream in = Files.newInputStream(Paths.get(args[0]))) {
-    	final Configuration config = yaml.loadAs(in, Configuration.class);
-    	System.out.println(config.toString());
+    	config = yaml.loadAs(in, Configuration.class);
+    	logger.info("Loaded configuration from {}", args[0]);
     }
 		
-		final long seed = 78;//78;//1;6;
-		
-		logger.info("Initializing RandomUtil with seed={}", seed);
-		
-		/*TODO GET SEED*/
-		RandomUtil.initializeWithSeed(seed);
+		logger.info("Initializing RandomUtil with seed={}", config.getEnvironment().getSeed());
+		RandomUtil.initializeWithSeed(config.getEnvironment().getSeed());
 
 		logger.info("Generating war environment");
 		
 		//TODO ADD ARGUMENTS
-    WarEnviromentGenerator.generate();
+    WarEnviromentGenerator.generateWithConfiguration(config);
 
 		final WarEnvironment warEnvironment = WarEnvironment.getInstance();
 
@@ -53,10 +51,13 @@ public class App {
 			throw new Exception("Run WarEnviromentGenerator.generate before getting an instance of WarEnvironment");
 		}
 		
-		final long time = 5000;
+		logger.info("Initializing visual environment");
+		ProcessingApplet.init(config.getViewport().getWidth(), config.getViewport().getHeight(), config.getEnvironment().getSize());
+		logger.info("Starting visual environment");
+		String[] processingArgs = {"Montu"};
+		ProcessingApplet.runSketch(processingArgs, ProcessingApplet.instance());
 		
-		logger.info("Starting war environment for {} minutes", time);
-		
-		warEnvironment.start(time);
+		logger.info("Starting war environment for {} minutes", config.getEnvironment().getTime());
+		warEnvironment.start(config.getEnvironment().getTime());
 	}
 }

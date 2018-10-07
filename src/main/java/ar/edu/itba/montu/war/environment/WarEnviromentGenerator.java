@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ar.edu.itba.montu.App;
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.visual.KingdomColorGetter;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
@@ -22,27 +23,29 @@ public class WarEnviromentGenerator {
 	
 	private static final Logger logger = LogManager.getLogger(WarEnviromentGenerator.class);
 	
-	public static void generate() {
-		final Random random = RandomUtil.getRandom();
-		final double MAP_SIZE = 500;
+	public static void generateWithConfiguration(final Configuration config) {
 		
-		final long kingdomCount = RandomUtil.getIntExponentialDistribution(0.5) + 2;
-		logger.info("Creating {} kingdoms", kingdomCount);
-		final List<Kingdom> kingdoms = LongStream.range(0, kingdomCount).mapToObj(i -> {
-			final String kingdomName = String.format("Kingdom %d", random.nextInt());
-			final long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
-			logger.info("Creating {} castles for KINGDOM={}", castleCount, kingdomName);
-			final KingdomCharacteristics kingdomCharacteristics = KingdomCharacteristics.withOffenseCapacity(RandomUtil.getNormalDistribution(50,22));
-			final List<CastleBuilder> castles = LongStream.range(0, castleCount).mapToObj(j -> {
-				final Coordinate coordinate = Coordinate.at(random.nextDouble() * MAP_SIZE, random.nextDouble() * MAP_SIZE);
-				return CastleBuilder
-						.withName(String.format("%s %d", kingdomName, j), coordinate)
-						.withCastleCharacteristics(CastleCharacteristics.standardCharacteristics(kingdomCharacteristics));
-			}).collect(Collectors.toList());
+		logger.info("Loading configuration to environment");
+		
+		final List<Kingdom> kingdoms = config.getKingdoms().stream().map(k -> {
+			final KingdomCharacteristics kingdomCharacteristics = KingdomCharacteristics.withOffenseCapacity(k.getOffenseCapacity());
 			return KingdomBuilder
-					.withName(kingdomName)
-					.withKingdomCharacteristics(kingdomCharacteristics)
-					.andCastles(castles)
+					.withName(k.getName())
+					.withKingdomCharacteristics(
+							kingdomCharacteristics
+					)
+					.andCastles(
+							k.getCastles().stream().map(c -> {
+								return CastleBuilder
+										.withName(
+												String.format("%s", k.getName()),
+												Coordinate.at(c.getLocation().getLat(), c.getLocation().getLng())
+										)
+										.withCastleCharacteristics(
+												CastleCharacteristics.standardCharacteristics(kingdomCharacteristics)
+										);
+							}).collect(Collectors.toList())
+					)
 					.build();
 		}).collect(Collectors.toList());
 		

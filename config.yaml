@@ -6,6 +6,10 @@ environment:
    time: 525600 # 1 year
    # Random seed
    seed: 1
+
+viewport:
+   width: 640
+   height: 480
    
 kingdoms:
    -

@@ -59,6 +59,28 @@ enquirer.question({
 });
 
 enquirer.question({
+	name: 'viewport.width',
+	message: 'Viewport width (in px): ',
+	transform: v => parseInt(v, 10),
+	errorMessage: 'Map size must be a non-negative number',
+	validate: function () {
+		const v = this.status === 'submitted' ? this.answer : this.ui.rl.line;
+		return isNonNegativeNumber(v);
+	}
+});
+
+enquirer.question({
+	name: 'viewport.height',
+	message: 'Viewport height (in px): ',
+	transform: v => parseInt(v, 10),
+	errorMessage: 'Map size must be a non-negative number',
+	validate: function () {
+		const v = this.status === 'submitted' ? this.answer : this.ui.rl.line;
+		return isNonNegativeNumber(v);
+	}
+});
+
+enquirer.question({
 	name: 'kingdom_count',
 	message: 'Number of kingdoms: ',
 	transform: v => parseInt(v, 10),
@@ -101,6 +123,8 @@ enquirer.prompt([
 	'environment.time',
 	'seed',
 	'environment.seed',
+	'viewport.width',
+	'viewport.height',
 	'kingdom_count',
 	'min_castles',
 	'max_castles',
@@ -137,6 +161,8 @@ enquirer.prompt([
 	delete config['environment.size'];
 	delete config['environment.time'];
 	delete config['environment.seed'];
+	delete config['viewport.width'];
+	delete config['viewport.height'];
 
 	const filename = /\.ya?ml$/.test(config.filename) ? config.filename : `${config.filename}.yaml`;
 	delete config.filename;

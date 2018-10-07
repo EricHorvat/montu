@@ -12,7 +12,7 @@ public class KingdomColorGetter {
   static int last = 0;
 
   public static void putKingdoms(List<Kingdom> kingdoms){
-    kingdoms.forEach( kingdom -> kingdomOrder.put(kingdom,last++));
+    kingdoms.forEach(kingdom -> kingdomOrder.put(kingdom, last++));
   }
 
   static int getHueValue(Kingdom kingdom){
