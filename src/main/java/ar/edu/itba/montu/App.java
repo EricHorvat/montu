@@ -42,7 +42,8 @@ public class App {
 		
 		warEnvironment.start(time);
 		
-//        System.out.println( "Hello World!" );
+		
+		
 //        Test t = new Test();
 //        for (int i = 0; i < 5000; i++)
 //            t.turn(i);

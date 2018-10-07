@@ -37,6 +37,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final String name;
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
+	private final List<Kingdom> rivals = new ArrayList<>();
 	private final PriorityQueue<KingdomObjective> objectives = new PriorityQueue<>();
 	
 	private Optional<WarStrategy> strategy;
@@ -221,5 +222,13 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public List<Castle> castles() {
 		return this.castles;
+	}
+	
+	public boolean isEnemy(Kingdom k){
+		return rivals.contains(k);
+	}
+	
+	public boolean addEnemy(Kingdom k){
+		return rivals.add(k);
 	}
 }

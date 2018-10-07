@@ -69,11 +69,11 @@ public class WarEnvironment {
 		final List<Kingdom> shuffledKingdoms = shuffledKingdoms(kingdoms);
 		final List<LocatableAgent> shuffledAgents = shuffledAgents(locatableAgents());
 
-
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
 		this.processingApplet.noLoop();
 		this.processingApplet.redraw();
+		System.out.println(timeElapsed);
 		try{Thread.sleep(20L);}catch (InterruptedException e){}
 	}
 

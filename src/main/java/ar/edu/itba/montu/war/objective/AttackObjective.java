@@ -23,18 +23,19 @@ public class AttackObjective implements Objective {
 	@Override
 	public void enforce(final Attacker attacker) {
 		
-		final int requiredAttackers = target.availableAttackers().size() + 1;
+		//final int requiredAttackers = target.availableDefenders().size() + 1;
 
-		if ( attacker.attackers().size() < requiredAttackers) {
-			attacker.createAttackers(1);
-		}
+		//if ( attacker.attackers().size() < requiredAttackers) {
+			
+			int s = attacker.createAttackers(1).size();
+		//}
 		
-		if (attacker.availableAttackers().size() >= requiredAttackers) {
+		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
 			attacker.availableAttackers().forEach(a -> {
 				((MovingAgent)a).assignTarget((LocatableAgent)target);
 			});
 			// I don't what happens now
-		}
+		//}*/
 		
 	}
 

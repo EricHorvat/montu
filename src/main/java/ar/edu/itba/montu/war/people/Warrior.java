@@ -42,7 +42,7 @@ public class Warrior extends MovingAgent {
 	protected void displace() {
 		// Displace will get called only if target is no null
 		if(target.isPresent()){
-			this.location = this.location.applyingDeltaInDirectionTo(speed, target.get().location());
+			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target.get().location());
 		}
 	}
 	
@@ -113,7 +113,7 @@ public class Warrior extends MovingAgent {
 				break;
 			case WarriorStatus.ATTACKING:
 				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
-					target.get().defend(warriorCharacteristics.attack());
+					target.get().defend(this,warriorCharacteristics.attack());
 				}
 			case WarriorStatus.DEFENDING:
 				break;
@@ -122,6 +122,10 @@ public class Warrior extends MovingAgent {
 				break;
 		}
 
+	}
+	
+	public void toDefend(){
+		status = WarriorStatus.DEFENDING;
 	}
 
 	@Override
@@ -133,14 +137,19 @@ public class Warrior extends MovingAgent {
 	public Attacker createAnAttacker() {
 		throw new UnsupportedOperationException("a warrior cant create attackers");
 	}
-
+	
 	@Override
 	public List<Warrior> availableAttackers() {
 		return Arrays.asList(this);
 	}
+	
+	@Override
+	public List<Warrior> availableDefenders() {
+		return Arrays.asList(this);
+	}
 
 	@Override
-	public void defend(double damageSkill) {
+	public void defend(LocatableAgent agent, double damageSkill) {
 		double hp = warriorCharacteristics.healthPoints() - damageSkill;
 		if (hp < 0){
 			status = WarriorStatus.DEAD;
@@ -166,9 +175,19 @@ public class Warrior extends MovingAgent {
 	public boolean isAvailable() {
 		return status.equals(WarriorStatus.UNASSIGNED); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
 	}
+	
+	public boolean isDefending() {
+		return status.equals(WarriorStatus.DEFENDING); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
+	}
 
 	public int gasCost(){
 		/*TODO FORMULA*/
 		return 12;
+	}
+	
+	@Override
+	public String toString() {
+		//return this.hashCode() + "";
+		return "";//this.hashCode() + "";
 	}
 }

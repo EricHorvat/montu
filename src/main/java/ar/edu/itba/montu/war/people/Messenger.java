@@ -3,6 +3,7 @@ package ar.edu.itba.montu.war.people;
 import java.util.Arrays;
 import java.util.List;
 
+import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 
 public class Messenger extends MovingAgent {
@@ -57,14 +58,19 @@ public class Messenger extends MovingAgent {
 	public List<Messenger> availableAttackers() {
 		return Arrays.asList(this);
 	}
-
+	
+	@Override
+	public List<Messenger> availableDefenders() {
+		return Arrays.asList(this);
+	}
+	
 	@Override
 	public int getHealthPointPercentage() {
 		return 0;
 	}
 
 	@Override
-	public void defend(double damageSkill) {
+	public void defend(LocatableAgent agent, double damageSkill) {
 
 	}
 

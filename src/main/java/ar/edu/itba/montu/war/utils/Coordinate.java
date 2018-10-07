@@ -30,6 +30,12 @@ public class Coordinate {
 		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.sin(angle)));
 	}
 	
+	public Coordinate applyingNoisyDeltaInDirectionTo(final double delta, final Coordinate to) {
+		final Coordinate dir = Coordinate.direction(this, to);
+		final double angle = Math.atan2(dir.Y, dir.X) * (1.0 + RandomUtil.getRandom().nextDouble() * 0.05);
+		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.sin(angle)));
+	}
+	
 	public static Coordinate direction(final Coordinate from, final Coordinate to) {
 		final double h = Math.sqrt(Math.pow(from.X - to.X, 2) + Math.pow(from.Y - to.Y, 2));
 		return new Coordinate((to.X - from.X) / h, (to.Y - from.Y) / h);

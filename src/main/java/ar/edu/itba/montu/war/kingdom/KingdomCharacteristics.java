@@ -12,6 +12,7 @@ public class KingdomCharacteristics {
 	}
 	
 	public static KingdomCharacteristics withOffenseCapacity(final double offenseCapacity) {
+		
 		return new KingdomCharacteristics(offenseCapacity);
 	}
 	

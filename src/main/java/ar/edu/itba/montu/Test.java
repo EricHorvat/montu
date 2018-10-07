@@ -28,8 +28,6 @@ public class Test {
 //    public Outfile outfile = new Outfile();
 //
 //    public void turn(int i){
-//        if (i%1000 == 0)
-//            System.out.println(i);
 //        for (WarObject wo: objects) {
 //            wo.move();
 //        }

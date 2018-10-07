@@ -32,7 +32,7 @@ public class WarEnviromentGenerator {
 			final String kingdomName = String.format("Kingdom %d", random.nextInt());
 			final long castleCount = RandomUtil.getIntExponentialDistribution(1) + 1;
 			logger.info("Creating {} castles for KINGDOM={}", castleCount, kingdomName);
-			final KingdomCharacteristics kingdomCharacteristics = KingdomCharacteristics.withOffenseCapacity(random.nextDouble() * 100);
+			final KingdomCharacteristics kingdomCharacteristics = KingdomCharacteristics.withOffenseCapacity(RandomUtil.getNormalDistribution(50,22));
 			final List<CastleBuilder> castles = LongStream.range(0, castleCount).mapToObj(j -> {
 				final Coordinate coordinate = Coordinate.at(random.nextDouble() * MAP_SIZE, random.nextDouble() * MAP_SIZE);
 				return CastleBuilder

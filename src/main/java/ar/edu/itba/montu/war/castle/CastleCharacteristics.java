@@ -27,12 +27,12 @@ public class CastleCharacteristics extends LocatableAgentCharacteristic {
 		);
 		this.population = Characteristic.withChangingValue(
 				0,
-				RandomUtil.getRandom().nextInt(50),
+				RandomUtil.getRandom().nextInt(20),
 				0
 		);
 		this.populationGas = Characteristic.withChangingValue(
 				0,
-				RandomUtil.getRandom().nextInt(5000)
+				RandomUtil.getRandom().nextInt(50)
 		);
 	}
 	

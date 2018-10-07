@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
@@ -66,34 +67,37 @@ public class Castle extends LocatableAgent {
   }
 
   public void tick(final long timeEllapsed) {
-  	/// TODO: template what a castle does on each tick
-  	
-  	final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
-  	
-  	if (!kingdomObjective.isPresent()) {
-  		return;
-  	}
-  	
-  	final double d = RandomUtil.getRandom().nextDouble() * 100;
-  	
-  	if (d < characteristics.defenseCapacity()) {
-  		// spawn defense warrior
-  		createAttackers(1);
-  		availableAttackers().stream().findFirst().ifPresent(w -> {
-  			if (!visibleAgents().isEmpty()) {
-  				w.assignTarget(visibleAgents().get(0));
-  			}
-  		});
-  		return;
-  	}
-  	
-  	if (kingdomObjective.get().equals(currentObjective)) {
-  		this.enforceCurrentObjective();
-  		return;
-  	}
-
-  	currentObjective = kingdomObjective.get();
-  	characteristics.populationGas(characteristics.populationGas() + 1 );
+	  /// TODO: template what a castle does on each tick
+	
+	  final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
+	  characteristics.populationGas(characteristics.populationGas() + 1 );
+	
+	  if (!kingdomObjective.isPresent()) {
+		  return;
+	  }
+	
+	  final double d = RandomUtil.getRandom().nextDouble() * 100;
+	
+	  List<LocatableAgent> visibleRivalAgents = visibleAgents().stream().filter(l -> l instanceof MovingAgent && this.kingdom().isEnemy(l.kingdom())).collect(Collectors.toList());
+	
+	  if (!visibleRivalAgents.isEmpty()) {
+		  availableDefenders().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
+		  /* TODO THEN COME BACK*/
+	  }
+	  
+	  if (d < characteristics.defenseCapacity()) {
+		  // spawn defense warrior
+		  createAttackers(1).size();
+		  availableAttackers().stream().findFirst().ifPresent(Warrior::toDefend);
+		  return;
+	  }
+	
+	  if (kingdomObjective.get().equals(currentObjective)) {
+		  this.enforceCurrentObjective();
+		  return;
+	  }
+	
+	  currentObjective = kingdomObjective.get();
   }
 
 	public Coordinate location() {
@@ -109,7 +113,7 @@ public class Castle extends LocatableAgent {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		
 		///TODO: make the proper calculations to get the value of radius
-		return environment.agentsWithinRadiusOfCoordinate(location, 1000).stream().filter(agent -> {
+		return environment.agentsWithinRadiusOfCoordinate(location, 50).stream().filter(agent -> {
 			return !agent.kingdom().equals(kingdom);
 		}).collect(Collectors.toList());
 	}
@@ -155,8 +159,14 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public void defend(double damageSkill) {
+	public List<Warrior> availableDefenders() {
+		return warriors.stream().filter(Warrior::isDefending).collect(Collectors.toList());
+	}
+
+	@Override
+	public void defend(LocatableAgent agent, double damageSkill) {
 		double hp = characteristics.healthPoints() - damageSkill;
+		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
 			//TODO STATUS = DEAD
 			hp = 0;
@@ -174,5 +184,10 @@ public class Castle extends LocatableAgent {
 	public boolean isAlive() {
 		//TODO CHANGE
 		return characteristics.healthPoints() > 0;
+	}
+	
+	@Override
+	public String toString() {
+		return name ;
 	}
 }
