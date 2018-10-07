@@ -1,14 +1,11 @@
 package ar.edu.itba.montu.war.environment;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.visual.KingdomColorGetter;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
@@ -17,7 +14,6 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.utils.Coordinate;
-import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class WarEnviromentGenerator {
 	
