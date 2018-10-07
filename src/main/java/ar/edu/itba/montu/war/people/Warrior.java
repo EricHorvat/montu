@@ -25,7 +25,7 @@ public class Warrior extends MovingAgent {
 	/**
 	 * Expressed in metres/delta time
 	 */
-	private double speed = .3;
+	private double speed = 0.03; // km per minute
 
 	private Warrior(final Kingdom kingdom, final Coordinate xy) {
 		super();

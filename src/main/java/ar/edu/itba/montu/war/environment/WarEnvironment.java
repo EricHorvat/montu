@@ -25,6 +25,8 @@ public class WarEnvironment {
 	private final List<Kingdom> kingdoms;
 	private final WarStrategy strategy;
 	ProcessingApplet processingApplet;
+	
+	private long time;
 
 	private WarEnvironment(final WarStrategy strategy, final List<Kingdom> kingdoms) {
 		kingdoms.forEach(kingdom -> {
@@ -69,6 +71,8 @@ public class WarEnvironment {
 	private void tick(final long timeElapsed) {
 		logger.debug("environment ticking at={}", timeElapsed);
 		
+		time = timeElapsed;
+		
 		final List<Kingdom> shuffledKingdoms = shuffledKingdoms(kingdoms);
 		final List<LocatableAgent> shuffledAgents = shuffledAgents(locatableAgents());
 
@@ -99,6 +103,12 @@ public class WarEnvironment {
 		kingdoms.forEach(k -> k.castleWillDie(castle));
 		kingdoms.forEach(k -> k.castleDidDie(castle));
 	}
+
+	public Long time() {
+		return time;
+	}
+	
+	
 	
 
 }

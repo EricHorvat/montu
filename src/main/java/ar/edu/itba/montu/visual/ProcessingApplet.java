@@ -41,7 +41,7 @@ public class ProcessingApplet extends PApplet {
     clear();
     colorMode(HSB, 360, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
-    for(int i = a.size() - 1; i >=0; i-- ){
+    for (int i = a.size() - 1; i >= 0; i--) {
       a.get(i).draw(this);
     }
     noLoop();
