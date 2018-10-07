@@ -140,7 +140,8 @@ enquirer.prompt([
 	config.kingdoms = range(config.kingdom_count, 1).map(i => ({
 		name: `Kingdom ${i}`,
 		offenseCapacity: randomInt(1, 100),
-		castles: range(randomInt(config.min_castles, config.max_castles)).map(j => ({
+		castles: range(randomInt(config.min_castles, config.max_castles), 1).map(j => ({
+			name: `Castle ${j}`,
 			characteristics: {
 				viewDistance: randomInt(1, 100),
 				attackDistance: randomInt(1, 100),

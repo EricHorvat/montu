@@ -3,9 +3,13 @@ package ar.edu.itba.montu.war.people;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
+import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
@@ -14,12 +18,14 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Warrior extends MovingAgent {
 
+	private static final Logger logger = LogManager.getLogger(Castle.class);
+	
 	final WarriorCharacteristics warriorCharacteristics;
 
 	/**
 	 * Expressed in metres/delta time
 	 */
-	private double speed = 1;
+	private double speed = .3;
 
 	private Warrior(final Kingdom kingdom, final Coordinate xy) {
 		super();
@@ -41,7 +47,7 @@ public class Warrior extends MovingAgent {
 	@Override
 	protected void displace() {
 		// Displace will get called only if target is no null
-		if(target.isPresent()){
+		if (target.isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target.get().location());
 		}
 	}
@@ -62,7 +68,7 @@ public class Warrior extends MovingAgent {
 		// get from the environment the enemies within viewing distance
 		/// TODO: remove hardcoded 500 value, it should be computed
 		/// based on warrior characteristics
-		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, 500);
+		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, 5);
 		
 		final List<Warrior> attackingEnemies =
 				enemies.stream()
@@ -81,6 +87,8 @@ public class Warrior extends MovingAgent {
 				.sorted(Comparator.comparingDouble(e -> e.location.distanceTo(location)))
 				.findFirst()
 				.get();
+		
+		logger.debug("Unassigned warrior of {} will attack {}", kingdom, enemy);
 		
 		this.assignTarget(enemy);
 	}
@@ -152,6 +160,7 @@ public class Warrior extends MovingAgent {
 	public void defend(LocatableAgent agent, double damageSkill) {
 		double hp = warriorCharacteristics.healthPoints() - damageSkill;
 		if (hp < 0){
+			logger.debug("Warrior of kingdom {} is dead", kingdom);
 			status = WarriorStatus.DEAD;
 			hp = 0;
 		}

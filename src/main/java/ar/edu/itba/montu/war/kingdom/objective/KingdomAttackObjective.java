@@ -90,5 +90,13 @@ public class KingdomAttackObjective implements KingdomObjective {
 	public Kingdom target() {
 		return target;
 	}
+
+	@Override
+	public String toString() {
+		return "KAObjective [target=" + target + ", priority=" + priority + "]";
+	}
+	
+	
+	
 	
 }

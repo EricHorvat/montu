@@ -29,4 +29,9 @@ public abstract class Agent {
 	public int hashCode() {
 		return Objects.hash(uid);
 	}
+
+	@Override
+	public String toString() {
+		return "Agent [uid=" + uid + "]";
+	}
 }

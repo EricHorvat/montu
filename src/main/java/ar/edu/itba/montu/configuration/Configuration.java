@@ -90,6 +90,7 @@ public final class Configuration {
 	}
 	
 	public static final class CastleConfiguration {
+		private String name;
 		private CastleCharacteristicConfiguration characteristics;
 		private Coordinate location;
 		public CastleCharacteristicConfiguration getCharacteristics() {
@@ -103,6 +104,12 @@ public final class Configuration {
 		}
 		public void setLocation(Coordinate location) {
 			this.location = location;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
 		}
 		@Override
 		public String toString() {

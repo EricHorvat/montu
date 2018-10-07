@@ -42,6 +42,10 @@ public abstract class MovingAgent extends LocatableAgent {
 		this.status = MovingAgentStatus.UNASSIGNED;
 	}
 	
+	public boolean isUnassigned() {
+		return status == MovingAgentStatus.UNASSIGNED;
+	}
+	
 	public Optional<LocatableAgent> target() {
 		return target;
 	}

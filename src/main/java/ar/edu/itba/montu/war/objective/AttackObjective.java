@@ -81,6 +81,9 @@ public class AttackObjective implements Objective {
 	public boolean involves(final LocatableAgent agent) {
 		return ((LocatableAgent)target).equals(agent);
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "AObjective [target=" + target + ", priority=" + priority + "]";
+	}
 }

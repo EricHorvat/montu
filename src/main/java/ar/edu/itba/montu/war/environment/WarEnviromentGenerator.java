@@ -34,7 +34,7 @@ public class WarEnviromentGenerator {
 							k.getCastles().stream().map(c -> {
 								return CastleBuilder
 										.withName(
-												String.format("%s", k.getName()),
+												c.getName(),
 												Coordinate.at(c.getLocation().getLat(), c.getLocation().getLng())
 										)
 										.withCastleCharacteristics(

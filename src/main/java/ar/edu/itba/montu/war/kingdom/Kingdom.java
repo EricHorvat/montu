@@ -92,7 +92,9 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			
 			if (coinFlip > 0.5) {
 				final int priority = RandomUtil.getRandom().nextInt(100);
-				objectives.add(KingdomAttackObjective.headedToWithPriority(kingdom, priority));
+				final KingdomAttackObjective objective = KingdomAttackObjective.headedToWithPriority(kingdom, priority);
+				logger.debug("{} has objective {}", name, objective);
+				objectives.add(objective);
 			}
 		});
 		
@@ -173,6 +175,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 //				break;
 //		}
 		
+		logger.debug("{} tick={}", name, timeEllapsed);
 		
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> kingdoms = environment.kingdoms();
@@ -182,14 +185,18 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			
 			final double coinFlip = RandomUtil.getRandom().nextDouble();
 			
-			if (coinFlip > 0.5) return;
+			if (coinFlip > 0.9) return;
 			
-			final List<KingdomObjective> objectiveIntersection = this.objectiveIntersectionWith(kingdom);
+			final List<KingdomObjective> objectiveIntersection = objectiveIntersectionWith(kingdom);
 			
 			if (objectiveIntersection.isEmpty()) return;
 			
+			logger.debug("{} neg with {} over {}", this.name, kingdom.name, objectiveIntersection);
+			
 			objectiveIntersection.forEach(objective -> {
-				objective.alterPriority(objective.priority() / 2);
+				if (objective.priority() > 50) {
+					objective.alterPriority(objective.priority() / 2);
+				}
 			});
 		});
 		
@@ -231,4 +238,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public boolean addEnemy(Kingdom k){
 		return rivals.add(k);
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 }
