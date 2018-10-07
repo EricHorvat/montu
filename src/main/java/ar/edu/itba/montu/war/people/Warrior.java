@@ -130,7 +130,7 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public List<Attacker> createAttackers(final int attackers) {
+	public Attacker createAnAttacker() {
 		throw new UnsupportedOperationException("a warrior cant create attackers");
 	}
 

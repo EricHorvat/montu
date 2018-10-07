@@ -93,6 +93,7 @@ public class Castle extends LocatableAgent {
   	}
 
   	currentObjective = kingdomObjective.get();
+  	characteristics.populationGas(characteristics.populationGas() + 1 );
   }
 
 	public Coordinate location() {
@@ -134,10 +135,10 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public List<Warrior> createAttackers(final int attackers) {
+	public Warrior createAnAttacker() {
 		int population = characteristics.population();
 		int populationLimit = characteristics.maxPopulation() - population;
-		final int attackerCount = Math.min(populationLimit,Math.min(attackers, characteristics.spawnCapacity()));
+		final int attackerCount = Math.min(populationLimit,Math.min(1, characteristics.spawnCapacity()));
 		final List<Warrior> warriors = IntStream
 				.range(0, attackerCount)
 				.mapToObj(i -> buildWarrior())
@@ -145,7 +146,7 @@ public class Castle extends LocatableAgent {
 				.collect(Collectors.toList());
 		this.warriors.addAll(warriors);
 		characteristics.population(population + warriors.size());
-		return warriors;
+		return warriors.size() == 0 ? null : warriors.get(0);
 	}
 
 	@Override

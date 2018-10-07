@@ -25,8 +25,7 @@ public class AttackObjective implements Objective {
 		
 		final int requiredAttackers = target.availableAttackers().size() + 1;
 
-		double r = RandomUtil.getRandom().nextDouble();
-		if ( (attacker.attackers().size() < requiredAttackers && r <  0.01) || r < 0.001) {
+		if ( attacker.attackers().size() < requiredAttackers) {
 			attacker.createAttackers(1);
 		}
 		
