@@ -1,0 +1,54 @@
+# Environment Settings
+environment:
+   # Map size in km
+   size: 500
+   # Simulation time in minutes
+   time: 525600 # 1 year
+   # Random seed
+   seed: 1
+   
+kingdoms:
+   -
+      name: "Kingdom 1"
+      offenseCapacity: 30
+      castles:
+         -
+            characteristics:
+               viewDistance: 50 # in km
+               attackDistance: 2 # in km
+               healthPoints: 100 # isn't it 100 by default?
+               attack: 70
+            location:
+               lat: 10
+               lng: 10
+   -
+      name: "Kingdom 2"
+      offenseCapacity: 50
+      castles:
+         -
+            characteristics:
+               viewDistance: 50 # in km
+               attackDistance: 2 # in km
+               healthPoints: 100 # isn't it 100 by default?
+               attack: 70
+            location:
+               lat: 20
+               lng: 50
+         -
+            characteristics:
+               viewDistance: 50 # in km
+               attackDistance: 2 # in km
+               healthPoints: 100 # isn't it 100 by default?
+               attack: 70
+            location:
+               lat: 200
+               lng: 150
+         -
+            characteristics:
+               viewDistance: 50 # in km
+               attackDistance: 2 # in km
+               healthPoints: 100 # isn't it 100 by default?
+               attack: 70
+            location:
+               lat: 300
+               lng: 450 

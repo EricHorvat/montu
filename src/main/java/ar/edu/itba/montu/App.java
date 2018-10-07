@@ -1,9 +1,15 @@
 package ar.edu.itba.montu;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.yaml.snakeyaml.Yaml;
 
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -18,6 +24,17 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 
+		if (args.length != 1) {
+			System.out.println("Usage: <file.yml>");
+			return;
+		}
+		
+		Yaml yaml = new Yaml();  
+    try (InputStream in = Files.newInputStream(Paths.get(args[0]))) {
+    	final Configuration config = yaml.loadAs(in, Configuration.class);
+    	System.out.println(config.toString());
+    }
+		
 		final long seed = 78;//78;//1;6;
 		
 		logger.info("Initializing RandomUtil with seed={}", seed);
@@ -41,20 +58,5 @@ public class App {
 		logger.info("Starting war environment for {} minutes", time);
 		
 		warEnvironment.start(time);
-		
-		
-		
-//        Test t = new Test();
-//        for (int i = 0; i < 5000; i++)
-//            t.turn(i);
-//        try {
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("./output/test.txt"));
-//            writer.write(t.outfile.getValue());
-//
-//            writer.close();
-//        }catch (IOException e){
-//            e.getMessage();
-//        }
-
-    }
+	}
 }

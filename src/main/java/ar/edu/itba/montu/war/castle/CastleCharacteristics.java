@@ -17,8 +17,9 @@ public class CastleCharacteristics extends LocatableAgentCharacteristic {
 			final KingdomCharacteristics characteristics,
 			final double viewDistance,
 			final double attackDistance,
-			final double healthPoint, double attack) {
-		super(viewDistance, attackDistance, healthPoint, attack);
+			final double healthPoints,
+			final double attack) {
+		super(viewDistance, attackDistance, healthPoints, attack);
 		this.offenseCapacity = Characteristic.withFixedValue(
 				RandomUtil.getNormalDistribution(characteristics.offenseCapacity(), 0.1 * characteristics.offenseCapacity())
 		);

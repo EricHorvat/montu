@@ -24,7 +24,7 @@ public class Characteristic<T extends Comparable<T>>{
   }
 
   public static <T extends Comparable<T>> Characteristic<T> withChangingValue(final T minValue, final T maxValue) {
-    return Characteristic.withChangingValue(minValue,maxValue,maxValue);
+    return Characteristic.withChangingValue(minValue, maxValue, maxValue);
   }
 
   public T value() {

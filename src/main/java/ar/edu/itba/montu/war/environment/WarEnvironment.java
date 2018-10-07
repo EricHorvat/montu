@@ -27,7 +27,7 @@ public class WarEnvironment {
 		});
 		this.kingdoms = kingdoms;
 		this.strategy = strategy;
-		String[] processingArgs = {"MySketch"};
+		String[] processingArgs = {"Montu"};
 		this.processingApplet = new ProcessingApplet(520);
 		ProcessingApplet.runSketch(processingArgs,processingApplet);
 
@@ -71,15 +71,15 @@ public class WarEnvironment {
 
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
+		updateVisual(timeElapsed);
+	}
+	
+	private void updateVisual(final long timeElapsed) {
 		this.processingApplet.noLoop();
 		this.processingApplet.redraw();
 		System.out.println(timeElapsed);
 		try{Thread.sleep(20L);}catch (InterruptedException e){}
 	}
-
-//	public List<WarFieldAgent> getAgentsFromCoordinate(Coordinate coordinate, int viewDistance){
-//		return agents.stream().filter(agent -> Coordinate.sees(agent.getCoordinate(),coordinate,viewDistance)).collect(Collectors.toList());
-//	}
 
 	public List<Kingdom> kingdoms() {
 		return kingdoms;

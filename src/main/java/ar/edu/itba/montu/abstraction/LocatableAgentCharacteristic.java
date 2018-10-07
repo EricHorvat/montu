@@ -4,13 +4,13 @@ public abstract class LocatableAgentCharacteristic {
   private Characteristic<Double> viewDistance;
   private Characteristic<Double> attackDistance;
   private Characteristic<Double> attack;
-  private Characteristic<Double> healthPoint;
+  private Characteristic<Double> healthPoints;
 
-  public LocatableAgentCharacteristic(double viewDistance, double attackDistance, double healthPoint, double attack) {
+  public LocatableAgentCharacteristic(double viewDistance, double attackDistance, double healthPoints, double attack) {
     this.viewDistance = Characteristic.withFixedValue(viewDistance);
     this.attackDistance = Characteristic.withFixedValue(attackDistance);
     this.attack = Characteristic.withFixedValue(attack); 
-    this.healthPoint = Characteristic.withChangingValue(0.0, healthPoint, healthPoint);
+    this.healthPoints = Characteristic.withChangingValue(0.0, healthPoints);
   }
 
   public double viewDistance() {
@@ -26,18 +26,18 @@ public abstract class LocatableAgentCharacteristic {
   }
 
   public double healthPoints() {
-    return healthPoint.value();
+    return healthPoints.value();
   }
 
   public void healthPoints(double value) {
-    healthPoint.updateValue(value);
+    healthPoints.updateValue(value);
   }
 
   public double maxHealthPoints() {
-    return healthPoint.maxValue();
+    return healthPoints.maxValue();
   }
 
   public double healthPercentage() {
-    return healthPoint.value()/healthPoint.maxValue();
+    return healthPoints.value()/healthPoints.maxValue();
   }
 }
