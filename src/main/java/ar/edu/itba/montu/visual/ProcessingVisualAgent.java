@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
   /*package*/ ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
-    visualAgents.add(this);
+    visualAgents.add(0,this);
   }
 
   /*package*/ void draw(ProcessingApplet applet){
