@@ -21,7 +21,7 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
 
   /*package*/ ProcessingVisualAgent(UUID uid, LocatableAgent locatableAgent) {
     super(uid, locatableAgent);
-    visualAgents.add(this);
+    visualAgents.add(0,this);
   }
   
   private static double linearMap(double x, double a, double b, double c, double d) {
