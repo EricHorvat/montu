@@ -1,5 +1,7 @@
 package ar.edu.itba.montu.abstraction;
 
+import ar.edu.itba.montu.war.castle.Castle;
+
 import java.util.Optional;
 
 public abstract class MovingAgent extends LocatableAgent {
@@ -7,6 +9,11 @@ public abstract class MovingAgent extends LocatableAgent {
 	protected Optional<LocatableAgent> target = Optional.empty();
 	protected String status = MovingAgentStatus.UNASSIGNED;
 	
+	protected Castle ownCastle;/*Promove to PQ, with creator as more priority*/
+
+		public MovingAgent(Castle ownCastle) {
+				this.ownCastle = ownCastle;
+			}
 	/**
 	 * The subclass should describe how the target
 	 * should be pursued
@@ -20,7 +27,7 @@ public abstract class MovingAgent extends LocatableAgent {
 		}
 		
 		if (!target.get().isAlive()) {
-			this.unassign();
+			this.comeBack();
 		}
 		
 		this.displace();
@@ -35,6 +42,13 @@ public abstract class MovingAgent extends LocatableAgent {
 		} else {
 			this.status = MovingAgentStatus.UNASSIGNED;
 		}
+	}
+	
+	
+ 
+	public void comeBack(){
+		assignTarget(ownCastle);
+		this.status = MovingAgentStatus.MOVING;
 	}
 	
 	public void unassign() {

@@ -12,8 +12,8 @@ public abstract class LocatableAgent extends Agent implements Attacker {
     private VisualAgent visualAgent;
     
     public LocatableAgent() {
-        super();
-        visualAgent = VisualAgent.buildNew(uid(),this);
+    	super();
+	    visualAgent = VisualAgent.buildNew(uid(),this);
     }
     
 	public Coordinate location() {
@@ -29,4 +29,5 @@ public abstract class LocatableAgent extends Agent implements Attacker {
 	public abstract boolean isAlive();
 
   public abstract int getHealthPointPercentage();
+  
 }

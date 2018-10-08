@@ -27,15 +27,15 @@ public class Warrior extends MovingAgent {
 	 */
 	private double speed = 0.03; // km per minute
 
-	private Warrior(final Kingdom kingdom, final Coordinate xy) {
-		super();
-		this.kingdom = kingdom;
+	private Warrior(final Castle castle, final Coordinate xy) {
+		super(castle);
+		this.kingdom = castle.kingdom();
 		this.location = xy;
 		this.warriorCharacteristics = WarriorCharacteristics.standardCharacteristics();
 	}
 	
-	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Kingdom kingdom) {
-		final Warrior w = new Warrior(kingdom, xy);
+	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Castle castle) {
+		final Warrior w = new Warrior(castle, xy);
 		
 		return w;
 	}
@@ -49,6 +49,8 @@ public class Warrior extends MovingAgent {
 		// Displace will get called only if target is no null
 		if (target.isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target.get().location());
+		}else {
+			comeBack();
 		}
 	}
 	
@@ -114,16 +116,25 @@ public class Warrior extends MovingAgent {
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
 				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
+					if (target.get().equals(ownCastle)){
+						status = WarriorStatus.UNASSIGNED;
+						return;
+					}
 					status = WarriorStatus.ATTACKING;
 				} else {
 					this.move();
 				}
 				break;
 			case WarriorStatus.ATTACKING:
-				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
-					target.get().defend(this,warriorCharacteristics.attack());
+				if (target.isPresent() && target.get().isAlive()) {
+					if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
+						target.get().defend(this, warriorCharacteristics.attack());
+						return;
+					}
 				}
+				comeBack();
 			case WarriorStatus.DEFENDING:
+				this.unassigned(timeElapsed);
 				break;
 			case WarriorStatus.DEAD:
 				// I'm f*ing dead
@@ -197,6 +208,11 @@ public class Warrior extends MovingAgent {
 	@Override
 	public String toString() {
 		//return this.hashCode() + "";
-		return "";//this.hashCode() + "";
+		return status.substring(0,3);//this.hashCode() + "";
+	}
+	
+	public void noCreated(){
+		this.status = WarriorStatus.DEAD;
+		this.warriorCharacteristics.healthPoints(0);
 	}
 }

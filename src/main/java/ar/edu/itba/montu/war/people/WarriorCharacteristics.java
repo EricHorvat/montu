@@ -9,11 +9,11 @@ public class WarriorCharacteristics extends MovingAgentCharacteristic {
 	}
 
 	public static WarriorCharacteristics standardCharacteristics() {
-		return new WarriorCharacteristics(30,20,100, 1);
+		return new WarriorCharacteristics(30,20,5000, 1);
 	}
 	
 	public static WarriorCharacteristics defenseCharacteristics() {
-		return new WarriorCharacteristics(30,20,100, 1);
+		return new WarriorCharacteristics(30,20,5000, 1);
 	}
 	
 	public static WarriorCharacteristics withHpSpeedDelayAndDamageSkill(final double hp) {

@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.castle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,10 +47,11 @@ public class Castle extends LocatableAgent {
 		this.height = height;
 		this.kingdom = kingdom;
 		
-		this.warriors = IntStream
+		this.warriors = new ArrayList<>();
+		/*this.warriors = IntStream
 				.range(0, warriors)
-				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdomAtLocation(coordinate, characteristics, kingdom))
-				.collect(Collectors.toList());
+				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdomAtLocation(coordinate, characteristics, this))
+				.collect(Collectors.toList());*/
 	}
 
   public void act() {
@@ -97,8 +99,12 @@ public class Castle extends LocatableAgent {
 //	  availableDefenders().stream().filter(Warrior::isUnassigned).forEach(d -> );
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
-	  	logger.debug("{} has {} attackers nearby", name, visibleRivalAgents.size());
-		  availableDefenders().forEach(def -> def.assignTarget(visibleRivalAgents.get(0)));
+	  	if (availableDefenders().size() > 0){
+	  		int a = 5;
+		  }
+		  availableDefenders().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
+		  availableAttackers().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
+		  /* TODO THEN COME BACK*/
 	  }
 	  
 	  if (d < characteristics.defenseCapacity()) {
@@ -150,8 +156,9 @@ public class Castle extends LocatableAgent {
 	/*WARN CAN BE NULL*/
 	private Warrior buildWarrior() {
 		int populationGas = characteristics.populationGas();
-		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, kingdom);
+		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
 		if (populationGas - w.gasCost() < 0){
+			w.noCreated();
 			return null;
 		}
 		characteristics.populationGas(populationGas - w.gasCost());
