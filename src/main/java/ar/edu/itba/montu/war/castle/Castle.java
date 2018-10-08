@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.castle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,10 +42,11 @@ public class Castle extends LocatableAgent {
 		this.height = height;
 		this.kingdom = kingdom;
 		
-		this.warriors = IntStream
+		this.warriors = new ArrayList<>();
+		/*this.warriors = IntStream
 				.range(0, warriors)
-				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdomAtLocation(coordinate, characteristics, kingdom))
-				.collect(Collectors.toList());
+				.mapToObj(i -> Warrior.createWithCharacteristicsInKingdomAtLocation(coordinate, characteristics, this))
+				.collect(Collectors.toList());*/
 	}
 
   public void act() {
@@ -73,7 +75,8 @@ public class Castle extends LocatableAgent {
 	  characteristics.populationGas(characteristics.populationGas() + 1 );
 	
 	  if (!kingdomObjective.isPresent()) {
-		  return;
+		  System.out.println(kingdom());
+	  	return;
 	  }
 	
 	  final double d = RandomUtil.getRandom().nextDouble() * 100;
@@ -81,7 +84,11 @@ public class Castle extends LocatableAgent {
 	  List<LocatableAgent> visibleRivalAgents = visibleAgents().stream().filter(l -> l instanceof MovingAgent && this.kingdom().isEnemy(l.kingdom())).collect(Collectors.toList());
 	
 	  if (!visibleRivalAgents.isEmpty()) {
+	  	if (availableDefenders().size() > 0){
+	  		int a = 5;
+		  }
 		  availableDefenders().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
+		  availableAttackers().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
 		  /* TODO THEN COME BACK*/
 	  }
 	  
@@ -130,8 +137,9 @@ public class Castle extends LocatableAgent {
 	/*WARN CAN BE NULL*/
 	private Warrior buildWarrior() {
 		int populationGas = characteristics.populationGas();
-		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, kingdom);
+		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
 		if (populationGas - w.gasCost() < 0){
+			w.noCreated();
 			return null;
 		}
 		characteristics.populationGas(populationGas - w.gasCost());

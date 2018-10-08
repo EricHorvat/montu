@@ -18,7 +18,7 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 
-		final long seed = 78;//78;//1;6;
+		final long seed = 1;//78;//1;6;
 		
 		logger.info("Initializing RandomUtil with seed={}", seed);
 		

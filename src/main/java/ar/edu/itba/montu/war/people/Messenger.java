@@ -5,6 +5,7 @@ import java.util.List;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
+import ar.edu.itba.montu.war.castle.Castle;
 
 public class Messenger extends MovingAgent {
 
@@ -12,6 +13,10 @@ public class Messenger extends MovingAgent {
 	 * Expressed in metres/delta time
 	 */
 	private double speed;
+	
+	public Messenger(Castle ownCastle) {
+		super(ownCastle);
+	}
 	
 	/**
 	 * Warrior applies simple logic to movement

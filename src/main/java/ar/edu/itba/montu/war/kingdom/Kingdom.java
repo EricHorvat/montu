@@ -228,7 +228,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return rivals.contains(k);
 	}
 	
-	public boolean addEnemy(Kingdom k){
-		return rivals.add(k);
+	public void addEnemy(Kingdom k){
+		rivals.add(k);
 	}
 }
