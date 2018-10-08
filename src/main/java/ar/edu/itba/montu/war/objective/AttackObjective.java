@@ -6,6 +6,8 @@ import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import java.util.Random;
+
 public class AttackObjective implements Objective {
 	
 	final Attacker target;
@@ -32,7 +34,7 @@ public class AttackObjective implements Objective {
 		
 		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
 			attacker.availableAttackers().forEach(a -> {
-				((MovingAgent)a).assignTarget((LocatableAgent)target);
+				((MovingAgent)a).assignTarget((LocatableAgent)target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
 			});
 			// I don't what happens now
 		//}*/
@@ -82,5 +84,8 @@ public class AttackObjective implements Objective {
 		return ((LocatableAgent)target).equals(agent);
 	}
 	
-	
+	@Override
+	public <T extends Attacker> T target() {
+		return (T)target;
+	}
 }

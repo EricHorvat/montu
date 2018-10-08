@@ -87,8 +87,8 @@ public class Castle extends LocatableAgent {
 	  	if (availableDefenders().size() > 0){
 	  		int a = 5;
 		  }
-		  availableDefenders().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
-		  availableAttackers().forEach(def -> def.assignTarget(visibleRivalAgents .get(0)));
+		  visibleRivalAgents.forEach(rival -> availableAttackers().forEach(att -> att.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
+		  visibleRivalAgents.forEach(rival -> availableDefenders().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
 		  /* TODO THEN COME BACK*/
 	  }
 	  

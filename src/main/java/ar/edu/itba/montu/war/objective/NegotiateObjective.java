@@ -87,4 +87,9 @@ public class NegotiateObjective implements Objective {
 	public boolean involves(final LocatableAgent agent) {
 		return targets.contains(agent);
 	}
+	
+	@Override
+	public <T extends Attacker> T target() {
+		return (T)targets.get(0); /*TODO CHECK*/
+	}
 }

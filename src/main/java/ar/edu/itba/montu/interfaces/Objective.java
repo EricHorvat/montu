@@ -7,4 +7,5 @@ public interface Objective extends Comparable<Objective> {
 	<T extends Attacker> void enforce(T agent);
 	int priority();
 	boolean involves(final LocatableAgent agent);
+	<T extends Attacker> T target();
 }
