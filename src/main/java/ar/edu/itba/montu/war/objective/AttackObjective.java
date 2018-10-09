@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
@@ -85,7 +86,7 @@ public class AttackObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Attacker> T target() {
+	public <T extends Agent> T target() {
 		return (T)target;
 	}
 }

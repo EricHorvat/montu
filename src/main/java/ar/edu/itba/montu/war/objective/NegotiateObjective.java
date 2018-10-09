@@ -2,6 +2,7 @@ package ar.edu.itba.montu.war.objective;
 
 import java.util.List;
 
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
@@ -89,7 +90,7 @@ public class NegotiateObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Attacker> T target() {
+	public <T extends Agent> T target() {
 		return (T)targets.get(0); /*TODO CHECK*/
 	}
 }

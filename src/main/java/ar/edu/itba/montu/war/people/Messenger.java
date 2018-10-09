@@ -25,7 +25,7 @@ public class Messenger extends MovingAgent {
 	@Override
 	protected void displace() {
 		// Displace will get called only if target is no null
-		this.location = this.location.applyingDeltaInDirectionTo(speed, target.get().location());
+		this.location = this.location.applyingDeltaInDirectionTo(speed, target().get().location());
 	}
 	
 	public String status() {

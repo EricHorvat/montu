@@ -196,6 +196,6 @@ public class Castle extends LocatableAgent {
 	
 	@Override
 	public String toString() {
-		return name ;
+		return name + " \nRes:" + characteristics.populationGas() + "/" + characteristics.maxPopulationGas() + " \nPop:" + characteristics.population() + "/" + characteristics.maxPopulation() ;
 	}
 }

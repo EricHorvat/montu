@@ -5,10 +5,7 @@ import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public abstract class MovingAgent extends LocatableAgent {
 	
@@ -64,13 +61,12 @@ public abstract class MovingAgent extends LocatableAgent {
 	}
 	
 	public void unassign(LocatableAgent target) {
-		this.targets = new PriorityQueue<>();
-		this.status = MovingAgentStatus.UNASSIGNED;
+		targetsObjectives.removeIf(o -> o.target().equals(target));
 	}
 	
 	public Optional<LocatableAgent> target() {
 		if(targetsObjectives.size() > 0){
-			return Optional.of(targetsObjectives.peek().agent());
+			return Optional.of(targetsObjectives.peek().target());
 		}
 		return Optional.empty();
 	}
