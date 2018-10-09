@@ -26,7 +26,7 @@ public class Warrior extends MovingAgent {
 	/**
 	 * Expressed in metres/delta time
 	 */
-	private double speed = 0.03; // km per minute
+	private double speed = 5;// km per minute
 
 	private Warrior(final Castle castle, final Coordinate xy) {
 		super(castle);
@@ -132,13 +132,16 @@ public class Warrior extends MovingAgent {
 				}
 				break;
 			case WarriorStatus.ATTACKING:
-				if (target().isPresent() && target().get().isAlive()) {
-					if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
-						target().get().defend(this, warriorCharacteristics.attack());
-						return;
+				if (target().isPresent()){
+					if(target().get().isAlive()) {
+						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
+							target().get().defend(this, warriorCharacteristics.attack());
+							return;
+						}
+					}else{
+						unassign(target().get());
 					}
 				}
-				comeBack();
 			case WarriorStatus.DEFENDING:
 				this.unassigned(timeElapsed);
 				break;
