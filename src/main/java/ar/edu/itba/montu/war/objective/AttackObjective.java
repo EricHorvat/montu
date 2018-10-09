@@ -1,10 +1,13 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.utils.RandomUtil;
+
+import java.util.Random;
 
 public class AttackObjective implements Objective {
 	
@@ -32,7 +35,7 @@ public class AttackObjective implements Objective {
 		
 		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
 			attacker.availableAttackers().forEach(a -> {
-				((MovingAgent)a).assignTarget((LocatableAgent)target);
+				((MovingAgent)a).assignTarget((LocatableAgent)target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
 			});
 			// I don't what happens now
 		//}*/
@@ -81,9 +84,14 @@ public class AttackObjective implements Objective {
 	public boolean involves(final LocatableAgent agent) {
 		return ((LocatableAgent)target).equals(agent);
 	}
-
+	
 	@Override
-	public String toString() {
-		return "AObjective [target=" + target + ", priority=" + priority + "]";
+	public <T extends Agent> T target() {
+		return (T)target;
 	}
+    
+    @Override
+    public String toString() {
+        return "AObjective [target=" + target + ", priority=" + priority + "]";
+    }
 }

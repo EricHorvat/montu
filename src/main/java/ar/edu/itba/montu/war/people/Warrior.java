@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
+import ar.edu.itba.montu.abstraction.MovingAgentStatus;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
@@ -47,8 +48,8 @@ public class Warrior extends MovingAgent {
 	@Override
 	protected void displace() {
 		// Displace will get called only if target is no null
-		if (target.isPresent()) {
-			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target.get().location());
+		if (target().isPresent()) {
+			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target().get().location());
 		}else {
 			comeBack();
 		}
@@ -67,6 +68,11 @@ public class Warrior extends MovingAgent {
 		//    ratio is high
 
 		final WarEnvironment environment = WarEnvironment.getInstance();
+		
+		if (targetsObjectives.size() >0 ){
+			status = MovingAgentStatus.MOVING;
+			return;
+		}
 		// get from the environment the enemies within viewing distance
 		/// TODO: remove hardcoded 500 value, it should be computed
 		/// based on warrior characteristics
@@ -92,10 +98,10 @@ public class Warrior extends MovingAgent {
 		
 		logger.debug("Unassigned warrior of {} will attack {}", kingdom, enemy);
 		
-		this.assignTarget(enemy);
+		this.assignTarget(enemy, RandomUtil.getRandom().nextInt(1000));
 	}
 	
-	public void assignToTarget(final LocatableAgent target) {
+	public void assignToTarget(final LocatableAgent target, int priority) {
 
 		/*TODO IF ALREADY ASSIGNED?*/
 		
@@ -103,7 +109,7 @@ public class Warrior extends MovingAgent {
 			return;
 		}
 		
-		super.assignTarget(target);
+		super.assignTarget(target,priority);
 	}
 	
 	public void tick(final long timeElapsed) {
@@ -115,8 +121,8 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
-				if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
-					if (target.get().equals(ownCastle)){
+				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
+					if (target().get().equals(ownCastle)){
 						status = WarriorStatus.UNASSIGNED;
 						return;
 					}
@@ -126,9 +132,9 @@ public class Warrior extends MovingAgent {
 				}
 				break;
 			case WarriorStatus.ATTACKING:
-				if (target.isPresent() && target.get().isAlive()) {
-					if (Coordinate.distanceBetween(location, target.get().location()) < warriorCharacteristics.attackDistance()) {
-						target.get().defend(this, warriorCharacteristics.attack());
+				if (target().isPresent() && target().get().isAlive()) {
+					if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
+						target().get().defend(this, warriorCharacteristics.attack());
 						return;
 					}
 				}

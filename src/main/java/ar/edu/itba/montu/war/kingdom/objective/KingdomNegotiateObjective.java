@@ -2,6 +2,7 @@ package ar.edu.itba.montu.war.kingdom.objective;
 
 import java.util.List;
 
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
@@ -86,5 +87,13 @@ public class KingdomNegotiateObjective implements Objective {
 	@Override
 	public boolean involves(final LocatableAgent agent) {
 		return targets.contains(agent);
+	}
+	
+	@Override
+	public <T extends Agent> T target() {
+		if (targets.size() > 0) {
+			return (T)targets.get(0);
+		}
+		return null;
 	}
 }

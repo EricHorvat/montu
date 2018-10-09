@@ -1,18 +1,22 @@
 package ar.edu.itba.montu.abstraction;
 
+import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
+import ar.edu.itba.montu.war.objective.AttackObjective;
+import ar.edu.itba.montu.war.objective.DefendObjective;
 
-import java.util.Optional;
+import java.util.*;
 
 public abstract class MovingAgent extends LocatableAgent {
 	
-	protected Optional<LocatableAgent> target = Optional.empty();
+	protected PriorityQueue<Objective> targetsObjectives = new PriorityQueue<>();
 	protected String status = MovingAgentStatus.UNASSIGNED;
 	
 	protected Castle ownCastle;/*Promove to PQ, with creator as more priority*/
 
 		public MovingAgent(Castle ownCastle) {
-				this.ownCastle = ownCastle;
+			this.ownCastle = ownCastle;
+			this.assignTarget(ownCastle,Integer.MIN_VALUE);
 			}
 	/**
 	 * The subclass should describe how the target
@@ -22,38 +26,42 @@ public abstract class MovingAgent extends LocatableAgent {
 	
 	protected void move() {
 		// don't move if there is no target present 
-		if (!target.isPresent()) {
+		if (!target().isPresent()) {
 			return;
 		}
 		
-		if (!target.get().isAlive()) {
+		if (!target().get().isAlive()) {
 			this.comeBack();
 		}
 		
 		this.displace();
 	}
 	
-	public void assignTarget(LocatableAgent target) {
-		Optional<LocatableAgent> nextTarget = Optional.ofNullable(target); 
-		if (this.target.equals(nextTarget)) return;
-		this.target = nextTarget;
-		if (this.target.isPresent()) {
-			this.status = MovingAgentStatus.MOVING;
-		} else {
-			this.status = MovingAgentStatus.UNASSIGNED;
+	public void assignTarget(LocatableAgent target, Integer priority) {
+		for(Objective o : targetsObjectives){
+			if(o.involves(target)){
+				//TODO? o.priority(priority);
+				return;
+			}
 		}
+		Objective ob;
+		if (target.kingdom.equals(kingdom)){
+			ob = DefendObjective.fromWithPriority(target,priority);
+		}else{
+			ob = AttackObjective.headedToWithPriority(target,priority);
+		}
+		targetsObjectives.add(ob);
 	}
 	
 	
  
 	public void comeBack(){
-		assignTarget(ownCastle);
+		assignTarget(ownCastle, Integer.MIN_VALUE);
 		this.status = MovingAgentStatus.MOVING;
 	}
 	
-	public void unassign() {
-		this.target = Optional.empty();
-		this.status = MovingAgentStatus.UNASSIGNED;
+	public void unassign(LocatableAgent target) {
+		targetsObjectives.removeIf(o -> o.target().equals(target));
 	}
 	
 	public boolean isUnassigned() {
@@ -61,6 +69,9 @@ public abstract class MovingAgent extends LocatableAgent {
 	}
 	
 	public Optional<LocatableAgent> target() {
-		return target;
+		if(targetsObjectives.size() > 0){
+			return Optional.of(targetsObjectives.peek().target());
+		}
+		return Optional.empty();
 	}
 }

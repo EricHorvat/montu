@@ -60,6 +60,10 @@ public class CastleCharacteristics extends LocatableAgentCharacteristic {
 	public int populationGas() {
 		return populationGas.value();
 	}
+	
+	public int maxPopulationGas() {
+		return populationGas.maxValue();
+	}
 
 	public void populationGas(int value) {
 		populationGas.updateValue(value);
