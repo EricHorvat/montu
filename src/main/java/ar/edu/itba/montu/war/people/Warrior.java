@@ -19,8 +19,10 @@ public class Warrior extends MovingAgent {
 
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
-	final WarriorCharacteristics warriorCharacteristics;
+	private static final int MINUTES_IN_A_DAY = 24 * 60;
+	private static final int BASE_WARRIOR_COST = MINUTES_IN_A_DAY * 3;
 	
+	final WarriorCharacteristics warriorCharacteristics;
 	final WarriorRole role;
 
 	/**
@@ -83,7 +85,7 @@ public class Warrior extends MovingAgent {
 		// get from the environment the enemies within viewing distance
 		/// TODO: remove hardcoded 500 value, it should be computed
 		/// based on warrior characteristics
-		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, 5);
+		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance());
 		
 		final List<Warrior> attackingEnemies =
 				enemies.stream()
@@ -187,7 +189,7 @@ public class Warrior extends MovingAgent {
 
 	public int gasCost(){
 		/*TODO FORMULA*/
-		return 12;
+		return BASE_WARRIOR_COST;
 	}
 	
 	@Override
