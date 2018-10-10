@@ -1,76 +1,59 @@
 package ar.edu.itba.montu.war.castle;
 
+import ar.edu.itba.montu.abstraction.AttackingAgentCharacteristics;
 import ar.edu.itba.montu.abstraction.Characteristic;
-import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristic;
+import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
-public class CastleCharacteristics extends LocatableAgentCharacteristic {
-
-	private final Characteristic<Double> offenseCapacity;
-	private final Characteristic<Integer> spawnCapacity;
-
-	private final Characteristic<Integer> population;
-	private final Characteristic<Integer> populationGas;
+public class CastleCharacteristics extends AttackingAgentCharacteristics {
+	
+	private final Characteristic<Integer> offenseCapacity;
+	private Characteristic<Integer> gas;
 	
 	public CastleCharacteristics(
-			final KingdomCharacteristics characteristics,
-			final double viewDistance,
-			final double attackDistance,
-			final double healthPoints,
-			final double attack) {
-		super(viewDistance, attackDistance, healthPoints, attack);
+			final KingdomCharacteristics kingdomCharacteristics,
+			final AttackingAgentCharacteristics attackCharacteristics,
+			final int gas
+	) {
+		super(
+				LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
+						attackCharacteristics.viewDistance(),
+						attackCharacteristics.healthPoints()
+				),
+				attackCharacteristics.attackDistance(),
+				attackCharacteristics.attackHarm()
+		);
 		this.offenseCapacity = Characteristic.withFixedValue(
-				RandomUtil.getNormalDistribution(characteristics.offenseCapacity(), 0.1 * characteristics.offenseCapacity())
+				(int)RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 0.1 * kingdomCharacteristics.offenseCapacity())
 		);
-		this.spawnCapacity = Characteristic.withFixedValue(
-				RandomUtil.getRandom().nextInt(10)
-		);
-		this.population = Characteristic.withChangingValue(
-				0,
-				RandomUtil.getRandom().nextInt(20),
-				0
-		);
-		this.populationGas = Characteristic.withChangingValue(
-				0,
-				RandomUtil.getRandom().nextInt(50)
-		);
+		this.gas = Characteristic.withChangingValue(0, gas);
+	}
+
+	public int gas() {
+		return gas.value();
 	}
 	
-	public static CastleCharacteristics standardCharacteristics(final KingdomCharacteristics characteristics) {
-		return new CastleCharacteristics(characteristics, 30, 20, 100000, 1);
+	public int maxGas() {
+		return gas.maxValue();
+	}
+
+	public CastleCharacteristics useGas(int gas) {
+		this.gas.updateValue(this.gas.value() - gas);
+		return this;
 	}
 	
-	public static CastleCharacteristics defenseCharacteristics(final KingdomCharacteristics characteristics) {
-		return new CastleCharacteristics(characteristics, 30, 20, 100000, 1);
-	}
-
-	public int population() {
-		return population.value();
-	}
-
-	public int maxPopulation() {
-		return population.maxValue();
-	}
-
-	public void population(int value) {
-		population.updateValue(value);
-	}
-
-	public int populationGas() {
-		return populationGas.value();
+	public boolean hasGas() {
+		return gas() > 0;
 	}
 	
-	public int maxPopulationGas() {
-		return populationGas.maxValue();
+	public CastleCharacteristics boostGasBy(int gas) {
+		this.gas = Characteristic.withChangingValue(0, maxGas() + gas, gas());
+		return this;
 	}
-
-	public void populationGas(int value) {
-		populationGas.updateValue(value);
-	}
-
-	public int spawnCapacity() {
-		return spawnCapacity.value();
+	
+	public CastleCharacteristics boostGasByWithCost(int gas, int cost) {
+		return this.useGas(cost).boostGasBy(gas);
 	}
 
 	public double offenseCapacity() {

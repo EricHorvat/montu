@@ -1,0 +1,92 @@
+environment:
+  size: 1000
+  time: 518400
+  seed: 287
+viewport:
+  width: 1024
+  height: 768
+kingdoms:
+  - name: Reichel Inc
+    offenseCapacity: 30
+    warriorSpeed: 91
+    castles:
+      - name: 'Franecki, Wisoky and Lubowitz'
+        characteristics:
+          viewDistance: 30
+          attackDistance: 37
+          healthPoints: 97
+          attack: 55
+        location:
+          lat: 8
+          lng: 915
+      - name: Kuvalis Group
+        characteristics:
+          viewDistance: 14
+          attackDistance: 20
+          healthPoints: 25
+          attack: 77
+        location:
+          lat: 808
+          lng: 934
+  - name: Thompson - Dietrich
+    offenseCapacity: 71
+    warriorSpeed: 92
+    castles:
+      - name: Heathcote LLC
+        characteristics:
+          viewDistance: 86
+          attackDistance: 75
+          healthPoints: 45
+          attack: 99
+        location:
+          lat: 570
+          lng: 815
+      - name: Mohr and Sons
+        characteristics:
+          viewDistance: 54
+          attackDistance: 64
+          healthPoints: 64
+          attack: 79
+        location:
+          lat: 593
+          lng: 25
+      - name: 'Armstrong, Fisher and Goyette'
+        characteristics:
+          viewDistance: 7
+          attackDistance: 58
+          healthPoints: 46
+          attack: 37
+        location:
+          lat: 845
+          lng: 303
+      - name: 'Hessel, Schmitt and Lebsack'
+        characteristics:
+          viewDistance: 90
+          attackDistance: 91
+          healthPoints: 91
+          attack: 12
+        location:
+          lat: 420
+          lng: 457
+  - name: 'Morar, Hermiston and Keebler'
+    offenseCapacity: 80
+    warriorSpeed: 97
+    castles:
+      - name: 'Gulgowski, Vandervort and Rempel'
+        characteristics:
+          viewDistance: 38
+          attackDistance: 27
+          healthPoints: 44
+          attack: 11
+        location:
+          lat: 345
+          lng: 194
+      - name: 'Doyle, Bartoletti and Kutch'
+        characteristics:
+          viewDistance: 82
+          attackDistance: 6
+          healthPoints: 78
+          attack: 17
+        location:
+          lat: 911
+          lng: 294

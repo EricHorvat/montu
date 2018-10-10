@@ -138,7 +138,7 @@ public class Castle extends LocatableAgent {
 		
 		///TODO: make the proper calculations to get the value of radius
 		return environment
-				.agentsWithinRadiusOfCoordinate(location, 10)
+				.agentsWithinRadiusOfCoordinate(location, characteristics.viewDistance())
 				.stream()
 				.filter(agent -> !agent.kingdom().equals(kingdom))
 				.collect(Collectors.toList());
@@ -211,6 +211,10 @@ public class Castle extends LocatableAgent {
 	public boolean isAlive() {
 		//TODO CHANGE
 		return characteristics.healthPoints() > 0;
+	}
+	
+	public boolean hasGas() {
+		return characteristics.hasGas();
 	}
 	
 	@Override

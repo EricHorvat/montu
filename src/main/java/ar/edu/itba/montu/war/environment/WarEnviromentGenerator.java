@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ar.edu.itba.montu.abstraction.AttackingAgentCharacteristics;
+import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.visual.KingdomColorGetter;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
@@ -14,6 +16,7 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.kingdom.KingdomBuilder;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
 import ar.edu.itba.montu.war.utils.Coordinate;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class WarEnviromentGenerator {
 	
@@ -24,7 +27,11 @@ public class WarEnviromentGenerator {
 		logger.info("Loading configuration to environment");
 		
 		final List<Kingdom> kingdoms = config.getKingdoms().stream().map(k -> {
-			final KingdomCharacteristics kingdomCharacteristics = KingdomCharacteristics.withOffenseCapacity(k.getOffenseCapacity());
+			final KingdomCharacteristics kingdomCharacteristics =
+					KingdomCharacteristics.withOffenseCapacityAndWarriorSpeed(
+							k.getOffenseCapacity(),
+							k.getWarriorSpeed()
+					);
 			return KingdomBuilder
 					.withName(k.getName())
 					.withKingdomCharacteristics(
@@ -38,7 +45,18 @@ public class WarEnviromentGenerator {
 												Coordinate.at(c.getLocation().getLat(), c.getLocation().getLng())
 										)
 										.withCastleCharacteristics(
-												CastleCharacteristics.standardCharacteristics(kingdomCharacteristics)
+												new CastleCharacteristics(
+														kingdomCharacteristics,
+														new AttackingAgentCharacteristics(
+																LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
+																		c.getCharacteristics().getViewDistance(),
+																		c.getCharacteristics().getHealthPoints()
+																),
+																c.getCharacteristics().getAttackDistance(),
+																(int)RandomUtil.getNormalDistribution(100 - k.getOffenseCapacity(), k.getOffenseCapacity() / 10)
+														),
+														c.getCharacteristics().getGas()
+												)
 										);
 							}).collect(Collectors.toList())
 					)

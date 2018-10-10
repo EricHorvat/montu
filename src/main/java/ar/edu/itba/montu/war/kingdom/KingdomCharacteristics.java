@@ -5,15 +5,16 @@ import ar.edu.itba.montu.abstraction.Characteristic;
 public class KingdomCharacteristics {
 
 	final Characteristic<Double> offenseCapacity;
+	final Characteristic<Double> warriorSpeed;
 
-	public KingdomCharacteristics(double attack) {
-		/*CONTROL 0.0 <= attack <= 1.0*/
+	public KingdomCharacteristics(final double attack, final double speed) {
 		this.offenseCapacity = Characteristic.withFixedValue(attack);
+		this.warriorSpeed = Characteristic.withFixedValue(speed);
 	}
 	
-	public static KingdomCharacteristics withOffenseCapacity(final double offenseCapacity) {
+	public static KingdomCharacteristics withOffenseCapacityAndWarriorSpeed(final double offenseCapacity, final double warriorSpeed) {
 		
-		return new KingdomCharacteristics(offenseCapacity);
+		return new KingdomCharacteristics(offenseCapacity, warriorSpeed);
 	}
 	
 	public double offenseCapacity() {
@@ -22,5 +23,9 @@ public class KingdomCharacteristics {
 	
 	public double defenseCapacity() {
 		return 100 - offenseCapacity.value();
+	}
+	
+	public double warriorSpeed() {
+		return offenseCapacity.value();
 	}
 }

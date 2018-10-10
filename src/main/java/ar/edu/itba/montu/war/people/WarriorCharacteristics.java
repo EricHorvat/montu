@@ -1,11 +1,17 @@
 package ar.edu.itba.montu.war.people;
 
+import ar.edu.itba.montu.abstraction.Characteristic;
 import ar.edu.itba.montu.abstraction.MovingAgentCharacteristic;
+import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 
 public class WarriorCharacteristics extends MovingAgentCharacteristic {
 
-	public WarriorCharacteristics(double viewDistance, double attackDistance, double healthPoint, double attack) {
-		super(viewDistance, attackDistance, healthPoint, attack);
+	private final Characteristic<Integer> attackDistance;
+	
+	
+	
+	private WarriorCharacteristics(final CastleCharacteristics characteristics, double attack) {
+		super(viewDistance, healthPoint, attack);
 	}
 
 	public static WarriorCharacteristics standardCharacteristics() {

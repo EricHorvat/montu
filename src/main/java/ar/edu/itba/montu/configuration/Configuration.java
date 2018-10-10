@@ -33,38 +33,38 @@ public final class Configuration {
 	}
 	
 	public static final class CastleCharacteristicConfiguration {
-		private int viewDistance;
-		private int attackDistance;
+		private double viewDistance;
+		private double attackDistance;
 		private int healthPoints;
-		private int attack;
-		public int getViewDistance() {
+		private int gas;
+		public double getViewDistance() {
 			return viewDistance;
 		}
-		public int getAttackDistance() {
+		public double getAttackDistance() {
 			return attackDistance;
 		}
 		public int getHealthPoints() {
 			return healthPoints;
 		}
-		public int getAttack() {
-			return attack;
-		}
-		public void setViewDistance(int viewDistance) {
+		public void setViewDistance(double viewDistance) {
 			this.viewDistance = viewDistance;
 		}
-		public void setAttackDistance(int attackDistance) {
+		public void setAttackDistance(double attackDistance) {
 			this.attackDistance = attackDistance;
 		}
 		public void setHealthPoints(int healthPoints) {
 			this.healthPoints = healthPoints;
 		}
-		public void setAttack(int attack) {
-			this.attack = attack;
+		public int getGas() {
+			return gas;
+		}
+		public void setGas(int gas) {
+			this.gas = gas;
 		}
 		@Override
 		public String toString() {
 			return "CastleCharacteristics [viewDistance=" + viewDistance + ", attackDistance=" + attackDistance
-					+ ", healthPoints=" + healthPoints + ", attack=" + attack + "]";
+					+ ", healthPoints=" + healthPoints + "]";
 		}
 	}
 	
@@ -120,6 +120,7 @@ public final class Configuration {
 	public static final class KingdomConfiguration {
 		public String name;
 		private int offenseCapacity;
+		private double warriorSpeed;
 		private List<CastleConfiguration> castles;
 		public String getName() {
 			return name;
@@ -138,6 +139,12 @@ public final class Configuration {
 		}
 		public void setCastles(List<CastleConfiguration> castles) {
 			this.castles = castles;
+		}
+		public double getWarriorSpeed() {
+			return warriorSpeed;
+		}
+		public void setWarriorSpeed(double warriorSpeed) {
+			this.warriorSpeed = warriorSpeed;
 		}
 		@Override
 		public String toString() {

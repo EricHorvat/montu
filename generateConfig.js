@@ -3,7 +3,9 @@ const Enquirer = require('enquirer')
 		, crypto = require('crypto')
 		, yaml = require('write-yaml')
 		, log = require('log-utils')
-		, prettyjson = require('prettyjson');
+		, prettyjson = require('prettyjson')
+		, d3 = require('d3-random')
+		, faker = require('faker');
 
 enquirer.register('confirm', require('prompt-confirm'));
 
@@ -14,13 +16,16 @@ const isNonNegativeNumberOrZero = v => isNumber(v) && parseInt(v, 10) >= 0;
 const times = n => new Array(n).fill(undefined);
 const range = (n, b = 0) => times(n).map(($, i) => i + b);
 
-const randomInt = (a, b) => {
-	const buffer = crypto.randomBytes(8);
-	const value = parseInt(buffer.toString('hex'), 16);
-	return Math.min(a, b) + (value % (Math.abs(b - a) + 1));
-}
+// const randomInt = (a, b) => {
+// 	const buffer = crypto.randomBytes(8);
+// 	const value = parseInt(buffer.toString('hex'), 16);
+// 	return Math.min(a, b) + (value % (Math.abs(b - a) + 1));
+// }
 
 const MINUTES_IN_A_MONTH = 30 * 24 * 60;
+const MINUTES_IN_A_DAY = 24 * 60;
+
+const BASE_WARRIOR_COST = 10;
 
 enquirer.question({
 	name: 'environment.size',
@@ -137,20 +142,22 @@ enquirer.prompt([
 
 	config.environment.time *= MINUTES_IN_A_MONTH;
 
+	const offenseCapacity = Math.round(d3.randomUniform(1, 100)());
 	config.kingdoms = range(config.kingdom_count, 1).map(i => ({
-		name: `Kingdom ${i}`,
-		offenseCapacity: randomInt(1, 100),
-		castles: range(randomInt(config.min_castles, config.max_castles), 1).map(j => ({
-			name: `Castle ${j}`,
+		name: faker.address.country(),
+		offenseCapacity,
+		warriorSpeed: d3.randomNormal(0.09, 0.009)(), // double
+		castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
+			name: faker.address.city(),
 			characteristics: {
-				viewDistance: randomInt(1, 100),
-				attackDistance: randomInt(1, 100),
-				healthPoints: randomInt(1, 100),
-				attack: randomInt(1, 100)
+				viewDistance: d3.randomUniform(2, 5)(), // double
+				attackDistance: d3.randomUniform(0.2, 0.7)(), // double
+				healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
+				gas: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)())
 			},
 			location: {
-				lat: randomInt(0, config.environment.size),
-				lng: randomInt(0, config.environment.size)
+				lat: d3.randomUniform(0, config.environment.size)(), // double
+				lng: d3.randomUniform(0, config.environment.size)() // double
 			}
 		}))
 	}));
