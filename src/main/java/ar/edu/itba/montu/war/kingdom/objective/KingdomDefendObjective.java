@@ -2,9 +2,13 @@ package ar.edu.itba.montu.war.kingdom.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 
-public class KingdomDefendObjective implements Objective {
+import java.util.List;
+
+public class KingdomDefendObjective implements KingdomObjective {
 	
 	final private LocatableAgent target;
 	final private int priority;
@@ -17,13 +21,9 @@ public class KingdomDefendObjective implements Objective {
 	public static KingdomDefendObjective fromWithPriority(final LocatableAgent target, final int priority) {
 		return new KingdomDefendObjective(target, priority);
 	}
-	
-	public void enforce(LocatableAgent locatableAgent) {
-		
-	}
 
 	@Override
-	public int compareTo(Objective o) {
+	public int compareTo(KingdomObjective o) {
 		return priority - o.priority();
 	}
 
@@ -61,8 +61,8 @@ public class KingdomDefendObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Agent> T target() {
-		return (T)target;
+	public Kingdom target() {
+		return null; /*TODO*/
 	}
 	
 	@Override
@@ -71,7 +71,12 @@ public class KingdomDefendObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Agent> void enforce(T agent) {
+	public void alterPriority(int priority) {
 	
+	}
+	
+	@Override
+	public List<Objective> translate() {
+		return null;
 	}
 }

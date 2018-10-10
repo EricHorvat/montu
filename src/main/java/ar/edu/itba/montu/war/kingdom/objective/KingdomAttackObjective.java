@@ -23,11 +23,6 @@ public class KingdomAttackObjective implements KingdomObjective {
 	public static KingdomAttackObjective headedToWithPriority(final Kingdom target, final int priority) {
 		return new KingdomAttackObjective(target, priority);
 	}
-	
-	@Override
-	public void enforce(final Agent a) {
-	
-	}
 
 	@Override
 	public int priority() {

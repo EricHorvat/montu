@@ -5,9 +5,11 @@ import java.util.List;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
+import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 
-public class KingdomNegotiateObjective implements Objective {
+public class KingdomNegotiateObjective implements KingdomObjective {
 	
 	public static enum Intention {
 		ATTACK,
@@ -32,7 +34,7 @@ public class KingdomNegotiateObjective implements Objective {
 	}
 
 	@Override
-	public int compareTo(Objective o) {
+	public int compareTo(KingdomObjective o) {
 		return priority - o.priority();
 	}
 
@@ -84,15 +86,18 @@ public class KingdomNegotiateObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Agent> T target() {
-		if (targets.size() > 0) {
-			return (T)targets.get(0);
-		}
+	public void alterPriority(int priority) {
+	
+	}
+	
+	@Override
+	public List<Objective> translate() {
 		return null;
 	}
 	
 	@Override
-	public <T extends Agent> void enforce(T agent) {
-	
+	public Kingdom target() {
+		return null;
 	}
+	
 }

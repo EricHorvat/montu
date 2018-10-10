@@ -5,6 +5,7 @@ import java.util.List;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
+import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
 
 public class NegotiateObjective implements Objective {
@@ -29,11 +30,6 @@ public class NegotiateObjective implements Objective {
 	
 	public static NegotiateObjective withOtherToIntentTargetsAndPriority(final List<? extends NonLocatableAgent> friendKingdoms, final Intention intention, final List<? extends NonLocatableAgent> enemyKingdoms, final int priority) {
 		return new NegotiateObjective(friendKingdoms, intention, enemyKingdoms, priority);
-	}
-	
-	@Override
-	public void enforce(final Agent agent) {
-		
 	}
 
 	@Override
@@ -91,5 +87,10 @@ public class NegotiateObjective implements Objective {
 	@Override
 	public <T extends Agent> T target() {
 		return (T)targets.get(0); /*TODO CHECK*/
+	}
+	
+	@Override
+	public void enforce(Spawner callerAgent) {
+	
 	}
 }
