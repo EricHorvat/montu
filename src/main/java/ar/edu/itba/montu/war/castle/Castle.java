@@ -171,16 +171,12 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 
 	public Warrior createAnAttacker() {
-		int population = characteristics.population();
-		int populationLimit = characteristics.maxPopulation() - population;
-		final int attackerCount = Math.min(populationLimit,Math.min(1, characteristics.spawnCapacity()));
 		final List<Warrior> warriors = IntStream
-				.range(0, attackerCount)
+				.range(0, 1)
 				.mapToObj(i -> buildAttacker())
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		this.warriors.addAll(warriors);
-		characteristics.population(population + warriors.size());
 		return warriors.size() == 0 ? null : warriors.get(0);
 	}
 
@@ -211,8 +207,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, int damageSkill) {
-		int hp = characteristics.healthPoints() - damageSkill;
+	public void defend(LocatableAgent agent, int attackHarm) {
+		double hp = characteristics.healthPoints() - attackHarm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
 			//TODO STATUS = DEAD
@@ -254,7 +250,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	@Override
 	public String toString() {
-		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nPop:" + characteristics.population() + "/" + characteristics.maxPopulation() ;
+		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas();
 	}
 	
 }

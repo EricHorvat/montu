@@ -22,7 +22,6 @@ public class AttackObjective implements Objective {
 		return new AttackObjective(target, priority);
 	}
 	
-	@Override
 	public void enforce(final Spawner spawner) {
 		
 		//final int requiredAttackers = target.availableDefenders().size() + 1;
@@ -35,7 +34,7 @@ public class AttackObjective implements Objective {
 		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
 			spawner.availableAttackers()
 				.forEach(a -> {
-					(a.assignTarget(target, RandomUtil.getRandom().nextInt(1000))); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+					a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
 			});
 			// I don't what happens now
 		//}*/
