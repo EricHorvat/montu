@@ -24,7 +24,7 @@ public abstract class LocatableAgent extends Agent{
 		return kingdom;
 	}
 
-	public abstract void defend(LocatableAgent agent, double damageSkill);
+	public abstract void defend(LocatableAgent agent, int harm);
 
 	public abstract boolean isAlive();
 

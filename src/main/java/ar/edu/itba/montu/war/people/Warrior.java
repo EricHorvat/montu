@@ -1,6 +1,7 @@
 package ar.edu.itba.montu.war.people;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.abstraction.MovingAgentStatus;
 import ar.edu.itba.montu.war.castle.Castle;
-import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
@@ -19,8 +19,10 @@ public class Warrior extends MovingAgent {
 
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
-	final WarriorCharacteristics warriorCharacteristics;
+	private static final int MINUTES_IN_A_DAY = 24 * 60;
+	private static final int BASE_WARRIOR_COST = MINUTES_IN_A_DAY * 3;
 	
+	final WarriorCharacteristics warriorCharacteristics;
 	final WarriorRole role;
 
 	/**
@@ -28,22 +30,22 @@ public class Warrior extends MovingAgent {
 	 */
 	private double speed = 5;// km per minute
 
-	private Warrior(final Castle castle, final Coordinate xy, final WarriorRole role) {
+	private Warrior(final Castle castle, final WarriorRole role) {
 		super(castle);
 		this.kingdom = castle.kingdom();
-		this.location = xy;
+		this.location = castle.location();
 		this.role = role;
-		this.warriorCharacteristics = WarriorCharacteristics.standardCharacteristics();
+		this.warriorCharacteristics = WarriorCharacteristics.fromCastleCharacteristics(castle.characteristics());
 	}
 	
-	public static Warrior createDefenderWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Castle castle) {
-		final Warrior w = new Warrior(castle, xy, WarriorRole.DEFENDER);
+	public static Warrior createDefenderInCastle(final Castle castle) {
+		final Warrior w = new Warrior(castle, WarriorRole.DEFENDER);
 		
 		return w;
 	}
 	
-	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Castle castle) {
-		final Warrior w = new Warrior(castle, xy, WarriorRole.ATTACKER);
+	public static Warrior createAttackerInCastle(final Castle castle) {
+		final Warrior w = new Warrior(castle, WarriorRole.ATTACKER);
 		
 		return w;
 	}
@@ -83,7 +85,7 @@ public class Warrior extends MovingAgent {
 		// get from the environment the enemies within viewing distance
 		/// TODO: remove hardcoded 500 value, it should be computed
 		/// based on warrior characteristics
-		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, 5);
+		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance());
 		
 		final List<Warrior> attackingEnemies =
 				enemies.stream()
@@ -142,7 +144,7 @@ public class Warrior extends MovingAgent {
 				if (target().isPresent()){
 					if(target().get().isAlive()) {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
-							target().get().defend(this, warriorCharacteristics.attack());
+							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
 						}
 					}else{
@@ -157,8 +159,8 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, double damageSkill) {
-		double hp = warriorCharacteristics.healthPoints() - damageSkill;
+	public void defend(LocatableAgent agent, int harm) {
+		int hp = warriorCharacteristics.healthPoints() - harm;
 		if (hp < 0){
 			logger.debug("Warrior of kingdom {} is dead", kingdom);
 			status = WarriorStatus.DEAD;
@@ -187,7 +189,7 @@ public class Warrior extends MovingAgent {
 
 	public int gasCost(){
 		/*TODO FORMULA*/
-		return 12;
+		return BASE_WARRIOR_COST;
 	}
 	
 	@Override

@@ -149,7 +149,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	/*WARN CAN BE NULL*/
 	private Warrior buildAttacker() {
 		int gas = characteristics.gas();
-		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
+		Warrior w = Warrior.createAttackerInCastle(this);
 		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
@@ -161,7 +161,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	/*WARN CAN BE NULL*/
 	private Warrior build() {
 		int gas = characteristics.gas();
-		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
+		Warrior w = Warrior.createAttackerInCastle(this);
 		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
@@ -207,8 +207,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, int attackHarm) {
-		double hp = characteristics.healthPoints() - attackHarm;
+	public void defend(LocatableAgent agent, int harm) {
+		int hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
 			//TODO STATUS = DEAD
