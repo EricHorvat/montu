@@ -69,4 +69,9 @@ public class KingdomDefendObjective implements Objective {
 	public boolean involves(final LocatableAgent agent) {
 		return target.equals(agent);
 	}
+	
+	@Override
+	public <T extends Agent> void enforce(T agent) {
+	
+	}
 }

@@ -3,36 +3,39 @@ package ar.edu.itba.montu.war.objective;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
+import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.people.WarriorRole;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class AttackObjective implements Objective {
 	
-	final Agent target;
+	final LocatableAgent target;
 	final int priority;
 	
-	private AttackObjective(final Agent target, final int priority) {
+	private AttackObjective(final LocatableAgent target, final int priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static AttackObjective headedToWithPriority(final Agent target, final int priority) {
+	public static AttackObjective headedToWithPriority(final LocatableAgent target, final int priority) {
 		return new AttackObjective(target, priority);
 	}
 	
 	@Override
-	public void enforce(final Agent attacker) {
+	public void enforce(final Spawner spawner) {
 		
 		//final int requiredAttackers = target.availableDefenders().size() + 1;
 
 		//if ( attacker.attackers().size() < requiredAttackers) {
 			
-			int s = attacker.createAttackers(1).size();
+			int s = spawner.createWarriors(1, WarriorRole.ATTACKER).size();
 		//}
 		
 		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
-			attacker.availableAttackers().forEach(a -> {
-				((MovingAgent)a).assignTarget((LocatableAgent)target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+			spawner.availableAttackers()
+				.forEach(a -> {
+					(a.assignTarget(target, RandomUtil.getRandom().nextInt(1000))); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
 			});
 			// I don't what happens now
 		//}*/

@@ -90,4 +90,9 @@ public class KingdomNegotiateObjective implements Objective {
 		}
 		return null;
 	}
+	
+	@Override
+	public <T extends Agent> void enforce(T agent) {
+	
+	}
 }
