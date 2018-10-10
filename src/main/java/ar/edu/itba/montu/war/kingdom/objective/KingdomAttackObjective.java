@@ -3,14 +3,12 @@ package ar.edu.itba.montu.war.kingdom.objective;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ar.edu.itba.montu.abstraction.Attacker;
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.objective.AttackObjective;
-import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class KingdomAttackObjective implements KingdomObjective {
 	
@@ -27,7 +25,7 @@ public class KingdomAttackObjective implements KingdomObjective {
 	}
 	
 	@Override
-	public void enforce(final Attacker attacker) {
+	public void enforce(final Agent agent) {
 		
 	}
 

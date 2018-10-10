@@ -14,7 +14,7 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
   @Override
   void draw(ProcessingApplet applet) {
     super.draw(applet);
-    applet.ellipse(x - R, y - R, 2 * R, 2 * R);
+    applet.ellipse(x, y, 2 * R, 2 * R);
     /* See attack distance
     float attackD = ((Warrior) locatableAgent).getAttackD();
     applet.noFill();

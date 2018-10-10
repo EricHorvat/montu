@@ -3,7 +3,6 @@ package ar.edu.itba.montu.war.kingdom.objective;
 import java.util.List;
 
 import ar.edu.itba.montu.abstraction.Agent;
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
@@ -30,11 +29,6 @@ public class KingdomNegotiateObjective implements Objective {
 	
 	public static KingdomNegotiateObjective withOtherToIntentTargetsAndPriority(final List<? extends NonLocatableAgent> friendKingdoms, final Intention intention, final List<? extends NonLocatableAgent> enemyKingdoms, final int priority) {
 		return new KingdomNegotiateObjective(friendKingdoms, intention, enemyKingdoms, priority);
-	}
-	
-	@Override
-	public void enforce(final Attacker attacker) {
-		
 	}
 
 	@Override
