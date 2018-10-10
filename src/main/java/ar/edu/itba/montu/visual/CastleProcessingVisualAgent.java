@@ -19,10 +19,10 @@ import java.util.UUID;
     applet.noFill();
     float viewDistance = (float) ((Castle)locatableAgent).characteristics().viewDistance();
     applet.stroke(applet.color(120,100,100));
-    applet.ellipse(x-viewDistance,y-viewDistance,2*viewDistance,2*viewDistance);
+    applet.ellipse(x,y,2*viewDistance,2*viewDistance);
     float attackDistance = (float) ((Castle)locatableAgent).characteristics().attackDistance();
     applet.stroke(applet.color(0,100,100));
-    applet.ellipse(x-attackDistance,y-attackDistance,2*attackDistance,2*attackDistance);
-    applet.noStroke();
+    applet.ellipse(x,y,2*attackDistance,2*attackDistance);
+    applet.stroke(applet.color(0,0,0));
   }
 }
