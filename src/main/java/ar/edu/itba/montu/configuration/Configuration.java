@@ -46,6 +46,9 @@ public final class Configuration {
 		public int getHealthPoints() {
 			return healthPoints;
 		}
+		public int getGas() {
+			return gas;
+		}
 		public void setViewDistance(double viewDistance) {
 			this.viewDistance = viewDistance;
 		}
@@ -54,9 +57,6 @@ public final class Configuration {
 		}
 		public void setHealthPoints(int healthPoints) {
 			this.healthPoints = healthPoints;
-		}
-		public int getGas() {
-			return gas;
 		}
 		public void setGas(int gas) {
 			this.gas = gas;
@@ -69,18 +69,18 @@ public final class Configuration {
 	}
 	
 	public static final class Coordinate {
-		private int lat;
-		private int lng;
-		public int getLat() {
+		private double lat;
+		private double lng;
+		public double getLat() {
 			return lat;
 		}
-		public int getLng() {
+		public double getLng() {
 			return lng;
 		}
-		public void setLat(int lat) {
+		public void setLat(double lat) {
 			this.lat = lat;
 		}
-		public void setLng(int lng) {
+		public void setLng(double lng) {
 			this.lng = lng;
 		}
 		@Override
@@ -118,7 +118,7 @@ public final class Configuration {
 	}
 	
 	public static final class KingdomConfiguration {
-		public String name;
+		private String name;
 		private int offenseCapacity;
 		private double warriorSpeed;
 		private List<CastleConfiguration> castles;

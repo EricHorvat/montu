@@ -238,6 +238,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public void addEnemy(Kingdom k){
 		rivals.add(k);
 	}
+	
+	public KingdomCharacteristics characteristics() {
+		return characteristics;
+	}
 
 	@Override
 	public String toString() {

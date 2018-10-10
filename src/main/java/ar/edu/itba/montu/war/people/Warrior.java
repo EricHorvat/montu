@@ -28,14 +28,14 @@ public class Warrior extends MovingAgent {
 	/**
 	 * Expressed in metres/delta time
 	 */
-	private double speed = 5;// km per minute
+//	private double speed = 5;// km per minute
 
 	private Warrior(final Castle castle, final WarriorRole role) {
 		super(castle);
 		this.kingdom = castle.kingdom();
 		this.location = castle.location();
 		this.role = role;
-		this.warriorCharacteristics = WarriorCharacteristics.fromCastleCharacteristics(castle.characteristics());
+		this.warriorCharacteristics = WarriorCharacteristics.fromCastle(castle);
 	}
 	
 	public static Warrior createDefenderInCastle(final Castle castle) {
@@ -58,7 +58,7 @@ public class Warrior extends MovingAgent {
 	protected void displace() {
 		// Displace will get called only if target is no null
 		if (target().isPresent()) {
-			this.location = this.location.applyingNoisyDeltaInDirectionTo(speed, target().get().location());
+			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
 		}else {
 			comeBack();
 		}
