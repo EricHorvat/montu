@@ -25,7 +25,7 @@ const range = (n, b = 0) => times(n).map(($, i) => i + b);
 const MINUTES_IN_A_MONTH = 30 * 24 * 60;
 const MINUTES_IN_A_DAY = 24 * 60;
 
-const BASE_WARRIOR_COST = 10;
+const BASE_WARRIOR_COST = MINUTES_IN_A_DAY * 3;
 
 enquirer.question({
 	name: 'environment.size',

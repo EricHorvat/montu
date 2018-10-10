@@ -24,6 +24,9 @@ public class Castle extends LocatableAgent {
 
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
+	/// TODO should be retrieved from Configuration 
+	private static final int GAS_PER_MINUTE = 1;
+	
 	final private String name;
 	final private CastleCharacteristics characteristics;
 	/**
@@ -75,10 +78,11 @@ public class Castle extends LocatableAgent {
   public void tick(final long timeEllapsed) {
 	  /// TODO: template what a castle does on each tick
 	
-  	logger.debug("{} tick={}", name, timeEllapsed);
+  	logger.trace("{} tick={}", name, timeEllapsed);
+  	
+  	characteristics.increaseGas(characteristics.gas() + GAS_PER_MINUTE);
   	
 	  final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
-	  characteristics.populationGas(characteristics.populationGas() + 1 );
 	
 	  if (!kingdomObjective.isPresent()) {
 	  	logger.debug("{} has no objectives");
@@ -143,25 +147,25 @@ public class Castle extends LocatableAgent {
 	
 	/*WARN CAN BE NULL*/
 	private Warrior buildAttacker() {
-		int populationGas = characteristics.populationGas();
+		int gas = characteristics.gas();
 		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
-		if (populationGas - w.gasCost() < 0){
+		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
 		}
-		characteristics.populationGas(populationGas - w.gasCost());
+		this.useGas(w.gasCost());
 		return w;
 	}
 	
 	/*WARN CAN BE NULL*/
 	private Warrior build() {
-		int populationGas = characteristics.populationGas();
+		int gas = characteristics.gas();
 		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
-		if (populationGas - w.gasCost() < 0){
+		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
 		}
-		characteristics.populationGas(populationGas - w.gasCost());
+		this.useGas(w.gasCost());
 		return w;
 	}
 
@@ -203,8 +207,8 @@ public class Castle extends LocatableAgent {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, double damageSkill) {
-		double hp = characteristics.healthPoints() - damageSkill;
+	public void defend(LocatableAgent agent, int damageSkill) {
+		int hp = characteristics.healthPoints() - damageSkill;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
 			//TODO STATUS = DEAD
@@ -233,13 +237,18 @@ public class Castle extends LocatableAgent {
 			.mapToObj(i -> createAnAttacker())
 			.collect(Collectors.toList());
 	}
-    
-    public boolean hasGas() {
-        return characteristics.hasGas();
-    }
+	
+	public boolean hasGas() {
+		return characteristics.hasGas();
+	}
+
+	public Castle useGas(int gas) {
+		characteristics.useGas(gas);
+		return this;
+	}
 	
 	@Override
 	public String toString() {
-		return name + " \nRes:" + characteristics.populationGas() + "/" + characteristics.maxPopulationGas() + " \nPop:" + characteristics.population() + "/" + characteristics.maxPopulation() ;
+		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nPop:" + characteristics.population() + "/" + characteristics.maxPopulation() ;
 	}
 }

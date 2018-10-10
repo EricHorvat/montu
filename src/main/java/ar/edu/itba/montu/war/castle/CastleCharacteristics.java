@@ -43,6 +43,11 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 		return this;
 	}
 	
+	public CastleCharacteristics increaseGas(int gas) {
+		this.gas.updateValue(this.gas.value() + gas);
+		return this;
+	}
+	
 	public boolean hasGas() {
 		return gas() > 0;
 	}
