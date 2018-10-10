@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,7 @@ import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
-public class Castle extends LocatableAgent {
+public class Castle extends LocatableAgent implements Spawner {
 
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
@@ -104,7 +105,7 @@ public class Castle extends LocatableAgent {
 	  if (d < characteristics.defenseCapacity()) {
 		  // spawn defense warrior
 		  logger.debug("{} spawns a defending warrior", name);
-	  	createWarrior(1,WarriorRole.DEFENDER);
+	  	createWarriors(1,WarriorRole.DEFENDER);
 		  return;
 	  }
 	
@@ -179,6 +180,7 @@ public class Castle extends LocatableAgent {
 		return warriors.size() == 0 ? null : warriors.get(0);
 	}
 
+	@Override
 	public List<Warrior> availableAttackers() {
 		return warriors
 			.stream()
@@ -187,6 +189,7 @@ public class Castle extends LocatableAgent {
 			.collect(Collectors.toList());
 	}
 	
+	@Override
 	public List<Warrior> availableDefenders() {
 		return warriors
 			.stream()
@@ -195,6 +198,7 @@ public class Castle extends LocatableAgent {
 			.collect(Collectors.toList());
 	}
 	
+	@Override
 	public List<Warrior> availableWarriors() {
 		return warriors
 			.stream()
@@ -225,7 +229,8 @@ public class Castle extends LocatableAgent {
 		return characteristics.healthPoints() > 0;
 	}
 	
-	List<LocatableAgent> createWarrior(final int quantity, WarriorRole role /*, Characteristics?*/){
+	@Override
+	public List<LocatableAgent> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
 		
 		return IntStream
 			.range(0,quantity)
@@ -238,4 +243,5 @@ public class Castle extends LocatableAgent {
 	public String toString() {
 		return name + " \nRes:" + characteristics.populationGas() + "/" + characteristics.maxPopulationGas() + " \nPop:" + characteristics.population() + "/" + characteristics.maxPopulation() ;
 	}
+	
 }

@@ -25,8 +25,8 @@ public class KingdomAttackObjective implements KingdomObjective {
 	}
 	
 	@Override
-	public void enforce(final Agent agent) {
-		
+	public void enforce(final Agent a) {
+	
 	}
 
 	@Override

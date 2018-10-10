@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
@@ -67,5 +68,10 @@ public class DefendObjective implements Objective {
 	@Override
 	public LocatableAgent target() {
 		return target;
+	}
+	
+	@Override
+	public <T extends Agent> void enforce(T agent) {
+	
 	}
 }
