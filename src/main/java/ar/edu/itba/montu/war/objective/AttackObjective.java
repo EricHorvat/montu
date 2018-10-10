@@ -1,30 +1,27 @@
 package ar.edu.itba.montu.war.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
-import java.util.Random;
-
 public class AttackObjective implements Objective {
 	
-	final Attacker target;
+	final Agent target;
 	final int priority;
 	
-	private AttackObjective(final Attacker target, final int priority) {
+	private AttackObjective(final Agent target, final int priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static AttackObjective headedToWithPriority(final Attacker target, final int priority) {
+	public static AttackObjective headedToWithPriority(final Agent target, final int priority) {
 		return new AttackObjective(target, priority);
 	}
 	
 	@Override
-	public void enforce(final Attacker attacker) {
+	public void enforce(final Agent attacker) {
 		
 		//final int requiredAttackers = target.availableDefenders().size() + 1;
 

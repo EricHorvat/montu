@@ -1,7 +1,6 @@
 package ar.edu.itba.montu.war.kingdom.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
@@ -19,7 +18,7 @@ public class KingdomDefendObjective implements Objective {
 		return new KingdomDefendObjective(target, priority);
 	}
 	
-	public void enforce(Attacker attacker) {
+	public void enforce(LocatableAgent locatableAgent) {
 		
 	}
 

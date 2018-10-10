@@ -7,18 +7,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
-import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.people.Warrior;
-import ar.edu.itba.montu.war.people.WarriorStatus;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
@@ -99,19 +97,14 @@ public class Castle extends LocatableAgent {
 //	  availableDefenders().stream().filter(Warrior::isUnassigned).forEach(d -> );
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
-	  	if (availableDefenders().size() > 0){
-	  		int a = 5;
-		  }
-		  visibleRivalAgents.forEach(rival -> availableAttackers().forEach(att -> att.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
-		  visibleRivalAgents.forEach(rival -> availableDefenders().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
+	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
 		  /* TODO THEN COME BACK*/
 	  }
 	  
 	  if (d < characteristics.defenseCapacity()) {
 		  // spawn defense warrior
 		  logger.debug("{} spawns a defending warrior", name);
-	  	createAttackers(1).size();
-		  availableAttackers().stream().findFirst().ifPresent(Warrior::toDefend);
+	  	createWarrior(1,WarriorRole.DEFENDER);
 		  return;
 	  }
 	
@@ -147,14 +140,21 @@ public class Castle extends LocatableAgent {
 	public List<LocatableAgent> agents() {
 		return warriors.stream().map(w -> (LocatableAgent)w).collect(Collectors.toList());
 	}
-
-	@Override
-	public List<Warrior> attackers() {
-		return warriors;
-	}
-
+	
 	/*WARN CAN BE NULL*/
-	private Warrior buildWarrior() {
+	private Warrior buildAttacker() {
+		int populationGas = characteristics.populationGas();
+		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
+		if (populationGas - w.gasCost() < 0){
+			w.noCreated();
+			return null;
+		}
+		characteristics.populationGas(populationGas - w.gasCost());
+		return w;
+	}
+	
+	/*WARN CAN BE NULL*/
+	private Warrior build() {
 		int populationGas = characteristics.populationGas();
 		Warrior w = Warrior.createWithCharacteristicsInKingdomAtLocation(location, characteristics, this);
 		if (populationGas - w.gasCost() < 0){
@@ -165,14 +165,13 @@ public class Castle extends LocatableAgent {
 		return w;
 	}
 
-	@Override
 	public Warrior createAnAttacker() {
 		int population = characteristics.population();
 		int populationLimit = characteristics.maxPopulation() - population;
 		final int attackerCount = Math.min(populationLimit,Math.min(1, characteristics.spawnCapacity()));
 		final List<Warrior> warriors = IntStream
 				.range(0, attackerCount)
-				.mapToObj(i -> buildWarrior())
+				.mapToObj(i -> buildAttacker())
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		this.warriors.addAll(warriors);
@@ -180,14 +179,27 @@ public class Castle extends LocatableAgent {
 		return warriors.size() == 0 ? null : warriors.get(0);
 	}
 
-	@Override
 	public List<Warrior> availableAttackers() {
-		return warriors.stream().filter(Warrior::isAvailable).collect(Collectors.toList());
+		return warriors
+			.stream()
+			.filter(Warrior::isAttacker)
+			.filter(Warrior::isAvailable)
+			.collect(Collectors.toList());
 	}
-
-	@Override
+	
 	public List<Warrior> availableDefenders() {
-		return warriors.stream().filter(Warrior::isDefending).collect(Collectors.toList());
+		return warriors
+			.stream()
+			.filter(Warrior::isDefender)
+			.filter(Warrior::isAvailable)
+			.collect(Collectors.toList());
+	}
+	
+	public List<Warrior> availableWarriors() {
+		return warriors
+			.stream()
+			.filter(Warrior::isAvailable)
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -211,6 +223,15 @@ public class Castle extends LocatableAgent {
 	public boolean isAlive() {
 		//TODO CHANGE
 		return characteristics.healthPoints() > 0;
+	}
+	
+	List<LocatableAgent> createWarrior(final int quantity, WarriorRole role /*, Characteristics?*/){
+		
+		return IntStream
+			.range(0,quantity)
+			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)
+			.mapToObj(i -> createAnAttacker())
+			.collect(Collectors.toList());
 	}
 	
 	@Override

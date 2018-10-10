@@ -7,7 +7,6 @@ public class KingdomCharacteristics {
 	final Characteristic<Double> offenseCapacity;
 
 	public KingdomCharacteristics(double attack) {
-		/*CONTROL 0.0 <= attack <= 1.0*/
 		this.offenseCapacity = Characteristic.withFixedValue(attack);
 	}
 	

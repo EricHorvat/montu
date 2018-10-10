@@ -1,6 +1,5 @@
 package ar.edu.itba.montu.war.objective;
 
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
 
@@ -18,7 +17,7 @@ public class DefendObjective implements Objective {
 		return new DefendObjective(target, priority);
 	}
 	
-	public void enforce(Attacker attacker) {
+	public void enforce(LocatableAgent agent) {
 		
 	}
 

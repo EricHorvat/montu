@@ -3,7 +3,6 @@ package ar.edu.itba.montu.war.objective;
 import java.util.List;
 
 import ar.edu.itba.montu.abstraction.Agent;
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.Objective;
@@ -33,7 +32,7 @@ public class NegotiateObjective implements Objective {
 	}
 	
 	@Override
-	public void enforce(final Attacker attacker) {
+	public void enforce(final Agent agent) {
 		
 	}
 

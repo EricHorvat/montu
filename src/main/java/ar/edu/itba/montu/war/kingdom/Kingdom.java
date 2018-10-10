@@ -111,7 +111,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 //		
 //		if (d > 0.5) {
 //			/// attack first agent
-//			final Attacker enemy = visibleAgents.get(RandomUtil.getRandom().nextInt(kingdoms.size()));
+//			final Spawner enemy = visibleAgents.get(RandomUtil.getRandom().nextInt(kingdoms.size()));
 //			logger.debug("[{}] {} will attack {}", uid(), name, ((Agent)enemy).uid());
 //			objectives.add(AttackObjective.headedToWithPriority(enemy, 100));
 //			status = KingdomStatus.ATTACKING;

@@ -48,26 +48,6 @@ public class Messenger extends MovingAgent {
 		}
 		
 	}
-
-	@Override
-	public List<Messenger> attackers() {
-		return Arrays.asList(this);
-	}
-
-	@Override
-	public Warrior createAnAttacker() {
-		throw new UnsupportedOperationException("a warrior cant create attackers");
-	}
-
-	@Override
-	public List<Messenger> availableAttackers() {
-		return Arrays.asList(this);
-	}
-	
-	@Override
-	public List<Messenger> availableDefenders() {
-		return Arrays.asList(this);
-	}
 	
 	@Override
 	public int getHealthPointPercentage() {

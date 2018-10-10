@@ -6,14 +6,12 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ar.edu.itba.montu.abstraction.Attacker;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.abstraction.MovingAgentStatus;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
-import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
@@ -22,21 +20,30 @@ public class Warrior extends MovingAgent {
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
 	final WarriorCharacteristics warriorCharacteristics;
+	
+	final WarriorRole role;
 
 	/**
 	 * Expressed in metres/delta time
 	 */
 	private double speed = 5;// km per minute
 
-	private Warrior(final Castle castle, final Coordinate xy) {
+	private Warrior(final Castle castle, final Coordinate xy, final WarriorRole role) {
 		super(castle);
 		this.kingdom = castle.kingdom();
 		this.location = xy;
+		this.role = role;
 		this.warriorCharacteristics = WarriorCharacteristics.standardCharacteristics();
 	}
 	
+	public static Warrior createDefenderWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Castle castle) {
+		final Warrior w = new Warrior(castle, xy, WarriorRole.DEFENDER);
+		
+		return w;
+	}
+	
 	public static Warrior createWithCharacteristicsInKingdomAtLocation(final Coordinate xy,  final CastleCharacteristics characteristics, final Castle castle) {
-		final Warrior w = new Warrior(castle, xy);
+		final Warrior w = new Warrior(castle, xy, WarriorRole.ATTACKER);
 		
 		return w;
 	}
@@ -142,38 +149,11 @@ public class Warrior extends MovingAgent {
 						unassign(target().get());
 					}
 				}
-			case WarriorStatus.DEFENDING:
-				this.unassigned(timeElapsed);
-				break;
 			case WarriorStatus.DEAD:
 				// I'm f*ing dead
 				break;
 		}
 
-	}
-	
-	public void toDefend(){
-		status = WarriorStatus.DEFENDING;
-	}
-
-	@Override
-	public List<Warrior> attackers() {
-		return Arrays.asList(this);
-	}
-
-	@Override
-	public Attacker createAnAttacker() {
-		throw new UnsupportedOperationException("a warrior cant create attackers");
-	}
-	
-	@Override
-	public List<Warrior> availableAttackers() {
-		return Arrays.asList(this);
-	}
-	
-	@Override
-	public List<Warrior> availableDefenders() {
-		return Arrays.asList(this);
 	}
 
 	@Override
@@ -204,10 +184,6 @@ public class Warrior extends MovingAgent {
 	public boolean isAvailable() {
 		return status.equals(WarriorStatus.UNASSIGNED); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
 	}
-	
-	public boolean isDefending() {
-		return status.equals(WarriorStatus.DEFENDING); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
-	}
 
 	public int gasCost(){
 		/*TODO FORMULA*/
@@ -223,5 +199,17 @@ public class Warrior extends MovingAgent {
 	public void noCreated(){
 		this.status = WarriorStatus.DEAD;
 		this.warriorCharacteristics.healthPoints(0);
+	}
+	
+	public WarriorRole role() {
+		return role;
+	}
+	
+	public boolean isAttacker(){
+		return role.equals(WarriorRole.ATTACKER);
+	}
+	
+	public boolean isDefender(){
+		return role.equals(WarriorRole.ATTACKER);
 	}
 }

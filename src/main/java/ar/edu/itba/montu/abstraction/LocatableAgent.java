@@ -4,7 +4,7 @@ import ar.edu.itba.montu.visual.VisualAgent;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
-public abstract class LocatableAgent extends Agent implements Attacker {
+public abstract class LocatableAgent extends Agent{
 	
 	protected Coordinate location;
 	protected Kingdom kingdom;
