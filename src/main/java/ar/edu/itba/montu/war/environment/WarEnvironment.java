@@ -24,13 +24,12 @@ public class WarEnvironment {
 
 	private final List<Kingdom> kingdoms;
 	private final WarStrategy strategy;
-	ProcessingApplet processingApplet;
 	
 	private long time;
 
 	private WarEnvironment(final WarStrategy strategy, final List<Kingdom> kingdoms) {
 		kingdoms.forEach(kingdom -> {
-			kingdom.enforceStrategy(strategy);
+			kingdom.applyStrategy(strategy);
 		});
 		this.kingdoms = kingdoms;
 		this.strategy = strategy;
@@ -84,7 +83,7 @@ public class WarEnvironment {
 	private void updateVisual(final long timeElapsed) {
 		ProcessingApplet.instance().noLoop();
 		ProcessingApplet.instance().redraw();
-		try{Thread.sleep(20L);}catch (InterruptedException e){}
+		try{Thread.sleep(2L);}catch (InterruptedException e){}
 	}
 
 	public List<Kingdom> kingdoms() {

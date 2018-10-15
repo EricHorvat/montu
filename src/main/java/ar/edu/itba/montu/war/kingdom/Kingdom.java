@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ar.edu.itba.montu.war.kingdom.objective.KingdomDefendObjective;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +51,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		this.castles = castles.stream().map(c -> c.kingdom(this).build()).collect(Collectors.toList());
 	}
 
-	public void enforceStrategy(final WarStrategy strategy) {
+	public void applyStrategy(final WarStrategy strategy) {
 		this.strategy = Optional.of(strategy);
 	}
 
@@ -86,16 +87,16 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final List<LocatableAgent> visibleAgents = castles.stream().map(Castle::visibleAgents).flatMap(List::stream).collect(Collectors.toList());
 		
 		kingdoms.forEach(kingdom -> {
-			if (kingdom.equals(this)) return;
-			
-			final double coinFlip = RandomUtil.getRandom().nextDouble();
-			
-			if (coinFlip > 0.5) {
-				final int priority = RandomUtil.getRandom().nextInt(100);
-				final KingdomAttackObjective objective = KingdomAttackObjective.headedToWithPriority(kingdom, priority);
-				logger.debug("{} has objective {}", name, objective);
-				objectives.add(objective);
+			KingdomObjective ko;
+			final int priority = RandomUtil.getRandom().nextInt(100);
+			if (kingdom.equals(this)) {
+				ko = KingdomDefendObjective.fromWithPriority(this,priority);
+			} else{
+				ko = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
 			}
+			logger.debug("{} has objective {}", name, ko);
+			objectives.add(ko);
+			//}
 		});
 		
 		return;

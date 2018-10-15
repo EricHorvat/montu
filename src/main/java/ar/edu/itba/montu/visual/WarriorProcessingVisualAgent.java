@@ -3,6 +3,7 @@ package ar.edu.itba.montu.visual;
 import java.util.UUID;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.war.people.Warrior;
 
 /*package*/ class WarriorProcessingVisualAgent extends ProcessingVisualAgent{
   private static final float R = 6;
@@ -14,7 +15,12 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
   @Override
   void draw(ProcessingApplet applet) {
     super.draw(applet);
-    applet.ellipse(x, y, 2 * R, 2 * R);
+    if (((Warrior)locatableAgent).isDefender()){
+      applet.ellipse(x, y, 2 * R, 2 * R);
+    }else if (((Warrior)locatableAgent).isAttacker()) {
+      applet.triangle(x, y, x + 2 * R, y + R, x, y + 2 * R);
+    }else
+      applet.ellipse(x, y, 2 * R, R);
     /* See attack distance
     float attackD = ((Warrior) locatableAgent).getAttackD();
     applet.noFill();

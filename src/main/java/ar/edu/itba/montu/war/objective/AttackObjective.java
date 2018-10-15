@@ -2,10 +2,8 @@ package ar.edu.itba.montu.war.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
-import ar.edu.itba.montu.war.people.WarriorRole;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class AttackObjective implements Objective {
@@ -22,22 +20,12 @@ public class AttackObjective implements Objective {
 		return new AttackObjective(target, priority);
 	}
 	
-	public void enforce(final Spawner spawner) {
+	public void apply(final Spawner spawner) {
 		
-		//final int requiredAttackers = target.availableDefenders().size() + 1;
-
-		//if ( attacker.attackers().size() < requiredAttackers) {
-			
-			int s = spawner.createWarriors(1, WarriorRole.ATTACKER).size();
-		//}
-		
-		/*if (attacker.availableAttackers().size() >= requiredAttackers) {*/
-			spawner.availableAttackers()
-				.forEach(a -> {
-					a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+		spawner.availableAttackers()
+			.forEach(a -> {
+				a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
 			});
-			// I don't what happens now
-		//}*/
 		
 	}
 
@@ -88,9 +76,9 @@ public class AttackObjective implements Objective {
 	public <T extends Agent> T target() {
 		return (T)target;
 	}
-    
-    @Override
-    public String toString() {
+	
+	@Override
+	public String toString() {
         return "AObjective [target=" + target + ", priority=" + priority + "]";
     }
 }

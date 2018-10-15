@@ -1,9 +1,9 @@
 package ar.edu.itba.montu.war.objective;
 
-import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class DefendObjective implements Objective {
 	
@@ -19,10 +19,6 @@ public class DefendObjective implements Objective {
 		return new DefendObjective(target, priority);
 	}
 	
-	public void enforce(LocatableAgent agent) {
-		
-	}
-
 	@Override
 	public int compareTo(Objective o) {
 		return priority - o.priority();
@@ -71,8 +67,14 @@ public class DefendObjective implements Objective {
 		return target;
 	}
 	
-	@Override
-	public void enforce(Spawner callerAgent) {
 	
+	public void apply(final Spawner spawner) {
+		
+		spawner.availableDefenders()
+			.forEach(a -> {
+				a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+			});
+		
 	}
+	
 }

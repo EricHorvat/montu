@@ -5,20 +5,23 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.objective.AttackObjective;
+import ar.edu.itba.montu.war.objective.DefendObjective;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KingdomDefendObjective implements KingdomObjective {
 	
-	final private LocatableAgent target;
+	final private Kingdom target;
 	final private int priority;
 	
-	private KingdomDefendObjective(final LocatableAgent target, final int priority) {
+	private KingdomDefendObjective(final Kingdom target, final int priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static KingdomDefendObjective fromWithPriority(final LocatableAgent target, final int priority) {
+	public static KingdomDefendObjective fromWithPriority(final Kingdom target, final int priority) {
 		return new KingdomDefendObjective(target, priority);
 	}
 
@@ -62,12 +65,12 @@ public class KingdomDefendObjective implements KingdomObjective {
 	
 	@Override
 	public Kingdom target() {
-		return null; /*TODO*/
+		return target; /*TODO*/
 	}
 	
 	@Override
 	public boolean involves(final LocatableAgent agent) {
-		return target.equals(agent);
+		return target.castles().contains(agent);
 	}
 	
 	@Override
@@ -77,6 +80,8 @@ public class KingdomDefendObjective implements KingdomObjective {
 	
 	@Override
 	public List<Objective> translate() {
-		return null;
+		return target.castles().stream()
+			.map(castle -> DefendObjective.fromWithPriority(castle, priority))
+			.collect(Collectors.toList());
 	}
 }

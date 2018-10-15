@@ -90,7 +90,7 @@ public class NegotiateObjective implements Objective {
 	}
 	
 	@Override
-	public void enforce(Spawner callerAgent) {
+	public void apply(Spawner callerAgent) {
 	
 	}
 }

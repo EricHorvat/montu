@@ -69,10 +69,11 @@ public class Castle extends LocatableAgent implements Spawner {
 
   }
   
-  private void enforceCurrentObjective() {
+  private void applyCurrentObjective() {
+		
   	currentObjective.translate().forEach(castleObjective -> {
   		logger.debug("{} enforces {}", name, castleObjective);
-  		castleObjective.enforce(this);
+  		castleObjective.apply(this);
   	});
   }
 
@@ -83,6 +84,7 @@ public class Castle extends LocatableAgent implements Spawner {
   	
   	characteristics.increaseGas(characteristics.gas() + GAS_PER_MINUTE);
   	
+  	// TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	  final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
 	
 	  if (!kingdomObjective.isPresent()) {
@@ -105,21 +107,27 @@ public class Castle extends LocatableAgent implements Spawner {
 	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
 		  /* TODO THEN COME BACK*/
 	  }
+	
+	  currentObjective = kingdomObjective.get();
 	  
 	  if (d < characteristics.defenseCapacity()) {
 		  // spawn defense warrior
-		  logger.debug("{} spawns a defending warrior", name);
-	  	createWarriors(1,WarriorRole.DEFENDER);
+		  logger.debug("{} apply current objective", name);
+		  createWarriors(1,WarriorRole.DEFENDER);
+		  this.applyCurrentObjective();
+		  logger.error(d + "<" + characteristics.defenseCapacity());
 		  return;
+	  } else {
+		  logger.error(d + ">" + characteristics.defenseCapacity());
 	  }
 	
 	  if (kingdomObjective.get().equals(currentObjective)) {
-	  	logger.debug("{} enforce current objective", name);
-		  this.enforceCurrentObjective();
+		  logger.debug("{} apply current objective", name);
+		  createWarriors(1,WarriorRole.ATTACKER);
+		  this.applyCurrentObjective();
 		  return;
 	  }
 	
-	  currentObjective = kingdomObjective.get();
   }
 
 	public Coordinate location() {
@@ -147,21 +155,9 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	/*WARN CAN BE NULL*/
-	private Warrior buildAttacker() {
+	private Warrior buildWarrior(WarriorRole role) {
 		int gas = characteristics.gas();
-		Warrior w = Warrior.createAttackerInCastle(this);
-		if (gas - w.gasCost() < 0){
-			w.noCreated();
-			return null;
-		}
-		this.useGas(w.gasCost());
-		return w;
-	}
-	
-	/*WARN CAN BE NULL*/
-	private Warrior build() {
-		int gas = characteristics.gas();
-		Warrior w = Warrior.createAttackerInCastle(this);
+		Warrior w = Warrior.createWarriorInCastle(this, role);
 		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
@@ -170,10 +166,10 @@ public class Castle extends LocatableAgent implements Spawner {
 		return w;
 	}
 
-	public Warrior createAnAttacker() {
+	public Warrior createAWarrior(WarriorRole role) {
 		final List<Warrior> warriors = IntStream
 				.range(0, 1)
-				.mapToObj(i -> buildAttacker())
+				.mapToObj(i -> buildWarrior(role))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		this.warriors.addAll(warriors);
@@ -235,7 +231,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		return IntStream
 			.range(0,quantity)
 			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)
-			.mapToObj(i -> createAnAttacker())
+			.mapToObj(i -> createAWarrior(role))
 			.collect(Collectors.toList());
 	}
 	
@@ -250,7 +246,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	@Override
 	public String toString() {
-		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas();
+		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
 	}
 	
 }

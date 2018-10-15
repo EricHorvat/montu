@@ -18,10 +18,10 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 						c.characteristics().healthPoints() / 10
 				),
 				c.characteristics().attackDistance() / 10,
-				(int)RandomUtil.getNormalDistribution(100 - c.characteristics().attackHarm(), c.characteristics().attackHarm() / 10)
+				(int)RandomUtil.getNormalDistribution((100 - c.characteristics().attackHarm())/20, c.characteristics().attackHarm() / 200)
 		);
 		this.speed = Characteristic.withFixedValue(
-				RandomUtil.getNormalDistribution(c.kingdom().characteristics().warriorSpeed(), c.kingdom().characteristics().warriorSpeed() / 10)
+				RandomUtil.getNormalDistribution(c.kingdom().characteristics().warriorSpeed()/100, c.kingdom().characteristics().warriorSpeed() / 1000)
 		);
 	}
 	

@@ -41,10 +41,6 @@ public class Coordinate {
 		return new Coordinate((to.X - from.X) / h, (to.Y - from.Y) / h);
 	}
 
-	public static Coordinate directionByApplyingNoise(final Coordinate from, final Coordinate to, final double noise) {
-		return sum(direction(from, to), new Coordinate(Math.random() * noise - noise / 2.0, Math.random() * noise - noise / 2.0));
-	}
-
 //	public static boolean sees(Coordinate looker, Coordinate looked, double lookerViewDistance) {
 //		double distance = distanceBetween(looker,looked);
 //		return distance < lookerViewDistance && RandomUtil.getRandom().nextDouble() > Math.pow(distance,2);

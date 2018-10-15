@@ -38,14 +38,8 @@ public class Warrior extends MovingAgent {
 		this.warriorCharacteristics = WarriorCharacteristics.fromCastle(castle);
 	}
 	
-	public static Warrior createDefenderInCastle(final Castle castle) {
-		final Warrior w = new Warrior(castle, WarriorRole.DEFENDER);
-		
-		return w;
-	}
-	
-	public static Warrior createAttackerInCastle(final Castle castle) {
-		final Warrior w = new Warrior(castle, WarriorRole.ATTACKER);
+	public static Warrior createWarriorInCastle(final Castle castle, WarriorRole role) {
+		final Warrior w = new Warrior(castle, role);
 		
 		return w;
 	}
@@ -114,7 +108,7 @@ public class Warrior extends MovingAgent {
 
 		/*TODO IF ALREADY ASSIGNED?*/
 		
-		if (status == WarriorStatus.DEAD) {
+		if (status.equals(WarriorStatus.DEAD)){
 			return;
 		}
 		
@@ -212,6 +206,6 @@ public class Warrior extends MovingAgent {
 	}
 	
 	public boolean isDefender(){
-		return role.equals(WarriorRole.ATTACKER);
+		return role.equals(WarriorRole.DEFENDER);
 	}
 }

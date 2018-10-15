@@ -69,7 +69,7 @@ public class KingdomAttackObjective implements KingdomObjective {
 
 	@Override
 	public boolean involves(final LocatableAgent agent) {
-		return target.castles().equals(agent);
+		return target.castles().contains(agent);
 	}
 
 	@Override
