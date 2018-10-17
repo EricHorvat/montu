@@ -3,11 +3,22 @@ package ar.edu.itba.montu;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.neovisionaries.ws.client.HostnameUnverifiedException;
+import com.neovisionaries.ws.client.OpeningHandshakeException;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.visual.ProcessingApplet;
@@ -36,7 +47,9 @@ public class App {
     	config = yaml.loadAs(in, Configuration.class);
     	logger.info("Loaded configuration from {}", args[0]);
     }
-		
+    
+    // initialize streamer
+    Streamer.currentStreamer();
 		
 		final long seed = 1;//78;//1;6;
 		logger.info("Initializing RandomUtil with seed={}", seed);

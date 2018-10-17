@@ -30,23 +30,17 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	final private String name;
 	final private CastleCharacteristics characteristics;
-	/**
-	 * The height of the castle is a measure of how
-	 * far away it can see
-	 */
-	final private double height;
 	
 	private KingdomObjective currentObjective;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
 	
-	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers, final double height) {
+	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers) {
 		super();
 		this.name = name;
 		this.characteristics = characteristics;
 		this.location = coordinate;
-		this.height = height;
 		this.kingdom = kingdom;
 		
 		this.warriors = new ArrayList<>();
@@ -247,6 +241,10 @@ public class Castle extends LocatableAgent implements Spawner {
 	@Override
 	public String toString() {
 		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
+	}
+	
+	public String name() {
+		return name;
 	}
 	
 }

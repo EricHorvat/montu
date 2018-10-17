@@ -249,4 +249,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return name;
 	}
 	
+	public String name() {
+		return name;
+	}
+	
 }
