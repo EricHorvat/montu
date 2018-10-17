@@ -125,7 +125,7 @@ public class Warrior extends MovingAgent {
 				// if we are headed toward a target then keep moving
 				///TODO: attack or dodge depending on characteristics
 				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
-					if (target().get().equals(ownCastle)){
+					if (kingdom().castles().contains(target().get())){
 						status = WarriorStatus.UNASSIGNED;
 						return;
 					}
