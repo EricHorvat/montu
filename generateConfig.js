@@ -142,25 +142,28 @@ enquirer.prompt([
 
 	config.environment.time *= MINUTES_IN_A_MONTH;
 
-	const offenseCapacity = Math.round(d3.randomUniform(1, 100)());
-	config.kingdoms = range(config.kingdom_count, 1).map(i => ({
-		name: faker.address.country(),
-		offenseCapacity,
-		warriorSpeed: d3.randomNormal(0.09, 0.009)(), // double
-		castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
-			name: faker.address.city(),
-			characteristics: {
-				viewDistance: d3.randomUniform(2, 5)(), // double
-				attackDistance: d3.randomUniform(0.2, 0.7)(), // double
-				healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
-				gas: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)())
-			},
-			location: {
-				lat: d3.randomUniform(0, config.environment.size)(), // double
-				lng: d3.randomUniform(0, config.environment.size)() // double
-			}
-		}))
-	}));
+	
+	config.kingdoms = range(config.kingdom_count, 1).map(i => {
+		const offenseCapacity = Math.round(d3.randomUniform(1, 100)());
+		return  {
+			name: faker.address.country(),
+			offenseCapacity,
+			warriorSpeed: d3.randomNormal(0.09, 0.009)(), // double
+			castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
+				name: faker.address.city(),
+				characteristics: {
+					viewDistance: d3.randomUniform(2, 5)(), // double
+					attackDistance: d3.randomUniform(0.2, 0.7)(), // double
+					healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
+					gas: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)())
+				},
+				location: {
+					lat: d3.randomUniform(0, config.environment.size)(), // double
+					lng: d3.randomUniform(0, config.environment.size)() // double
+				}
+			}))
+		}
+	});
 
 	delete config.min_castles;
 	delete config.max_castles;
