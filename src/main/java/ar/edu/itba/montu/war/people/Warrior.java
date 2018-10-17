@@ -17,7 +17,7 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Warrior extends MovingAgent {
 
-	private static final Logger logger = LogManager.getLogger(Castle.class);
+	private static final Logger logger = LogManager.getLogger(Warrior.class);
 	
 	private static final int MINUTES_IN_A_DAY = 24 * 60;
 	private static final int BASE_WARRIOR_COST = MINUTES_IN_A_DAY * 3;
@@ -63,22 +63,23 @@ public class Warrior extends MovingAgent {
 	}
 	
 	private void unassigned(final long timeEllapsed) {
-	// if a warrior is unassigned
+		// if a warrior is unassigned
 		// 1. He shouldn't move
 		// 2. He only checks if there are
 		//    any enemies around ONLY to defend
 		//    himself unless attack-to-defend
 		//    ratio is high
-
-		final WarEnvironment environment = WarEnvironment.getInstance();
-		
-		if (targetsObjectives.size() >0 ){
+		if (targetsObjectives.size() > 0) {
 			status = MovingAgentStatus.MOVING;
 			return;
 		}
+		defending();
+	}
+	
+	private void defending(){
 		// get from the environment the enemies within viewing distance
-		/// TODO: remove hardcoded 500 value, it should be computed
 		/// based on warrior characteristics
+		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance());
 		
 		final List<Warrior> attackingEnemies =
@@ -123,10 +124,9 @@ public class Warrior extends MovingAgent {
 				return;
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
-				///TODO: attack or dodge depending on characteristics
 				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 					if (kingdom().castles().contains(target().get())){
-						status = WarriorStatus.UNASSIGNED;
+						status = WarriorStatus.DEFENDING;
 						return;
 					}
 					status = WarriorStatus.ATTACKING;
@@ -134,6 +134,13 @@ public class Warrior extends MovingAgent {
 					this.move();
 				}
 				break;
+			case WarriorStatus.DEFENDING:
+				if (target().isPresent()){
+					if(target().get().isAlive()) {
+						this.defending();
+					}
+				}
+				return;
 			case WarriorStatus.ATTACKING:
 				if (target().isPresent()){
 					if(target().get().isAlive()) {
@@ -189,7 +196,8 @@ public class Warrior extends MovingAgent {
 	@Override
 	public String toString() {
 		//return this.hashCode() + "";
-		return status.substring(0,3);//this.hashCode() + "";
+		//return status.substring(0,3);//this.hashCode() + "";
+		return this.uid().toString();
 	}
 	
 	public void noCreated(){
@@ -207,5 +215,9 @@ public class Warrior extends MovingAgent {
 	
 	public boolean isDefender(){
 		return role.equals(WarriorRole.DEFENDER);
+	}
+	
+	public WarriorCharacteristics characteristics(){
+		return this.warriorCharacteristics;
 	}
 }
