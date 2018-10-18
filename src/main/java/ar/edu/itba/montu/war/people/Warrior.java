@@ -107,8 +107,6 @@ public class Warrior extends MovingAgent {
 	
 	public void assignToTarget(final LocatableAgent target, int priority) {
 
-		/*TODO IF ALREADY ASSIGNED?*/
-		
 		if (status.equals(WarriorStatus.DEAD)){
 			return;
 		}
