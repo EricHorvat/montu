@@ -215,8 +215,7 @@ public class Castle extends LocatableAgent implements Spawner {
 
 	@Override
 	public boolean isAlive() {
-		//TODO CHANGE
-		return characteristics.healthPoints() > 0;
+		return status.equals(LocatableAgentStatus.ALIVE);
 	}
 	
 	@Override
