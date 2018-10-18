@@ -12,7 +12,6 @@ public class CastleBuilder {
 	private Kingdom kingdom;
 	private int warriors = 0;
 	private int healers = 0;
-	private double height = CastleHeight.GROUND_LEVEL.height();
 	
 	private CastleBuilder(final String name, final Coordinate coordinate) {
 		this.name = name;
@@ -40,7 +39,6 @@ public class CastleBuilder {
 	}
 	
 	public CastleBuilder height(final double height) {
-		this.height = height;
 		return this;
 	}
 	
@@ -50,6 +48,6 @@ public class CastleBuilder {
 	}
 	
 	public Castle build() {
-		return new Castle(kingdom, name, characteristics, coordinate, warriors, healers, height);
+		return new Castle(kingdom, name, characteristics, coordinate, warriors, healers);
 	}
 }

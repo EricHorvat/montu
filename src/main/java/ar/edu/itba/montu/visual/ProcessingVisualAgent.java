@@ -28,6 +28,16 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
   	return (x - a) / (b - a) * (d - c) + c;
   }
   
+  /*package*/ static float linearMapX(double value) {
+    ProcessingApplet applet = ProcessingApplet.instance();
+    return (float)linearMap(value, 0, applet.getL(), 0, applet.getW());
+  }
+  
+  /*package*/ static float linearMapY(double value) {
+    ProcessingApplet applet = ProcessingApplet.instance();
+    return (float)linearMap(value, 0, applet.getL(), 0, applet.getH());
+  }
+  
   private static String toHumanReadable(final Long time) {
   	final long days = TimeUnit.MINUTES.toDays(time);
     return String.format("%d days", days);

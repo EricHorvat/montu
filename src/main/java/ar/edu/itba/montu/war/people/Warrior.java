@@ -100,7 +100,7 @@ public class Warrior extends MovingAgent {
 				.findFirst()
 				.get();
 		
-		logger.debug("Unassigned warrior of {} will attack {}", kingdom, enemy);
+		logger.debug(status + " warrior of {} will attack {}", kingdom, enemy);
 		
 		this.assignTarget(enemy, RandomUtil.getRandom().nextInt(1000));
 	}

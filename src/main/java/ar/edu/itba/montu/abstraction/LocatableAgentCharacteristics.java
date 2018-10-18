@@ -31,6 +31,6 @@ public class LocatableAgentCharacteristics {
   }
 
   public double healthPercentage() {
-    return healthPoints.value() / healthPoints.maxValue() * 100;
+    return healthPoints.value() / healthPoints.maxValue();
   }
 }

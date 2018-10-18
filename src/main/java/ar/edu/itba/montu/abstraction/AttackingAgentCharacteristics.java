@@ -5,8 +5,8 @@ public class AttackingAgentCharacteristics extends LocatableAgentCharacteristics
   private Characteristic<Integer> attackHarm;
 
   public AttackingAgentCharacteristics(LocatableAgentCharacteristics characteristic, double attackDistance, int attackHarm) {
-  	super(characteristic.viewDistance()*4, characteristic.healthPoints());
-    this.attackDistance = Characteristic.withFixedValue(attackDistance*10);
+  	super(characteristic.viewDistance(), characteristic.healthPoints());
+    this.attackDistance = Characteristic.withFixedValue(attackDistance);
     this.attackHarm = Characteristic.withChangingValue(0, attackHarm);
   }
 
