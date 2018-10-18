@@ -70,6 +70,7 @@ public class Streamer {
 		transferObject.put("castles", WarEnvironment.getInstance().kingdoms().stream().flatMap(k -> k.castles().stream()).map(c -> {
 			Map<String, Object> castle = new HashMap<String, Object>();
 			castle.put("id", c.uid().toString());
+			castle.put("kingdom", c.kingdom().uid().toString());
 			castle.put("name", c.name());
 			castle.put("view_distance", c.characteristics().viewDistance());
 			castle.put("health_points", c.characteristics().healthPoints());
