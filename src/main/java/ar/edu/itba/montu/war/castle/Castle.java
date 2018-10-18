@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.abstraction.LocatableAgentStatus;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +33,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	final private CastleCharacteristics characteristics;
 	
 	private KingdomObjective currentObjective;
+	private String status;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -39,6 +41,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	/* package */ Castle(final Kingdom kingdom, final String name, final CastleCharacteristics characteristics, final Coordinate coordinate, final int warriors, final int healers) {
 		super();
 		this.name = name;
+		this.status = LocatableAgentStatus.ALIVE;
 		this.characteristics = characteristics;
 		this.location = coordinate;
 		this.kingdom = kingdom;
@@ -93,9 +96,6 @@ public class Castle extends LocatableAgent implements Spawner {
 	  		.stream()
 	  		.filter(l -> l instanceof MovingAgent && this.kingdom().isEnemy(l.kingdom()))
 	  		.collect(Collectors.toList());
-	
-	  /* TODO SHITTY HACK THEN COME BACK*/
-//	  availableDefenders().stream().filter(Warrior::isUnassigned).forEach(d -> );
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
 	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
@@ -201,7 +201,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		int hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
-			//TODO STATUS = DEAD
+			this.status = LocatableAgentStatus.DEAD;
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
 		}
@@ -215,8 +215,7 @@ public class Castle extends LocatableAgent implements Spawner {
 
 	@Override
 	public boolean isAlive() {
-		//TODO CHANGE
-		return characteristics.healthPoints() > 0;
+		return status.equals(LocatableAgentStatus.ALIVE);
 	}
 	
 	@Override
@@ -240,7 +239,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	@Override
 	public String toString() {
-		return name + " \nRes:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
+		return name + " \nGas:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
 	}
 	
 	public String name() {

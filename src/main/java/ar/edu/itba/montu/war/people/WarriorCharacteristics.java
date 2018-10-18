@@ -14,10 +14,10 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 	private WarriorCharacteristics(Castle c) {
 		super(
 				LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
-						c.characteristics().viewDistance() / 10,
+						c.characteristics().viewDistance() / 3,
 						c.characteristics().healthPoints() / 10
 				),
-				c.characteristics().attackDistance() / 10,
+				c.characteristics().attackDistance() / 3,
 				(int)RandomUtil.getNormalDistribution((100 - c.characteristics().attackHarm())/20, c.characteristics().attackHarm() / 200)
 		);
 		this.speed = Characteristic.withFixedValue(

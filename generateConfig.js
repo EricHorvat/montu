@@ -153,7 +153,7 @@ enquirer.prompt([
 				name: faker.address.city(),
 				characteristics: {
 					viewDistance: d3.randomUniform(2, 5)(), // double
-					attackDistance: d3.randomUniform(0.2, 0.7)(), // double
+					attackDistance: d3.randomUniform(1,1.5)(), // double
 					healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
 					gas: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)())
 				},
