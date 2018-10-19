@@ -1,14 +1,13 @@
 package ar.edu.itba.montu.war.castle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgentStatus;
 import ar.edu.itba.montu.abstraction.Spawner;
+import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +33,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	private KingdomObjective currentObjective;
 	private String status;
+	private PriorityQueue<Objective> objectives;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -75,21 +75,49 @@ public class Castle extends LocatableAgent implements Spawner {
   }
 
   public void tick(final long timeEllapsed) {
-	  /// TODO: template what a castle does on each tick
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
   	characteristics.increaseGas(characteristics.gas() + GAS_PER_MINUTE);
+  	updateObjetives();
+  	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
+	   *
+	   * TODO if GAS
+	   *
+	   *   A = RANDOM VALUE (0,SUM_PRIORITIES_VALUES)
+	   *   PQ.TO_LIST_RANDOM_SORT
+	   *   ITERATE LIST it ->
+	   *     A -= it.priority
+	   *     if A <=0
+	   *       TAKE IT AS NEXT OBJ
+	   *   CREATE WARRIOR FOR OBJ
+	   *
+	   *
+	   * */
+		
+  	/*This could be optimal; by near enemy castles; but its difficult to apply*/
+	  int prioritySum = kingdom.objectivePriorities().stream().mapToInt(KingdomObjective::priority).sum();
+	  int priorityValue = RandomUtil.getRandom().nextInt(prioritySum);
+	  for (KingdomObjective kingdomObjective : kingdom().objectivePriorities()){
+		  priorityValue -= kingdomObjective.priority();
+		  if (priorityValue <= 0 ){
+		  	WarriorRole warriorRole = kingdomObjective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
+		  	createWarriors(1,warriorRole);
+			  kingdomObjective.translate().forEach(o -> o.apply(this));
+			  break;
+		  }
+	  }
+	  
+	  
   	
-  	// TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
-	  final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
+	  /*TODO REMOVE FROM HERE*/final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
 	
 	  if (!kingdomObjective.isPresent()) {
 	  	logger.debug("{} has no objectives");
 		  return;
 	  }
 	
-	  final double d = RandomUtil.getRandom().nextDouble() * 100;
+	  final double d = RandomUtil.getRandom().nextDouble() * 100; /*TODO TO HERE*/
 	
 	  final List<LocatableAgent> visibleRivalAgents =
 	  		visibleAgents()
@@ -102,7 +130,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		  /* TODO THEN COME BACK*/
 	  }
 	
-	  currentObjective = kingdomObjective.get();
+	  /*TODO REMOVE FROM HERE*/currentObjective = kingdomObjective.get();
 	  
 	  if (d < characteristics.defenseCapacity()) {
 		  // spawn defense warrior
@@ -120,7 +148,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		  createWarriors(1,WarriorRole.ATTACKER);
 		  this.applyCurrentObjective();
 		  return;
-	  }
+	  }/*TODO REMOVE TO HERE*/
 	
   }
 
@@ -240,6 +268,16 @@ public class Castle extends LocatableAgent implements Spawner {
 	@Override
 	public String toString() {
 		return name + " \nGas:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
+	}
+	
+	public void updateObjetives(){
+		PriorityQueue<Objective> objectives = new PriorityQueue<>();
+		for(KingdomObjective kingdomObjective: kingdom.objectivePriorities()){
+			List<Objective> partialObjectives = kingdomObjective.translate();
+			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
+			objectives.addAll(partialObjectives);
+		}
+		this.objectives = objectives;
 	}
 	
 }

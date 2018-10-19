@@ -88,10 +88,12 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		
 		kingdoms.forEach(kingdom -> {
 			KingdomObjective ko;
-			final int priority = RandomUtil.getRandom().nextInt(100);
+			int priority = 0;
 			if (kingdom.equals(this)) {
+				priority = RandomUtil.getRandom().nextInt((int)characteristics().defenseCapacity());
 				ko = KingdomDefendObjective.fromWithPriority(this,priority);
 			} else{
+				priority = RandomUtil.getRandom().nextInt((int)characteristics().offenseCapacity());
 				ko = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
 			}
 			logger.debug("{} has objective {}", name, ko);
@@ -242,6 +244,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public KingdomCharacteristics characteristics() {
 		return characteristics;
+	}
+	
+	public PriorityQueue<KingdomObjective> objectivePriorities(){
+		return objectives;
 	}
 
 	@Override
