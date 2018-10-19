@@ -38,10 +38,6 @@ public class CastleBuilder {
 		return this;
 	}
 	
-	public CastleBuilder height(final double height) {
-		return this;
-	}
-	
 	public CastleBuilder kingdom(final Kingdom kingdom) {
 		this.kingdom = kingdom;
 		return this;

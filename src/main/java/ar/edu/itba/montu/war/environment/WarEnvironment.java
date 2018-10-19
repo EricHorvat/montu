@@ -9,6 +9,7 @@ import java.util.stream.LongStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ar.edu.itba.montu.Streamer;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.castle.Castle;
@@ -78,6 +79,8 @@ public class WarEnvironment {
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
 		updateVisual(timeElapsed);
+		
+		Streamer.currentStreamer().streamOnTick(timeElapsed);
 	}
 	
 	private void updateVisual(final long timeElapsed) {

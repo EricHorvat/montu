@@ -270,9 +270,13 @@ public class Castle extends LocatableAgent implements Spawner {
 		return name + " \nGas:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
 	}
 	
-	public void updateObjetives(){
+	public String name() {
+		return name;
+	}
+	
+	public void updateObjetives() {
 		PriorityQueue<Objective> objectives = new PriorityQueue<>();
-		for(KingdomObjective kingdomObjective: kingdom.objectivePriorities()){
+		for (KingdomObjective kingdomObjective : kingdom.objectivePriorities()) {
 			List<Objective> partialObjectives = kingdomObjective.translate();
 			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
 			objectives.addAll(partialObjectives);
