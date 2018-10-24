@@ -49,10 +49,9 @@ public class Streamer {
 		return instance;
 	}
 	
-	public void streamOnTick(final long timeEllapsed) {
-		if (ws == null) return;
+	public void streamNow(final long timeEllapsed) {
 		
-		if (timeEllapsed % SEND_EVERY != 0) return;
+		if (ws == null) return;
 		
 		Gson gson = new GsonBuilder().create();
 		Map<String, Object> transferObject = new HashMap<String, Object>();
@@ -84,6 +83,14 @@ public class Streamer {
 		}).collect(Collectors.toList()));
 
     ws.sendText(gson.toJson(transferObject));
+	}
+	
+	public void streamOnTick(final long timeEllapsed) {
+		if (ws == null) return;
+		
+		if (timeEllapsed % SEND_EVERY != 0) return;
+		
+		streamNow(timeEllapsed);
 	}
 	
 }

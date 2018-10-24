@@ -102,6 +102,7 @@ public class WarEnvironment {
 	}
 
 	public void onCastleDeath(final Castle castle) {
+		Streamer.currentStreamer().streamNow(time);
 		kingdoms.forEach(k -> k.castleWillDie(castle));
 		kingdoms.forEach(k -> k.castleDidDie(castle));
 	}

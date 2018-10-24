@@ -109,10 +109,10 @@ public class Castle extends LocatableAgent implements Spawner {
 		  logger.debug("{} apply current objective", name);
 		  createWarriors(1,WarriorRole.DEFENDER);
 		  this.applyCurrentObjective();
-		  logger.error(d + "<" + characteristics.defenseCapacity());
+		  logger.trace(d + "<" + characteristics.defenseCapacity());
 		  return;
 	  } else {
-		  logger.error(d + ">" + characteristics.defenseCapacity());
+		  logger.trace(d + ">" + characteristics.defenseCapacity());
 	  }
 	
 	  if (kingdomObjective.get().equals(currentObjective)) {
