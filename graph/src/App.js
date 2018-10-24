@@ -56,7 +56,7 @@ class App extends Component {
 					}
 					nextCastles[c.id].gas.push({ x: data.time, y: c.gas, y0: 0 });
 					nextCastles[c.id].max_gas.push({ x: data.time, y: c.max_gas, y0: 0 });
-					if (c.health_points <= 0) {
+					if (c.health_points <= 5) {
 						nextCastles[c.id].death_time = data.time;
 					}
 					return;

@@ -70,7 +70,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
-  	characteristics.increaseGas(characteristics.gas() + GAS_PER_MINUTE);
+  	characteristics.increaseGas(GAS_PER_MINUTE);
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
