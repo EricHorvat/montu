@@ -1,11 +1,9 @@
 package ar.edu.itba.montu.war.kingdom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.PriorityQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,16 +16,11 @@ import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
-import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
-import ar.edu.itba.montu.war.environment.WarEnviromentGenerator;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.kingdom.objective.KingdomAttackObjective;
-import ar.edu.itba.montu.war.objective.AttackObjective;
-import ar.edu.itba.montu.war.objective.NegotiateObjective;
-import ar.edu.itba.montu.war.objective.NegotiateObjective.Intention;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
@@ -39,7 +32,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
 	private final List<Kingdom> rivals = new ArrayList<>();
-	private final PriorityQueue<KingdomObjective> objectives = new PriorityQueue<>();
+	private final List<KingdomObjective> objectives = new ArrayList<>();
 	
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
@@ -59,10 +52,6 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return status;
 	}
 	
-	public Optional<KingdomObjective> currentObjective() {
-		return Optional.ofNullable(objectives.peek());
-	}
-
 	private void negotiate() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> otherKingdoms = environment.kingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
@@ -157,7 +146,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public List<KingdomObjective> objectiveIntersectionWith(final Kingdom other) {
     return objectives.stream()
-    		.filter(o-> other.objectives.contains(o))
+    		.filter(other.objectives::contains)
     		.collect(Collectors.toList());
 }
 
@@ -217,13 +206,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	}
 
 	public void castleWillDie(final Castle castle) {
-		final Iterator<KingdomObjective> it = objectives.iterator();
-		while (it.hasNext()) {
-			final KingdomObjective o = it.next();
-			if (o.target().castles.size() == 1 && o.target().castles.get(0).equals(castle)) {
-				it.remove();
-			}
-		}
+		objectives.removeIf(o -> o.target().castles.size() == 1 && o.target().castles.get(0).equals(castle));
 	}
 	
 	public void castleDidDie(final Castle castle) {
@@ -246,7 +229,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return characteristics;
 	}
 	
-	public PriorityQueue<KingdomObjective> objectivePriorities(){
+	public List<KingdomObjective> objectivePriorityList(){
 		return objectives;
 	}
 

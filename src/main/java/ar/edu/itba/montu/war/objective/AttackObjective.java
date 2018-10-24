@@ -8,8 +8,8 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class AttackObjective implements Objective {
 	
-	final LocatableAgent target;
-	final int priority;
+	private final LocatableAgent target;
+	private int priority;
 	
 	private AttackObjective(final LocatableAgent target, final int priority) {
 		this.target = target;
@@ -32,6 +32,11 @@ public class AttackObjective implements Objective {
 	@Override
 	public int priority() {
 		return priority;
+	}
+	
+	@Override
+	public void priority(int priority) {
+		this.priority = priority;
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class AttackObjective implements Objective {
 
 	@Override
 	public boolean involves(final LocatableAgent agent) {
-		return ((LocatableAgent)target).equals(agent);
+		return (target).equals(agent);
 	}
 	
 	@Override

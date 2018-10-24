@@ -19,7 +19,7 @@ public class NegotiateObjective implements Objective {
 	final private List<? extends NonLocatableAgent> targets;
 	final private Intention intention;
 	
-	final int priority;
+	private int priority;
 	
 	private NegotiateObjective(final List<? extends NonLocatableAgent> with, final Intention intention, final List<? extends NonLocatableAgent> targets, final int priority) {
 		this.with = with;
@@ -36,10 +36,15 @@ public class NegotiateObjective implements Objective {
 	public int compareTo(Objective o) {
 		return priority - o.priority();
 	}
-
+	
 	@Override
 	public int priority() {
 		return priority;
+	}
+	
+	@Override
+	public void priority(int priority) {
+		this.priority = priority;
 	}
 	
 	@Override

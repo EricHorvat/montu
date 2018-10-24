@@ -8,7 +8,7 @@ import ar.edu.itba.montu.war.utils.RandomUtil;
 public class DefendObjective implements Objective {
 	
 	final private LocatableAgent target;
-	final private int priority;
+	private int priority;
 	
 	private DefendObjective(final LocatableAgent target, final int priority) {
 		this.target = target;
@@ -23,10 +23,15 @@ public class DefendObjective implements Objective {
 	public int compareTo(Objective o) {
 		return priority - o.priority();
 	}
-
+	
 	@Override
 	public int priority() {
 		return priority;
+	}
+	
+	@Override
+	public void priority(int priority) {
+		this.priority = priority;
 	}
 
 	@Override

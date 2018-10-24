@@ -33,7 +33,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	private KingdomObjective currentObjective;
 	private String status;
-	private PriorityQueue<Objective> objectives;
+	private List<Objective> objectives;
 	
 	final List<Warrior> warriors;
 //	private List<WarFieldAgent> visibleAgents = new ArrayList<>();
@@ -66,14 +66,6 @@ public class Castle extends LocatableAgent implements Spawner {
 
   }
   
-  private void applyCurrentObjective() {
-		
-  	currentObjective.translate().forEach(castleObjective -> {
-  		logger.debug("{} enforces {}", name, castleObjective);
-  		castleObjective.apply(this);
-  	});
-  }
-
   public void tick(final long timeEllapsed) {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
@@ -92,33 +84,32 @@ public class Castle extends LocatableAgent implements Spawner {
 	   *       TAKE IT AS NEXT OBJ
 	   *   CREATE WARRIOR FOR OBJ
 	   *
-	   *
+	   *  K1 = [p = 500]
+	   *  K2 = [p = 3]
+	   *  K3 = [p = 2]
+	   *  A = 7
+	   *  [K1]
+	   *  A -= 5 (A = 2)
+	   *  [K2]
+	   *  A -= 3 (A = -1)
+	   *  K2.apply()
 	   * */
 		
   	/*This could be optimal; by near enemy castles; but its difficult to apply*/
-	  int prioritySum = kingdom.objectivePriorities().stream().mapToInt(KingdomObjective::priority).sum();
+	  int prioritySum = objectives.stream().mapToInt(Objective::priority).sum();
 	  int priorityValue = RandomUtil.getRandom().nextInt(prioritySum);
-	  for (KingdomObjective kingdomObjective : kingdom().objectivePriorities()){
-		  priorityValue -= kingdomObjective.priority();
+	  for (Objective objective : objectives){
+		  priorityValue -= objective.priority();
 		  if (priorityValue <= 0 ){
-		  	WarriorRole warriorRole = kingdomObjective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
+		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
 		  	createWarriors(1,warriorRole);
-			  kingdomObjective.translate().forEach(o -> o.apply(this));
+		  	if (warriors.size() > 0){
+		  		int e = 9;}
+		    objective.apply(this);
 			  break;
 		  }
 	  }
 	  
-	  
-  	
-	  /*TODO REMOVE FROM HERE*/final Optional<KingdomObjective> kingdomObjective = kingdom.currentObjective();
-	
-	  if (!kingdomObjective.isPresent()) {
-	  	logger.debug("{} has no objectives");
-		  return;
-	  }
-	
-	  final double d = RandomUtil.getRandom().nextDouble() * 100; /*TODO TO HERE*/
-	
 	  final List<LocatableAgent> visibleRivalAgents =
 	  		visibleAgents()
 	  		.stream()
@@ -127,29 +118,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
 	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
-		  /* TODO THEN COME BACK*/
 	  }
-	
-	  /*TODO REMOVE FROM HERE*/currentObjective = kingdomObjective.get();
 	  
-	  if (d < characteristics.defenseCapacity()) {
-		  // spawn defense warrior
-		  logger.debug("{} apply current objective", name);
-		  createWarriors(1,WarriorRole.DEFENDER);
-		  this.applyCurrentObjective();
-		  logger.error(d + "<" + characteristics.defenseCapacity());
-		  return;
-	  } else {
-		  logger.error(d + ">" + characteristics.defenseCapacity());
-	  }
-	
-	  if (kingdomObjective.get().equals(currentObjective)) {
-		  logger.debug("{} apply current objective", name);
-		  createWarriors(1,WarriorRole.ATTACKER);
-		  this.applyCurrentObjective();
-		  return;
-	  }/*TODO REMOVE TO HERE*/
-	
   }
 
 	public Coordinate location() {
@@ -247,11 +217,11 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	@Override
-	public List<LocatableAgent> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
+	public List<Warrior> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
 		
 		return IntStream
 			.range(0,quantity)
-			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)
+			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)/*TODO CHANGE THIS*/
 			.mapToObj(i -> createAWarrior(role))
 			.collect(Collectors.toList());
 	}
@@ -275,8 +245,9 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	public void updateObjetives() {
-		PriorityQueue<Objective> objectives = new PriorityQueue<>();
-		for (KingdomObjective kingdomObjective : kingdom.objectivePriorities()) {
+		/*TODO IDEA PROXIMITY OR STH LIKE THAT*/
+		List<Objective> objectives = new ArrayList<>();
+		for (KingdomObjective kingdomObjective : kingdom.objectivePriorityList()) {
 			List<Objective> partialObjectives = kingdomObjective.translate();
 			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
 			objectives.addAll(partialObjectives);
@@ -284,4 +255,8 @@ public class Castle extends LocatableAgent implements Spawner {
 		this.objectives = objectives;
 	}
 	
+	@Override
+	public LocatableAgent asLocatableAgent() {
+		return this;
+	}
 }

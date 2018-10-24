@@ -4,20 +4,19 @@ import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
+import ar.edu.itba.montu.war.objective.WalkObjective;
 
 import java.util.*;
 
 public abstract class MovingAgent extends LocatableAgent {
 	
-	protected PriorityQueue<Objective> targetsObjectives = new PriorityQueue<>();
+	protected PriorityQueue<Objective> targetsObjectives = new PriorityQueue<>(Comparator.comparing(o -> ((Objective) o ).priority()).reversed());
 	protected String status = MovingAgentStatus.UNASSIGNED;
 	
-	protected Castle ownCastle;/*Promove to PQ, with creator as more priority*/
 
-		public MovingAgent(Castle ownCastle) {
-			this.ownCastle = ownCastle;
-			this.assignTarget(ownCastle,Integer.MIN_VALUE);
-			}
+	public MovingAgent(Castle ownCastle) {
+		targetsObjectives.add(new WalkObjective(ownCastle));
+	}
 	/**
 	 * The subclass should describe how the target
 	 * should be pursued
@@ -29,18 +28,13 @@ public abstract class MovingAgent extends LocatableAgent {
 		if (!target().isPresent()) {
 			return;
 		}
-		
-		if (!target().get().isAlive()) {
-			this.comeBack();
-		}
-		
 		this.displace();
 	}
 	
 	public void assignTarget(LocatableAgent target, Integer priority) {
 		for(Objective o : targetsObjectives){
-			if(o.involves(target)){
-				//TODO? o.priority(priority);
+			if(o.involves(target) && !(o instanceof WalkObjective)){
+				o.priority(priority);
 				return;
 			}
 		}
@@ -54,18 +48,17 @@ public abstract class MovingAgent extends LocatableAgent {
 	}
 	
 	
- 
-	public void comeBack(){
-		assignTarget(ownCastle, Integer.MIN_VALUE);
-		this.status = MovingAgentStatus.MOVING;
-	}
-	
 	public void unassign(LocatableAgent target) {
 		targetsObjectives.removeIf(o -> o.target().equals(target));
+		if (targetsObjectives.size() == 0){
+			status = MovingAgentStatus.UNASSIGNED;
+		}else {
+		status = MovingAgentStatus.MOVING;
+		}
 	}
 	
 	public boolean isUnassigned() {
-		return status == MovingAgentStatus.UNASSIGNED;
+		return status.equals(MovingAgentStatus.UNASSIGNED);
 	}
 	
 	public Optional<LocatableAgent> target() {

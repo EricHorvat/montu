@@ -53,8 +53,6 @@ public class Warrior extends MovingAgent {
 		// Displace will get called only if target is no null
 		if (target().isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
-		}else {
-			comeBack();
 		}
 	}
 	
@@ -136,6 +134,8 @@ public class Warrior extends MovingAgent {
 				if (target().isPresent()){
 					if(target().get().isAlive()) {
 						this.defending();
+					}else {
+						unassign(target().get());
 					}
 				}
 				return;
