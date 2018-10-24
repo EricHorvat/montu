@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import momentDurationSetup from 'moment-duration-format';
 import randomColor from 'random-color';
 
-import { VictoryChart, VictoryLine, VictoryArea, VictoryLegend } from 'victory';
+import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel } from 'victory';
+
+momentDurationSetup(moment);
 
 class App extends Component {
 	state = {
@@ -20,6 +23,7 @@ class App extends Component {
 		}
 
 		this.max_health_points = 0;
+		this.max_gas = 0;
 
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -39,6 +43,9 @@ class App extends Component {
 			data.castles.forEach(c => {
 				if (c.health_points > this.max_health_points) {
 					this.max_health_points = c.health_points;
+				}
+				if (c.gas > this.max_gas) {
+					this.max_gas = c.gas;
 				}
 				if (nextCastles[c.id]) {
 					if (c.health_points >= 0) {
@@ -120,13 +127,17 @@ class App extends Component {
 
 		const castleList = Object.values(castles);
 
-		const kingdomList = Object.values(kingdoms).map(k => (
-			<li key={k.id} className={k.id === focusKingdom ? 'text-primary' : null}>
-				<span style={{cursor:'pointer'}} onClick={this.focusKingdom(k.id)}>
-					{castleList.find(c => c.kingdom === k.id && !c.death_time) ? k.name : <s>{k.name}</s>}
-				</span>
-			</li>
-		));
+		const kingdomList = Object.values(kingdoms).map(k => {
+			const total = castleList.filter(c => c.kingdom === k.id);
+			const alive = total.filter(c => !c.death_time).length;
+			return (
+				<li key={k.id} className={k.id === focusKingdom ? 'text-primary' : null}>
+					<span style={{cursor:'pointer'}} onClick={this.focusKingdom(k.id)}>
+						{alive ? k.name : <s>{k.name}</s>} ({alive}/{total.length})
+					</span>
+				</li>
+			)
+		});
 
 		const castleListComponent = castleList.map(c => (
 			<li key={c.id} className={focus === c.id || c.kingdom === focusKingdom ? 'text-primary' : null}>
@@ -137,16 +148,25 @@ class App extends Component {
 				{' '}
 				<small>Gas: <span className="text-muted">{Math.round(c.gas[c.gas.length - 1].y / c.max_gas[c.max_gas.length - 1].y * 100)}%</span></small>
 				{c.death_time && ' '}
-				{c.death_time && <small>DT: <span className="text-muted">{moment.duration(c.death_time, 'minutes').humanize()}</span></small>}
+				{c.death_time && <small>DT: <span className="text-muted">{moment.duration(c.death_time, 'minutes').format()}</span></small>}
 			</li>
 		));
 
 		const healthLines = (() => {
 			if (focus) {
-				return [
-					<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_health_points} />,
-					<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].health_points} />,
-				]
+				return <VictoryLine
+					style={{ data: { stroke: castles[focus].color } }}
+					data={castles[focus].health_points}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(focus)
+						}
+					}]} />;
+				// return [
+				// 	<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_health_points} />,
+				// 	<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].health_points} />,
+				// ]
 			}
 			const filteredCastles = (() => {
 				if (focusKingdom) {
@@ -155,7 +175,16 @@ class App extends Component {
 				return castleList;
 			})();
 			return filteredCastles.map(c => (
-				<VictoryLine key={c.id} style={{ data: { stroke: c.color } }} data={c.health_points} />
+				<VictoryLine
+					key={c.id}
+					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
+					data={c.health_points}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(c.id),
+						}
+					}]} />
 			));
 		})();
 
@@ -165,10 +194,19 @@ class App extends Component {
 
 		const gasLines = (() => {
 			if (focus) {
-				return [
-					<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_gas} />,
-					<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].gas} />,
-				];
+				return <VictoryLine
+					style={{ data: { stroke: castles[focus].color } }}
+					data={castles[focus].gas}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(focus)
+						}
+					}]} />;
+				// return [
+				// 	<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_gas} />,
+				// 	<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].gas} />,
+				// ];
 			}
 			const filteredCastles = (() => {
 				if (focusKingdom) {
@@ -177,13 +215,22 @@ class App extends Component {
 				return castleList;
 			})();
 			return filteredCastles.map(c => (
-				<VictoryLine key={c.id} style={{ data: { stroke: c.color } }} data={c.gas} />
+				<VictoryLine
+					key={c.id}
+					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
+					data={c.gas}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(c.id),
+						}
+					}]} />
 			));
 		})();
 
 		return (
 			<div className="container">
-				<h1>Time: {moment.duration(time, 'minutes').humanize()}&nbsp;
+				<h1>Time: {moment.duration(time, 'minutes').format()}&nbsp;
 				<button onClick={this.reset} className="btn btn-outline-dark btn-sm">Reset</button>
 				</h1>
 				<div className="row">
@@ -211,9 +258,14 @@ class App extends Component {
 								<h5 className="card-title">Health Points&nbsp;
 									<button onClick={this.expand('health_points')} className="btn btn-outline-dark btn-sm">{this.state.health_points ? 'Shrink' : 'Expand'}</button>
 								</h5>
-								<VictoryChart animate={{ duration: 1000, easing: "bounce" }}>
+								<VictoryChart
+									domain={{ x: [0, time], y: [0, this.max_health_points] }}
+									animate={{ duration: 1000, easing: "bounce" }}
+									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{healthLines}
 									{deathLines}
+									<VictoryAxis dependentAxis label="Health Points" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />}/>
+									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
 							</div>
 						</div>
@@ -225,9 +277,12 @@ class App extends Component {
 									<button onClick={this.expand('gas')} className="btn btn-outline-dark btn-sm">{this.state.gas ? 'Shrink' : 'Expand'}</button>
 								</h5>
 								<VictoryChart
+									domain={{ x: [0, time], y: [0, this.max_gas] }}
 									animate={{ duration: 1000, easing: "bounce" }}
-									padding={{ top: 50, left: 60, right: 50, bottom: 50 }}>
+									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{gasLines}
+									<VictoryAxis dependentAxis label="Gas" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />} />
+									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
 							</div>
 						</div>
