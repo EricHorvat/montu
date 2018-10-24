@@ -7,8 +7,9 @@ import processing.core.PApplet;
 public class ProcessingApplet extends PApplet {
 
   int W, H, L;
-
-  private static ProcessingApplet instance;
+	
+	private static ProcessingApplet instance;
+	public static boolean drawDistance = false;
   
   @Override
   public void setup() {
@@ -46,7 +47,21 @@ public class ProcessingApplet extends PApplet {
     }
     noLoop();
   }
-
+	
+	@Override
+	public void keyPressed() {
+		super.keyPressed();
+		switch (key){
+			case 'd':
+			case 'D':
+				drawDistance = true;
+				break;
+			case 'v':
+			case 'V':
+				drawDistance = !drawDistance;
+		}
+	}
+	
 	public int getW() {
 		return W;
 	}
