@@ -195,6 +195,29 @@ public class Castle extends LocatableAgent implements Spawner {
 			.filter(Warrior::isAvailable)
 			.collect(Collectors.toList());
 	}
+	
+	public List<Warrior> warriors() {
+		return warriors
+				.stream()
+				.filter(Warrior::isAlive)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Warrior> attackers() {
+		return warriors
+			.stream()
+			.filter(Warrior::isAttacker)
+			.filter(Warrior::isAlive)
+			.collect(Collectors.toList());
+	}
+	
+	public List<Warrior> defenders() {
+		return warriors
+			.stream()
+			.filter(Warrior::isDefender)
+			.filter(Warrior::isAlive)
+			.collect(Collectors.toList());
+	}
 
 	@Override
 	public void defend(LocatableAgent agent, int harm) {

@@ -3,7 +3,7 @@ import moment from 'moment';
 import momentDurationSetup from 'moment-duration-format';
 import randomColor from 'random-color';
 
-import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel } from 'victory';
+import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel, VictoryScatter } from 'victory';
 
 momentDurationSetup(moment);
 
@@ -234,11 +234,31 @@ class App extends Component {
 				<button onClick={this.reset} className="btn btn-outline-dark btn-sm">Reset</button>
 				</h1>
 				<div className="row">
-					<div className="col-sm-9">
+					<div className="col-sm-6">
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title">Castles</h5>
 								<ul className="list-unstyled">{castleListComponent}</ul>
+							</div>
+						</div>
+					</div>
+					<div className="col-sm-3">
+						<div className="card">
+							<div className="card-body">
+								<h5 className="card-title">Map</h5>
+								<VictoryScatter
+									style={{
+										data: {
+											fill: d => d.color,
+											opacity: d => Math.max(d.health_points[d.health_points.length - 1].y / d.max_health_points[d.max_health_points.length - 1].y, 0.2)
+										},
+										parent: {
+											fill: '#222'
+										}
+									}}
+									size={d => d.id === focus || d.kingdom === focusKingdom ? 12 : 7}
+									data={castleList}
+								/>
 							</div>
 						</div>
 					</div>

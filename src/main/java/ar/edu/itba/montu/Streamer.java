@@ -15,6 +15,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
+import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 
 public class Streamer {
@@ -79,6 +80,14 @@ public class Streamer {
 			castle.put("offense_capacity", c.characteristics().offenseCapacity());
 			castle.put("gas", c.characteristics().gas());
 			castle.put("max_gas", c.characteristics().maxGas());
+			castle.put("x", c.location().X);
+			castle.put("y", ProcessingApplet.instance().getL() - c.location().Y);
+			castle.put("warriors", c.warriors().size());
+			castle.put("available_warriors", c.availableWarriors().size());
+			castle.put("attackers", c.attackers().size());
+			castle.put("available_attackers", c.availableAttackers().size());
+			castle.put("defenders", c.defenders().size());
+			castle.put("available_defenders", c.availableDefenders().size());
 			return castle;
 		}).collect(Collectors.toList()));
 
