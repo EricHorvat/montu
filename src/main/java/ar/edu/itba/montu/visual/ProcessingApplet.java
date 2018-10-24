@@ -10,6 +10,7 @@ public class ProcessingApplet extends PApplet {
 	
 	private static ProcessingApplet instance;
 	public static boolean drawDistance = false;
+	public static int zoomLevel = 0;
   
   @Override
   public void setup() {
@@ -45,8 +46,32 @@ public class ProcessingApplet extends PApplet {
     for (int i = a.size() - 1; i >= 0; i--) {
       a.get(i).draw(this);
     }
+    fill(100,100,100);
+    rect(0,0,W/getZoomLevel(),H/getZoomLevel());
+    noFill();
     noLoop();
   }
+	
+	@Override
+	public void mouseClicked() {
+		super.mouseClicked();
+		switch (mouseButton ){
+			case RIGHT:
+				if (zoomLevel != 10){
+					zoomLevel += 1;
+				}
+				break;
+			case LEFT:
+				if (zoomLevel != 0){
+					zoomLevel -= 1;
+				}
+				break;
+		}
+	}
+	
+	public static float getZoomLevel() {
+		return (float) Math.pow(2,zoomLevel);
+	}
 	
 	@Override
 	public void keyPressed() {
