@@ -19,12 +19,14 @@ import java.util.UUID;
     final float Ry = linearMapY(R);
     applet.rect(x-Rx,y-Ry,2*Rx,2*Ry);
     applet.noFill();
-    float viewDistance = (float) ((Castle)locatableAgent).characteristics().viewDistance();
-    applet.stroke(applet.color(120,100,100));
-    applet.ellipse(x,y,linearMapX(2*viewDistance),linearMapY(2*viewDistance));
-    float attackDistance = (float) ((Castle)locatableAgent).characteristics().attackDistance();
-    applet.stroke(applet.color(0,100,100));
-    applet.ellipse(x,y,linearMapX(2*attackDistance),linearMapY(2*attackDistance));
-    applet.stroke(applet.color(0,0,0));
+    if(ProcessingApplet.drawDistance) {
+      float viewDistance = (float) ((Castle) locatableAgent).characteristics().viewDistance();
+      applet.stroke(applet.color(120, 100, 100));
+      applet.ellipse(x, y, linearMapX(2 * viewDistance), linearMapY(2 * viewDistance));
+      float attackDistance = (float) ((Castle) locatableAgent).characteristics().attackDistance();
+      applet.stroke(applet.color(0, 100, 100));
+      applet.ellipse(x, y, linearMapX(2 * attackDistance), linearMapY(2 * attackDistance));
+      applet.stroke(applet.color(0, 0, 0));
+    }
   }
 }
