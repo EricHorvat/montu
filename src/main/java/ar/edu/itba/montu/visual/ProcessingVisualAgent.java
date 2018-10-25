@@ -24,18 +24,70 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
     visualAgents.add(0,this);
   }
   
-  private static double linearMap(double x, double a, double b, double c, double d) {
-  	return (x - a) / (b - a) * (d - c) + c;
+  private static double linearMap(double number, double in_min, double in_max, double out_min, double out_max) {
+  	return (number - in_min) / (in_max - in_min) * (out_max - out_min) + out_min;
   }
   
-  /*package*/ static float linearMapX(double value) {
+  private static float zoomLinearMapX(double value, boolean fromOrigin) {
     ProcessingApplet applet = ProcessingApplet.instance();
-    return (float)linearMap(value, 0, applet.getL(), 0, applet.getW());
+    double w = applet.W * applet.getZoomLevel();
+    float mappedValue = (float)linearMap(value, 0, applet.getL(), 0, w);
+    float mappedOrigin = fromOrigin ? (float)linearMap(applet.originX, 0, applet.getL(), 0, w) : 0;
+    return mappedValue-mappedOrigin;
+  }
+	
+	private static float inverseZoomLinearMapX(double value, boolean fromOrigin) {
+		ProcessingApplet applet = ProcessingApplet.instance();
+		double w = applet.W * applet.getZoomLevel();
+		float mappedOrigin = fromOrigin ? (float)linearMap(applet.originX, 0, applet.getL(), 0, w) : 0;
+		return (float)linearMap(value + mappedOrigin, 0, w, 0, applet.getL());
+	}
+  
+  /*package*/ static float zoomLinearMapX(double value) {
+    return zoomLinearMapX(value,false);
   }
   
-  /*package*/ static float linearMapY(double value) {
+  /*package*/ static float zoomLinearMapXfromOrigin(double value) {
+    return zoomLinearMapX(value,true);
+  }
+	
+	/*package*/ static float inverseZoomLinearMapX(double value) {
+		return inverseZoomLinearMapX(value,false);
+	}
+	
+	/*package*/ static float inverseZoomLinearMapYfromOriginX(double value) {
+		return inverseZoomLinearMapX(value,true);
+	}
+  
+  private static float zoomLinearMapY(double value, boolean fromOrigin) {
     ProcessingApplet applet = ProcessingApplet.instance();
-    return (float)linearMap(value, 0, applet.getL(), 0, applet.getH());
+    double h = applet.H * applet.getZoomLevel();
+    float mappedValue = (float)linearMap(value, 0, applet.getL(), 0, h);
+    float mappedOrigin = fromOrigin ? (float)linearMap(applet.originY, 0, applet.getL(), 0, h) : 0;
+    return mappedValue-mappedOrigin;
+  }
+  
+  private static float inverseZoomLinearMapY(double value, boolean fromOrigin) {
+    ProcessingApplet applet = ProcessingApplet.instance();
+    double h = applet.H * applet.getZoomLevel();
+    float mappedOrigin = fromOrigin ? (float)linearMap(applet.originY, 0, applet.getL(), 0, h) : 0;
+    return (float)linearMap(value + mappedOrigin, 0, h, 0, applet.getL());
+  }
+  
+  /*package*/ static float zoomLinearMapY(double value) {
+    return zoomLinearMapY(value,false);
+  }
+  
+  /*package*/ static float zoomLinearMapYfromOrigin(double value) {
+    return zoomLinearMapY(value,true);
+  }
+  
+  /*package*/ static float inverseZoomLinearMapY(double value) {
+    return inverseZoomLinearMapY(value,false);
+  }
+  
+  /*package*/ static float inverseZoomLinearMapYfromOrigin(double value) {
+    return inverseZoomLinearMapY(value,true);
   }
   
   private static String toHumanReadable(final Long time) {
@@ -44,8 +96,8 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
   }
 
   /*package*/ void draw(ProcessingApplet applet) {
-    x = (float)linearMap(locatableAgent.location().X, 0, applet.getL(), 0, applet.getW());
-    y = (float)linearMap(locatableAgent.location().Y, 0, applet.getL(), 0, applet.getH());
+    x = zoomLinearMapXfromOrigin(locatableAgent.location().X);
+    y = zoomLinearMapYfromOrigin(locatableAgent.location().Y);
     		
     		//(float) locatableAgent.location().X + MAX_R;
 //    y = (float) locatableAgent.location().Y + MAX_R;

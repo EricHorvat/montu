@@ -15,17 +15,17 @@ import java.util.UUID;
   @Override
   void draw(ProcessingApplet applet) {
     super.draw(applet);
-    final float Rx = linearMapX(R);
-    final float Ry = linearMapY(R);
+    final float Rx = zoomLinearMapX(R);
+    final float Ry = zoomLinearMapY(R);
     applet.rect(x-Rx,y-Ry,2*Rx,2*Ry);
     applet.noFill();
     if(ProcessingApplet.drawDistance) {
       float viewDistance = (float) ((Castle) locatableAgent).characteristics().viewDistance();
       applet.stroke(applet.color(120, 100, 100));
-      applet.ellipse(x, y, linearMapX(2 * viewDistance), linearMapY(2 * viewDistance));
+      applet.ellipse(x, y, zoomLinearMapX(2 * viewDistance), zoomLinearMapY(2 * viewDistance));
       float attackDistance = (float) ((Castle) locatableAgent).characteristics().attackDistance();
       applet.stroke(applet.color(0, 100, 100));
-      applet.ellipse(x, y, linearMapX(2 * attackDistance), linearMapY(2 * attackDistance));
+      applet.ellipse(x, y, zoomLinearMapX(2 * attackDistance), zoomLinearMapY(2 * attackDistance));
       applet.stroke(applet.color(0, 0, 0));
     }
   }

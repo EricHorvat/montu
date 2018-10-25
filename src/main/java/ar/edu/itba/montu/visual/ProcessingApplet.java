@@ -5,12 +5,13 @@ import java.util.List;
 import processing.core.PApplet;
 
 public class ProcessingApplet extends PApplet {
-
-  int W, H, L;
+	
+	int W, H, L;
+	float originX = 0, originY = 0;
 	
 	private static ProcessingApplet instance;
 	public static boolean drawDistance = false;
-	public static int zoomLevel = 0;
+	int zoomLevel = 0;
   
   @Override
   public void setup() {
@@ -46,10 +47,27 @@ public class ProcessingApplet extends PApplet {
     for (int i = a.size() - 1; i >= 0; i--) {
       a.get(i).draw(this);
     }
-    fill(100,100,100);
-    rect(0,0,W/getZoomLevel(),H/getZoomLevel());
-    noFill();
+    updateOrigin();
     noLoop();
+  }
+  
+  private void updateOrigin(){
+	  if (mouseX < getW() * 0.1){
+		  originX -= ProcessingVisualAgent.inverseZoomLinearMapX(50);
+	  }
+	  if (mouseX > getW() * 0.9){
+		  originX += ProcessingVisualAgent.inverseZoomLinearMapX(50);
+	  }
+	  if (mouseY < getH() * 0.1){
+		  originY -= ProcessingVisualAgent.inverseZoomLinearMapY(50);
+	  }
+	  if (mouseY > getH() * 0.9){
+		  originY += ProcessingVisualAgent.inverseZoomLinearMapY(50);
+	  }
+	  originX = originX < 0 ? 0 : originX;
+	  originY = originY < 0 ? 0 : originY;
+	  originX = getL() - originX < ProcessingVisualAgent.inverseZoomLinearMapX(getW()) ? getL() - ProcessingVisualAgent.inverseZoomLinearMapX(getW()) : originX;
+	  originY = getL() - originY < ProcessingVisualAgent.inverseZoomLinearMapY(getH()) ? getL() - ProcessingVisualAgent.inverseZoomLinearMapY(getH()) : originY;
   }
 	
 	@Override
@@ -69,7 +87,7 @@ public class ProcessingApplet extends PApplet {
 		}
 	}
 	
-	public static float getZoomLevel() {
+	public float getZoomLevel() {
 		return (float) Math.pow(2,zoomLevel);
 	}
 	
