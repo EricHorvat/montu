@@ -50,7 +50,7 @@ public class Warrior extends MovingAgent {
 	 */
 	@Override
 	protected void displace() {
-		// Displace will get called only if target is no null
+		// Displace will get called only if target is not null
 		if (target().isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
 		}

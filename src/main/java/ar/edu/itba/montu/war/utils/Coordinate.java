@@ -17,7 +17,7 @@ public class Coordinate {
 	}
 
 	public static double distanceBetween(final Coordinate a, final Coordinate b) {
-		return Math.sqrt(Math.pow(a.X - b.X,2) + Math.pow(a.Y - b.Y,2));
+		return Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 	}
 	
 	public double distanceTo(final Coordinate c) {

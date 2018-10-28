@@ -32,28 +32,28 @@ public abstract class MovingAgent extends LocatableAgent {
 	}
 	
 	public void assignTarget(LocatableAgent target, Integer priority) {
-		for(Objective o : targetsObjectives){
-			if(o.involves(target) && !(o instanceof WalkObjective)){
+		for (Objective o : targetsObjectives) {
+			if (o.involves(target) && !(o instanceof WalkObjective)) {
 				o.priority(priority);
 				return;
 			}
 		}
-		Objective ob;
-		if (target.kingdom.equals(kingdom)){
-			ob = DefendObjective.fromWithPriority(target,priority);
-		}else{
-			ob = AttackObjective.headedToWithPriority(target,priority);
+		Objective objective;
+		if (target.kingdom.equals(kingdom)) {
+			objective = DefendObjective.fromWithPriority(target, priority);
+		} else{
+			objective = AttackObjective.headedToWithPriority(target, priority);
 		}
-		targetsObjectives.add(ob);
+		targetsObjectives.add(objective);
 	}
 	
 	
 	public void unassign(LocatableAgent target) {
 		targetsObjectives.removeIf(o -> o.target().equals(target));
-		if (targetsObjectives.size() == 0){
+		if (targetsObjectives.size() == 0) {
 			status = MovingAgentStatus.UNASSIGNED;
-		}else {
-		status = MovingAgentStatus.MOVING;
+		} else {
+			status = MovingAgentStatus.MOVING;
 		}
 	}
 	
