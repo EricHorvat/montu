@@ -52,16 +52,16 @@ public class ProcessingApplet extends PApplet {
   }
   
   private void updateOrigin(){
-	  if (mouseX < getW() * 0.1){
+	  if (mouseX < getW() * 0.1 || (keyPressed && key == CODED && keyCode == LEFT)){
 		  originX -= ProcessingVisualAgent.inverseZoomLinearMapX(50);
 	  }
-	  if (mouseX > getW() * 0.9){
+	  if (mouseX > getW() * 0.9 || (keyPressed && key == CODED && keyCode == RIGHT)){
 		  originX += ProcessingVisualAgent.inverseZoomLinearMapX(50);
 	  }
-	  if (mouseY < getH() * 0.1){
+	  if (mouseY < getH() * 0.1 || (keyPressed && key == CODED && keyCode == UP)){
 		  originY -= ProcessingVisualAgent.inverseZoomLinearMapY(50);
 	  }
-	  if (mouseY > getH() * 0.9){
+	  if (mouseY > getH() * 0.9 || (keyPressed && key == CODED && keyCode == DOWN)){
 		  originY += ProcessingVisualAgent.inverseZoomLinearMapY(50);
 	  }
 	  originX = originX < 0 ? 0 : originX;
