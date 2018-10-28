@@ -26,6 +26,6 @@ public class KingdomCharacteristics {
 	}
 	
 	public double warriorSpeed() {
-		return offenseCapacity.value();
+		return warriorSpeed.value();
 	}
 }

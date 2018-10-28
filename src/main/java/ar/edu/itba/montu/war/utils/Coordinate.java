@@ -32,7 +32,8 @@ public class Coordinate {
 	
 	public Coordinate applyingNoisyDeltaInDirectionTo(final double delta, final Coordinate to) {
 		final Coordinate dir = Coordinate.direction(this, to);
-		final double angle = Math.atan2(dir.Y, dir.X) * (1.0 + RandomUtil.getRandom().nextDouble() * 0.05);
+		final double theta = Math.atan2(dir.Y, dir.X);
+		final double angle = RandomUtil.getNormalDistribution(theta, theta * 0.1);
 		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.sin(angle)));
 	}
 	

@@ -40,4 +40,11 @@ public class Characteristic<T extends Comparable<T>>{
   		this.value = value;
   	}
   }
+
+	@Override
+	public String toString() {
+		return "C[vr=" + valueRange + ", v=" + value + "]";
+	}
+  
+  
 }
