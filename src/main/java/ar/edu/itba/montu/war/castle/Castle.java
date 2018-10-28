@@ -272,11 +272,11 @@ public class Castle extends LocatableAgent implements Spawner {
 	public void updateObjetives() {
 		/*TODO IDEA PROXIMITY OR STH LIKE THAT*/
 		List<Objective> objectives = new ArrayList<>();
-		for (KingdomObjective kingdomObjective : kingdom.objectivePriorityList()) {
+		kingdom.objectivePriorityList().stream().forEach(kingdomObjective -> {
 			List<Objective> partialObjectives = kingdomObjective.translate();
 			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
 			objectives.addAll(partialObjectives);
-		}
+		});
 		this.objectives = objectives;
 	}
 	

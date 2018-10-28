@@ -148,7 +148,7 @@ enquirer.prompt([
 		return  {
 			name: faker.address.country(),
 			offenseCapacity,
-			warriorSpeed: d3.randomNormal(0.48, 0.048)(), // double
+			warriorSpeed: d3.randomNormal(0.23, 0.023)(), // double
 			castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
 				name: faker.address.city(),
 				characteristics: {
