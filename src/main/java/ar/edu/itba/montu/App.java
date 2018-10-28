@@ -51,11 +51,11 @@ public class App {
     // initialize streamer
     Streamer.currentStreamer();
 		
-		final long seed = 1;//78;//1;6;
-		logger.info("Initializing RandomUtil with seed={}", seed);
-//		logger.info("Initializing RandomUtil with seed={}", config.getEnvironment().getSeed());
-		RandomUtil.initializeWithSeed(seed);
-//		RandomUtil.initializeWithSeed(config.getEnvironment().getSeed());
+//		final long seed = 1;//78;//1;6;
+//		logger.info("Initializing RandomUtil with seed={}", seed);
+		logger.info("Initializing RandomUtil with seed={}", config.getEnvironment().getSeed());
+//		RandomUtil.initializeWithSeed(seed);
+		RandomUtil.initializeWithSeed(config.getEnvironment().getSeed());
 
 		logger.info("Generating war environment");
 		

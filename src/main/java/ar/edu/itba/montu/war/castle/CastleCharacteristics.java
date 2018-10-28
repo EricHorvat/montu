@@ -25,7 +25,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 				attackCharacteristics.attackHarm()
 		);
 		this.offenseCapacity = Characteristic.withFixedValue(
-				(int)RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 0.1 * kingdomCharacteristics.offenseCapacity())
+				(int)Math.min(Math.max(RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 10), 0), 100)
 		);
 		this.gas = Characteristic.withChangingValue(0, gas);
 	}

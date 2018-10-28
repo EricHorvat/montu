@@ -98,13 +98,15 @@ public class Castle extends LocatableAgent implements Spawner {
   	/*This could be optimal; by near enemy castles; but its difficult to apply*/
 	  int prioritySum = objectives.stream().mapToInt(Objective::priority).sum();
 	  int priorityValue = RandomUtil.getRandom().nextInt(prioritySum);
-	  for (Objective objective : objectives){
+	  for (Objective objective : objectives) {
 		  priorityValue -= objective.priority();
-		  if (priorityValue <= 0 ){
+		  if (priorityValue <= 0 ) {
 		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
-		  	createWarriors(1,warriorRole);
-		  	if (warriors.size() > 0){
-		  		int e = 9;}
+		  	createWarriors(1, warriorRole);
+		  	if (warriors.size() > 0) {
+		  		/// TODO: Get this the fuck out of here
+		  		int e = 9;
+		  	}
 		    objective.apply(this);
 			  break;
 		  }

@@ -105,7 +105,7 @@ public class Warrior extends MovingAgent {
 	
 	public void assignToTarget(final LocatableAgent target, int priority) {
 
-		if (status.equals(WarriorStatus.DEAD)){
+		if (status.equals(WarriorStatus.DEAD)) {
 			return;
 		}
 		
@@ -121,7 +121,7 @@ public class Warrior extends MovingAgent {
 			case WarriorStatus.MOVING:
 				// if we are headed toward a target then keep moving
 				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
-					if (kingdom().castles().contains(target().get())){
+					if (kingdom().castles().contains(target().get())) {
 						status = WarriorStatus.DEFENDING;
 						return;
 					}
@@ -131,22 +131,22 @@ public class Warrior extends MovingAgent {
 				}
 				break;
 			case WarriorStatus.DEFENDING:
-				if (target().isPresent()){
-					if(target().get().isAlive()) {
+				if (target().isPresent()) {
+					if (target().get().isAlive()) {
 						this.defending();
-					}else {
+					} else {
 						unassign(target().get());
 					}
 				}
 				return;
 			case WarriorStatus.ATTACKING:
-				if (target().isPresent()){
-					if(target().get().isAlive()) {
+				if (target().isPresent()) {
+					if (target().get().isAlive()) {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
 						}
-					}else{
+					} else{
 						unassign(target().get());
 					}
 				}
@@ -160,7 +160,7 @@ public class Warrior extends MovingAgent {
 	@Override
 	public void defend(LocatableAgent agent, int harm) {
 		int hp = warriorCharacteristics.healthPoints() - harm;
-		if (hp < 0){
+		if (hp < 0) {
 			logger.debug("Warrior of kingdom {} is dead", kingdom);
 			status = WarriorStatus.DEAD;
 			hp = 0;

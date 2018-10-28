@@ -53,7 +53,7 @@ public class WarEnviromentGenerator {
 																		c.getCharacteristics().getHealthPoints()
 																),
 																c.getCharacteristics().getAttackDistance(),
-																(int)RandomUtil.getNormalDistribution(100 - k.getOffenseCapacity(), k.getOffenseCapacity() / 10)
+																(int)Math.min(Math.max(RandomUtil.getNormalDistribution(100 - k.getOffenseCapacity(), 10), 0), 100)
 														),
 														c.getCharacteristics().getGas()
 												)
