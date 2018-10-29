@@ -6,80 +6,77 @@ import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import java.util.Objects;
+
 public class AttackObjective implements Objective {
 	
 	private final LocatableAgent target;
-	private int priority;
+	private double priority;
+	private double basePriority;
 	
-	private AttackObjective(final LocatableAgent target, final int priority) {
+	private AttackObjective(final LocatableAgent target, final double priority) {
 		this.target = target;
 		this.priority = priority;
+		this.basePriority = priority;
 	}
 	
-	public static AttackObjective headedToWithPriority(final LocatableAgent target, final int priority) {
+	public static AttackObjective headedToWithPriority(final LocatableAgent target, final double priority) {
 		return new AttackObjective(target, priority);
 	}
 	
 	public void apply(final Spawner spawner) {
 		
 		spawner.availableAttackers()
-			.forEach(a -> {
-				a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+			.forEach(attacker -> {
+				attacker.assignToTarget(target, Double.MAX_VALUE);
+				spawner.attackObjectives().stream().filter(this::equals).forEach(attackObjective -> attacker.assignToTarget(attackObjective.target(),attackObjective.priority()));
 			});
 		
 	}
 
 	@Override
-	public int priority() {
+	public double priority() {
 		return priority;
 	}
 	
 	@Override
-	public void priority(int priority) {
-		this.priority = priority;
+	public void updatePriority(double coefficient) {
+		this.priority = basePriority * coefficient;
 	}
 
 	@Override
 	public int compareTo(Objective o) {
-		return priority - o.priority();
+		return Double.compare(priority, o.priority());
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AttackObjective that = (AttackObjective) o;
+		return Double.compare(that.priority, priority) == 0 &&
+			Double.compare(that.basePriority, basePriority) == 0 &&
+			Objects.equals(target, that.target);
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + priority;
-		result = prime * result + ((target == null) ? 0 : target.hashCode());
-		return result;
+		return Objects.hash(target, priority, basePriority);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AttackObjective other = (AttackObjective) obj;
-		if (priority != other.priority)
-			return false;
-		if (target == null) {
-			if (other.target != null)
-				return false;
-		} else if (!target.equals(other.target))
-			return false;
-		return true;
-	}
-
+	
 	@Override
 	public boolean involves(final LocatableAgent agent) {
 		return (target).equals(agent);
 	}
 	
 	@Override
-	public <T extends Agent> T target() {
+	public <T extends LocatableAgent> T target() {
 		return (T)target;
+	}
+	
+	@Override
+	public void basePriority(double priority) {
+		basePriority = priority;
 	}
 	
 	@Override

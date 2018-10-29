@@ -9,58 +9,45 @@ import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class KingdomDefendObjective implements KingdomObjective {
 	
 	final private Kingdom target;
-	final private int priority;
+	final private double priority;
 	
-	private KingdomDefendObjective(final Kingdom target, final int priority) {
+	private KingdomDefendObjective(final Kingdom target, final double priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static KingdomDefendObjective fromWithPriority(final Kingdom target, final int priority) {
+	public static KingdomDefendObjective fromWithPriority(final Kingdom target, final double priority) {
 		return new KingdomDefendObjective(target, priority);
 	}
 
 	@Override
 	public int compareTo(KingdomObjective o) {
-		return priority - o.priority();
+		return Double.compare(priority, o.priority());
 	}
 
 	@Override
-	public int priority() {
+	public double priority() {
 		return priority;
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		KingdomDefendObjective that = (KingdomDefendObjective) o;
+		return Double.compare(that.priority, priority) == 0 &&
+			Objects.equals(target, that.target);
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + priority;
-		result = prime * result + ((target == null) ? 0 : target.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KingdomDefendObjective other = (KingdomDefendObjective) obj;
-		if (priority != other.priority)
-			return false;
-		if (target == null) {
-			if (other.target != null)
-				return false;
-		} else if (!target.equals(other.target))
-			return false;
-		return true;
+		return Objects.hash(target, priority);
 	}
 	
 	@Override
@@ -74,7 +61,7 @@ public class KingdomDefendObjective implements KingdomObjective {
 	}
 	
 	@Override
-	public void alterPriority(int priority) {
+	public void alterPriority(double priority) {
 	
 	}
 	

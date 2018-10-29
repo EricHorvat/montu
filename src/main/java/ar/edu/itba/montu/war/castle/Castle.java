@@ -8,6 +8,7 @@ import ar.edu.itba.montu.abstraction.LocatableAgentStatus;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
+import ar.edu.itba.montu.war.objective.DefendObjective;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,8 +97,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	   * */
 		
   	/*This could be optimal; by near enemy castles; but its difficult to apply*/
-	  int prioritySum = objectives.stream().mapToInt(Objective::priority).sum();
-	  int priorityValue = RandomUtil.getRandom().nextInt(prioritySum);
+	  double prioritySum = objectives.stream().mapToDouble(Objective::priority).sum();
+	  double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
 	  for (Objective objective : objectives) {
 		  priorityValue -= objective.priority();
 		  if (priorityValue <= 0 ) {
@@ -119,7 +120,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	  		.collect(Collectors.toList());
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
-	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, RandomUtil.getRandom().nextInt(1000)))); /*TODO WARN*/
+	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, Double.MAX_VALUE))); /*TODO CHANGE TO NOT ONLY TAKE THE FIRST RIVAL*/
 	  }
 	  
   }
@@ -283,5 +284,15 @@ public class Castle extends LocatableAgent implements Spawner {
 	@Override
 	public LocatableAgent asLocatableAgent() {
 		return this;
+	}
+	
+	@Override
+	public List<Objective> attackObjectives() {
+		return objectives.stream().filter(objective -> objective instanceof AttackObjective).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<Objective> defendObjectives() {
+		return objectives.stream().filter(objective -> objective instanceof DefendObjective).collect(Collectors.toList());
 	}
 }

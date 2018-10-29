@@ -6,8 +6,9 @@ import ar.edu.itba.montu.abstraction.Spawner;
 
 public interface Objective extends Comparable<Objective> {
 	void apply(Spawner spawner);
-	int priority();
-	void priority(int priority);
+	double priority();
+	void updatePriority(double coefficient);
+	void basePriority(double priority);
 	boolean involves(final LocatableAgent agent);
-	<T extends Agent> T target();
+	<T extends LocatableAgent> T target();
 }

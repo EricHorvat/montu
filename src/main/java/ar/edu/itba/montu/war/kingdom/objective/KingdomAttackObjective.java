@@ -1,6 +1,7 @@
 package ar.edu.itba.montu.war.kingdom.objective;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.abstraction.Agent;
@@ -13,60 +14,46 @@ import ar.edu.itba.montu.war.objective.AttackObjective;
 public class KingdomAttackObjective implements KingdomObjective {
 	
 	final private Kingdom target;
-	private int priority;
+	private double priority;
 	
-	private KingdomAttackObjective(final Kingdom target, final int priority) {
+	private KingdomAttackObjective(final Kingdom target, final double priority) {
 		this.target = target;
 		this.priority = priority;
 	}
 	
-	public static KingdomAttackObjective headedToWithPriority(final Kingdom target, final int priority) {
+	public static KingdomAttackObjective headedToWithPriority(final Kingdom target, final double priority) {
 		return new KingdomAttackObjective(target, priority);
 	}
 
 	@Override
-	public int priority() {
+	public double priority() {
 		return priority;
 	}
 	
 	@Override
-	public void alterPriority(final int priority) {
+	public void alterPriority(final double priority) {
 		this.priority = priority;
 	} 
 
 	@Override
 	public int compareTo(KingdomObjective o) {
-		return priority - o.priority();
+		return Double.compare(priority, o.priority());
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		KingdomAttackObjective that = (KingdomAttackObjective) o;
+		return Double.compare(that.priority, priority) == 0 &&
+			Objects.equals(target, that.target);
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-//		result = prime * result + priority;
-		result = prime * result + ((target == null) ? 0 : target.hashCode());
-		return result;
+		return Objects.hash(target, priority);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KingdomAttackObjective other = (KingdomAttackObjective) obj;
-//		if (priority != other.priority)
-//			return false;
-		if (target == null) {
-			if (other.target != null)
-				return false;
-		} else if (!target.equals(other.target))
-			return false;
-		return true;
-	}
-
+	
 	@Override
 	public boolean involves(final LocatableAgent agent) {
 		return target.castles().contains(agent);

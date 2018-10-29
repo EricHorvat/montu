@@ -5,81 +5,76 @@ import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import java.util.Objects;
+
 public class DefendObjective implements Objective {
 	
 	final private LocatableAgent target;
-	private int priority;
+	private double priority;
+	private double basePriority;
 	
-	private DefendObjective(final LocatableAgent target, final int priority) {
+	private DefendObjective(final LocatableAgent target, final double priority) {
 		this.target = target;
 		this.priority = priority;
+		this.basePriority = priority;
 	}
 	
-	public static DefendObjective fromWithPriority(final LocatableAgent target, final int priority) {
+	public static DefendObjective fromWithPriority(final LocatableAgent target, final double priority) {
 		return new DefendObjective(target, priority);
 	}
 	
 	@Override
 	public int compareTo(Objective o) {
-		return priority - o.priority();
+		return Double.compare(priority, o.priority());
 	}
 	
 	@Override
-	public int priority() {
+	public double priority() {
 		return priority;
 	}
 	
 	@Override
-	public void priority(int priority) {
-		this.priority = priority;
+	public void updatePriority(double coefficient) {
+		this.priority = basePriority * coefficient;
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		DefendObjective that = (DefendObjective) o;
+		return Double.compare(that.priority, priority) == 0 &&
+			Double.compare(that.basePriority, basePriority) == 0 &&
+			Objects.equals(target, that.target);
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + priority;
-		result = prime * result + ((target == null) ? 0 : target.hashCode());
-		return result;
+		return Objects.hash(target, priority, basePriority);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefendObjective other = (DefendObjective) obj;
-		if (priority != other.priority)
-			return false;
-		if (target == null) {
-			if (other.target != null)
-				return false;
-		} else if (!target.equals(other.target))
-			return false;
-		return true;
-	}
-
+	
 	@Override
 	public boolean involves(final LocatableAgent agent) {
 		return target.equals(agent);
 	}
 	
 	@Override
-	public LocatableAgent target() {
-		return target;
+	public void basePriority(double priority) {
+		basePriority = priority;
+	}
+	@Override
+	public <T extends LocatableAgent> T target() {
+		return (T)target;
 	}
 	
 	
 	public void apply(final Spawner spawner) {
 		
 		spawner.availableDefenders()
-			.forEach(a -> {
-				a.assignTarget(target, RandomUtil.getRandom().nextInt(1000)); /* TODO WARNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN CHANGE 1000*/
+			.forEach(defender -> {
+				defender.assignToTarget(target, Double.MAX_VALUE/10.0);
+				spawner.defendObjectives().stream().filter(this::equals).forEach(defendObjective -> defender.assignToTarget(defendObjective.target(),defendObjective.priority()));
 			});
-		
 	}
 	
 }

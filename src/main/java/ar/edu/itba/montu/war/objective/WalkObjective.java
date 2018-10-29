@@ -5,19 +5,24 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.interfaces.Objective;
 
+import java.util.Objects;
+
 public class WalkObjective implements Objective {
 	
 	private final LocatableAgent target;
-	private int priority;
+	private double priority;
+	private double basePriority;
 	
 	private WalkObjective(final LocatableAgent target, final int priority) {
 		this.target = target;
 		this.priority = priority;
+		this.priority = basePriority;
 	}
 	
 	public WalkObjective(final LocatableAgent target) {
 		this.target = target;
 		this.priority = 0;
+		this.basePriority = 0;
 	}
 	
 	@Override
@@ -26,12 +31,12 @@ public class WalkObjective implements Objective {
 	}
 	
 	@Override
-	public int priority() {
+	public double priority() {
 		return 0;
 	}
 	
 	@Override
-	public void priority(int priority) {
+	public void updatePriority(double coefficient) {
 		//MUST BE EMPTY TODO REVISE
 	}
 	
@@ -42,13 +47,33 @@ public class WalkObjective implements Objective {
 	}
 	
 	@Override
-	public <T extends Agent> T target() {
+	public <T extends LocatableAgent> T target() {
 		return (T)target;
 	}
 	
 	@Override
 	public int compareTo(Objective o) {
-		return priority - o.priority();
+		return Double.compare(priority, o.priority());
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		WalkObjective that = (WalkObjective) o;
+		return Double.compare(that.priority, priority) == 0 &&
+			Double.compare(that.basePriority, basePriority) == 0 &&
+			Objects.equals(target, that.target);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(target, priority, basePriority);
+	}
+	
+	
+	@Override
+	public void basePriority(double priority) {
+		basePriority = priority;
+	}
 }

@@ -100,10 +100,10 @@ public class Warrior extends MovingAgent {
 		
 		logger.debug(status + " warrior of {} will attack {}", kingdom, enemy);
 		
-		this.assignTarget(enemy, RandomUtil.getRandom().nextInt(1000));
+		this.assignTarget(enemy, Double.MAX_VALUE);
 	}
 	
-	public void assignToTarget(final LocatableAgent target, int priority) {
+	public void assignToTarget(final LocatableAgent target, double priority) {
 
 		if (status.equals(WarriorStatus.DEAD)) {
 			return;

@@ -5,6 +5,9 @@ import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
 import ar.edu.itba.montu.war.objective.WalkObjective;
+import ar.edu.itba.montu.war.utils.Coordinate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -13,7 +16,8 @@ public abstract class MovingAgent extends LocatableAgent {
 	protected PriorityQueue<Objective> targetsObjectives = new PriorityQueue<>(Comparator.comparing(o -> ((Objective) o ).priority()).reversed());
 	protected String status = MovingAgentStatus.UNASSIGNED;
 	
-
+	private static final Logger logger = LogManager.getLogger(Castle.class);
+	
 	public MovingAgent(Castle ownCastle) {
 		targetsObjectives.add(new WalkObjective(ownCastle));
 	}
@@ -31,11 +35,10 @@ public abstract class MovingAgent extends LocatableAgent {
 		this.displace();
 	}
 	
-	public void assignTarget(LocatableAgent target, Integer priority) {
+	public void assignTarget(LocatableAgent target, Double priority) {
 		for (Objective o : targetsObjectives) {
-			if (o.involves(target) && !(o instanceof WalkObjective)) {
-				o.priority(priority);
-				return;
+			if (o.involves(target)) {
+				o.basePriority(priority);
 			}
 		}
 		Objective objective;
@@ -53,6 +56,7 @@ public abstract class MovingAgent extends LocatableAgent {
 		if (targetsObjectives.size() == 0) {
 			status = MovingAgentStatus.UNASSIGNED;
 		} else {
+			targetsObjectives.forEach(targetObjective -> {targetObjective.updatePriority(1.0/Coordinate.distanceBetween(this.location(),targetObjective.target().location()));});
 			status = MovingAgentStatus.MOVING;
 		}
 	}
