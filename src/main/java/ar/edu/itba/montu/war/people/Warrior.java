@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ar.edu.itba.montu.configuration.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,7 +79,7 @@ public class Warrior extends MovingAgent {
 		// get from the environment the enemies within viewing distance
 		/// based on warrior characteristics
 		final WarEnvironment environment = WarEnvironment.getInstance();
-		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance());
+		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance()).stream().filter(e -> !e.kingdom().equals(this.kingdom())).collect(Collectors.toList());
 		
 		final List<Warrior> attackingEnemies =
 				enemies.stream()
@@ -100,7 +101,7 @@ public class Warrior extends MovingAgent {
 		
 		logger.debug(status + " warrior of {} will attack {}", kingdom, enemy);
 		
-		this.assignTarget(enemy, Double.MAX_VALUE);
+		this.assignTarget(enemy, Configuration.MAX_PRIORITY);
 	}
 	
 	public void assignToTarget(final LocatableAgent target, double priority) {

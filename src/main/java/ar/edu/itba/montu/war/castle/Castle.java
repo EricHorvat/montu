@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.abstraction.LocatableAgentStatus;
 import ar.edu.itba.montu.abstraction.Spawner;
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
@@ -104,10 +105,6 @@ public class Castle extends LocatableAgent implements Spawner {
 		  if (priorityValue <= 0 ) {
 		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
 		  	createWarriors(1, warriorRole);
-		  	if (warriors.size() > 0) {
-		  		/// TODO: Get this the fuck out of here
-		  		int e = 9;
-		  	}
 		    objective.apply(this);
 			  break;
 		  }
@@ -120,7 +117,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	  		.collect(Collectors.toList());
 	  
 	  if (!visibleRivalAgents.isEmpty()) {
-	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, Double.MAX_VALUE))); /*TODO CHANGE TO NOT ONLY TAKE THE FIRST RIVAL*/
+	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, Configuration.MAX_PRIORITY))); /*TODO CHANGE TO NOT ONLY TAKE THE FIRST RIVAL*/
 	  }
 	  
   }

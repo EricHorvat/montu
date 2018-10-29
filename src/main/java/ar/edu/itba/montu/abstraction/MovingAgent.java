@@ -1,10 +1,12 @@
 package ar.edu.itba.montu.abstraction;
 
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
 import ar.edu.itba.montu.war.objective.WalkObjective;
+import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,8 +39,9 @@ public abstract class MovingAgent extends LocatableAgent {
 	
 	public void assignTarget(LocatableAgent target, Double priority) {
 		for (Objective o : targetsObjectives) {
-			if (o.involves(target)) {
+			if (o.involves(target) && !(o instanceof WalkObjective)) {
 				o.basePriority(priority);
+				return;
 			}
 		}
 		Objective objective;
@@ -56,7 +59,7 @@ public abstract class MovingAgent extends LocatableAgent {
 		if (targetsObjectives.size() == 0) {
 			status = MovingAgentStatus.UNASSIGNED;
 		} else {
-			targetsObjectives.forEach(targetObjective -> {targetObjective.updatePriority(1.0/Coordinate.distanceBetween(this.location(),targetObjective.target().location()));});
+			targetsObjectives.forEach(targetObjective -> targetObjective.updatePriority(1.0/Double.max(Coordinate.distanceBetween(this.location(),targetObjective.target().location()), Configuration.MIN_PRIORITY_DISTANCE))); /*TODO MARTIN CONSTANT*/
 			status = MovingAgentStatus.MOVING;
 		}
 	}
