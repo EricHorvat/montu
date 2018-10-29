@@ -59,7 +59,7 @@ public abstract class MovingAgent extends LocatableAgent {
 		if (targetsObjectives.size() == 0) {
 			status = MovingAgentStatus.UNASSIGNED;
 		} else {
-			targetsObjectives.forEach(targetObjective -> targetObjective.updatePriority(1.0/Double.max(Coordinate.distanceBetween(this.location(),targetObjective.target().location()), Configuration.MIN_PRIORITY_DISTANCE))); /*TODO MARTIN CONSTANT*/
+			targetsObjectives.forEach(targetObjective -> targetObjective.updatePriority(1.0/Double.max(Coordinate.distanceBetween(this.location(),targetObjective.target().location()), Configuration.MIN_PRIORITY_DISTANCE)));
 			status = MovingAgentStatus.MOVING;
 		}
 	}

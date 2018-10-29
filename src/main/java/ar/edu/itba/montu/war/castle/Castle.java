@@ -4,8 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import ar.edu.itba.montu.abstraction.LocatableAgentStatus;
-import ar.edu.itba.montu.abstraction.Spawner;
+import ar.edu.itba.montu.abstraction.*;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
@@ -14,8 +13,6 @@ import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
@@ -76,25 +73,6 @@ public class Castle extends LocatableAgent implements Spawner {
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
-	   * TODO if GAS
-	   *
-	   *   A = RANDOM VALUE (0,SUM_PRIORITIES_VALUES)
-	   *   PQ.TO_LIST_RANDOM_SORT
-	   *   ITERATE LIST it ->
-	   *     A -= it.priority
-	   *     if A <=0
-	   *       TAKE IT AS NEXT OBJ
-	   *   CREATE WARRIOR FOR OBJ
-	   *
-	   *  K1 = [p = 500]
-	   *  K2 = [p = 3]
-	   *  K3 = [p = 2]
-	   *  A = 7
-	   *  [K1]
-	   *  A -= 5 (A = 2)
-	   *  [K2]
-	   *  A -= 3 (A = -1)
-	   *  K2.apply()
 	   * */
 		
   	/*This could be optimal; by near enemy castles; but its difficult to apply*/
@@ -116,8 +94,21 @@ public class Castle extends LocatableAgent implements Spawner {
 	  		.filter(l -> l instanceof MovingAgent && this.kingdom().isEnemy(l.kingdom()))
 	  		.collect(Collectors.toList());
 	  
+	  //TODO CONTROL THIS SHOULD BE CALLED AFTER
 	  if (!visibleRivalAgents.isEmpty()) {
-	  	visibleRivalAgents.forEach(rival -> availableWarriors().forEach(def -> def.assignToTarget(rival, Configuration.MAX_PRIORITY))); /*TODO CHANGE TO NOT ONLY TAKE THE FIRST RIVAL*/
+		  for (Warrior availableWarrior: availableWarriors()) {
+				LocatableAgent enemySelected = visibleRivalAgents.get(0);
+			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), Configuration.MIN_PRIORITY_DISTANCE)).sum();
+			  double value = RandomUtil.getRandom().nextDouble() * prioritySum;
+			  for (LocatableAgent enemy : visibleRivalAgents) {
+				  priorityValue -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), Configuration.MIN_PRIORITY_DISTANCE);
+				  if (priorityValue <= 0) {
+					  enemySelected = enemy;
+					  break;
+				  }
+			  }
+			  availableWarrior.assignToTarget(enemySelected,Configuration.MAX_PRIORITY);
+		  }
 	  }
 	  
   }

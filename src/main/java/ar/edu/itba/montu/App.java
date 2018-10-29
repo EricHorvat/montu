@@ -59,7 +59,6 @@ public class App {
 
 		logger.info("Generating war environment");
 		
-		//TODO ADD ARGUMENTS
     WarEnviromentGenerator.generateWithConfiguration(config);
 
 		final WarEnvironment warEnvironment = WarEnvironment.getInstance();

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.montu.configuration.Configuration;
+import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.objective.AttackObjective;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -92,16 +94,22 @@ public class Warrior extends MovingAgent {
 			return;
 		}
 		
-		// get the closest enemy and attack him
-		/// TODO: this should be done only when attack to defense ratio is big enough
-		final Warrior enemy = attackingEnemies.stream()
-				.sorted(Comparator.comparingDouble(e -> e.location.distanceTo(location)))
-				.findFirst()
-				.get();
+		Warrior enemySelected = attackingEnemies.get(0);
 		
-		logger.debug(status + " warrior of {} will attack {}", kingdom, enemy);
+		// get the random enemy and attack him (with prioritized value)
+		double prioritySum = attackingEnemies.stream().mapToDouble(attacker -> Double.max(1.0/Coordinate.distanceBetween(this.location(),attacker.location),Configuration.MIN_PRIORITY_DISTANCE)).sum();
+		double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
+		for (Warrior enemy: attackingEnemies) {
+			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location),Configuration.MIN_PRIORITY_DISTANCE);
+			if (priorityValue <= 0 ) {
+				enemySelected = enemy;
+				break;
+			}
+		}
 		
-		this.assignTarget(enemy, Configuration.MAX_PRIORITY);
+		logger.debug(status + " warrior of {} will attack {}", kingdom, enemySelected);
+		
+		this.assignTarget(enemySelected, Configuration.MAX_PRIORITY);
 	}
 	
 	public void assignToTarget(final LocatableAgent target, double priority) {
