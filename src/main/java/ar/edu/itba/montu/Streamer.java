@@ -64,6 +64,7 @@ public class Streamer {
 			kingdom.put("name", k.name());
 			kingdom.put("offense_capcity", k.characteristics().offenseCapacity());
 			kingdom.put("warrior_speed", k.characteristics().warriorSpeed());
+			kingdom.put("color", Integer.toHexString(k.color()));
 			return kingdom;
 		}).collect(Collectors.toList()));
     

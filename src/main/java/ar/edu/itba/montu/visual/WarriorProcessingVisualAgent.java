@@ -29,13 +29,22 @@ import ar.edu.itba.montu.war.people.Warrior;
   
     applet.noFill();
     if (ProcessingApplet.drawDistance) {
-      float viewDistance = (float) ((Warrior) locatableAgent).characteristics().viewDistance();
-      applet.stroke(applet.color(120, 100, 100, 50));
+    	final Warrior w = (Warrior) locatableAgent;
+      final float viewDistance = (float)w.characteristics().viewDistance();
+      final float attackDistance = (float)w.characteristics().attackDistance();
+      final int color = w.kingdom().color(); 
+      
+      int r = (color & 0xff0000) >> 16;
+      int g = (color & 0x00ff00) >> 8;
+      int b = color & 0x0000ff;
+      
+      applet.stroke(r, g, b);
       applet.ellipse(x, y, zoomLinearMapX(2 * viewDistance), zoomLinearMapY(2 * viewDistance));
-      float attackDistance = (float) ((Warrior) locatableAgent).characteristics().attackDistance();
-      applet.stroke(applet.color(0, 100, 100, 50));
+      
+      applet.stroke(r, g, b);
       applet.ellipse(x, y, zoomLinearMapX(2 * attackDistance), zoomLinearMapY(2 * attackDistance));
-      applet.stroke(applet.color(0, 0, 0));
+      
+      applet.stroke(0x000000);
     }
   }
 }

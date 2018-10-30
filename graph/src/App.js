@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import momentDurationSetup from 'moment-duration-format';
-import randomColor from 'random-color';
 
 import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel, VictoryScatter } from 'victory';
 
@@ -66,8 +65,7 @@ class App extends Component {
 					max_health_points: [{ x: data.time, y: c.max_health_points, y0: 0 }],
 					gas: [{ x: data.time, y: c.gas, y0: 0 }],
 					max_gas: [{ x: data.time, y: c.max_gas, y0: 0 }],
-					color: randomColor().hexString(),
-					color2: randomColor().hexString(),
+					color: `#${nextKingdoms[c.kingdom].color}`,
 				});
 			});
 
@@ -138,6 +136,8 @@ class App extends Component {
 				</li>
 			)
 		});
+
+		console.log(castleList);
 
 		const castleListComponent = castleList.map(c => (
 			<li key={c.id} className={focus === c.id || c.kingdom === focusKingdom ? 'text-primary' : null}>
