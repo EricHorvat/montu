@@ -9,6 +9,7 @@ import ar.edu.itba.montu.abstraction.NonLocatableAgent;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
+import ar.edu.itba.montu.war.utils.Coordinate;
 
 public class KingdomNegotiateObjective implements KingdomObjective {
 	
@@ -71,7 +72,7 @@ public class KingdomNegotiateObjective implements KingdomObjective {
 	}
 	
 	@Override
-	public List<Objective> translate() {
+	public List<Objective> translate(Coordinate sourLocation) {
 		return null;
 	}
 	

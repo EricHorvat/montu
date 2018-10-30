@@ -75,10 +75,17 @@ public class Castle extends LocatableAgent implements Spawner {
 	   *
 	   * */
 		
+  	List<Objective> turnObjectives;
+  	if(RandomUtil.getRandom().nextDouble() * 100 < this.characteristics().offenseCapacity()){
+  		turnObjectives = attackObjectives();
+	  }else{
+  		turnObjectives = defendObjectives();
+	  }
+  	
   	/*This could be optimal; by near enemy castles; but its difficult to apply*/
-	  double prioritySum = objectives.stream().mapToDouble(Objective::priority).sum();
+	  double prioritySum = turnObjectives.stream().mapToDouble(Objective::priority).sum();
 	  double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
-	  for (Objective objective : objectives) {
+	  for (Objective objective : turnObjectives) {
 		  priorityValue -= objective.priority();
 		  if (priorityValue <= 0 ) {
 		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
@@ -237,6 +244,7 @@ public class Castle extends LocatableAgent implements Spawner {
 			.range(0,quantity)
 			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)/*TODO CHANGE THIS*/
 			.mapToObj(i -> createAWarrior(role))
+			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 			
 		warriorList.forEach(warrior -> kingdom.addAgent(warrior));
@@ -265,7 +273,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		/*TODO IDEA PROXIMITY OR STH LIKE THAT*/
 		List<Objective> objectives = new ArrayList<>();
 		kingdom.objectivePriorityList().stream().forEach(kingdomObjective -> {
-			List<Objective> partialObjectives = kingdomObjective.translate();
+			List<Objective> partialObjectives = kingdomObjective.translate(location);
 			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
 			objectives.addAll(partialObjectives);
 		});

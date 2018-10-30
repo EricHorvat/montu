@@ -2,11 +2,13 @@ package ar.edu.itba.montu.war.kingdom.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
+import ar.edu.itba.montu.war.utils.Coordinate;
 
 import java.util.List;
 import java.util.Objects;
@@ -66,9 +68,15 @@ public class KingdomDefendObjective implements KingdomObjective {
 	}
 	
 	@Override
-	public List<Objective> translate() {
+	public List<Objective> translate(Coordinate sourceLocation) {
 		return target.castles().stream()
-			.map(castle -> DefendObjective.fromWithPriority(castle, priority))
+			.map(castle -> DefendObjective.fromWithPriority(
+				castle,
+				priority
+					* castle.characteristics().maxHealthPoints()
+					/ castle.characteristics().healthPoints()
+					/ Double.max(Coordinate.distanceBetween(castle.location(),sourceLocation), 1)
+			))
 			.collect(Collectors.toList());
 	}
 }
