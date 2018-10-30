@@ -94,15 +94,14 @@ public class Castle extends LocatableAgent implements Spawner {
 	  		.filter(l -> l instanceof MovingAgent && this.kingdom().isEnemy(l.kingdom()))
 	  		.collect(Collectors.toList());
 	  
-	  //TODO CONTROL THIS SHOULD BE CALLED AFTER
 	  if (!visibleRivalAgents.isEmpty()) {
 		  for (Warrior availableWarrior: availableWarriors()) {
 				LocatableAgent enemySelected = visibleRivalAgents.get(0);
 			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), Configuration.MIN_PRIORITY_DISTANCE)).sum();
-			  double value = RandomUtil.getRandom().nextDouble() * prioritySum;
+			  double value = RandomUtil.getRandom().nextDouble() * sum;
 			  for (LocatableAgent enemy : visibleRivalAgents) {
-				  priorityValue -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), Configuration.MIN_PRIORITY_DISTANCE);
-				  if (priorityValue <= 0) {
+				  value -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), Configuration.MIN_PRIORITY_DISTANCE);
+				  if (value <= 0) {
 					  enemySelected = enemy;
 					  break;
 				  }
@@ -233,11 +232,15 @@ public class Castle extends LocatableAgent implements Spawner {
 	@Override
 	public List<Warrior> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
 		
-		return IntStream
+		List<Warrior> warriorList =
+			IntStream
 			.range(0,quantity)
 			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)/*TODO CHANGE THIS*/
 			.mapToObj(i -> createAWarrior(role))
 			.collect(Collectors.toList());
+			
+		warriorList.forEach(warrior -> kingdom.addAgent(warrior));
+		return warriorList;
 	}
 	
 	public boolean hasGas() {

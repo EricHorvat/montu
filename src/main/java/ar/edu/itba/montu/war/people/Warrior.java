@@ -56,6 +56,11 @@ public class Warrior extends MovingAgent {
 		// Displace will get called only if target is not null
 		if (target().isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
+			/*IF WE WANT, THIS IS FOR BATTLING IN THE PATH* /
+			if (Coordinate.distanceBetween(this.location,target().get().location()) < this.characteristics().viewDistance()){
+				defending();
+			}
+			*/
 		}
 	}
 	
@@ -79,28 +84,21 @@ public class Warrior extends MovingAgent {
 	
 	private void defending(){
 		// get from the environment the enemies within viewing distance
-		/// based on warrior characteristics
+		/// based on warrior characteristics; this should be called only
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance()).stream().filter(e -> !e.kingdom().equals(this.kingdom())).collect(Collectors.toList());
 		
-		final List<Warrior> attackingEnemies =
-				enemies.stream()
-					.filter(e -> e.getClass().equals(Warrior.class))
-					.map(e -> (Warrior)e)
-					.filter(w -> w.status().equals(WarriorStatus.ATTACKING))
-					.collect(Collectors.toList());
-		
-		if (attackingEnemies.isEmpty()) {
+		if (enemies.isEmpty()) {
 			return;
 		}
 		
-		Warrior enemySelected = attackingEnemies.get(0);
+		LocatableAgent enemySelected = enemies.get(0);
 		
 		// get the random enemy and attack him (with prioritized value)
-		double prioritySum = attackingEnemies.stream().mapToDouble(attacker -> Double.max(1.0/Coordinate.distanceBetween(this.location(),attacker.location),Configuration.MIN_PRIORITY_DISTANCE)).sum();
+		double prioritySum = enemies.stream().mapToDouble(attacker -> Double.max(1.0/Coordinate.distanceBetween(this.location(),attacker.location()),Configuration.MIN_PRIORITY_DISTANCE)).sum();
 		double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
-		for (Warrior enemy: attackingEnemies) {
-			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location),Configuration.MIN_PRIORITY_DISTANCE);
+		for (LocatableAgent enemy: enemies) {
+			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location()),Configuration.MIN_PRIORITY_DISTANCE);
 			if (priorityValue <= 0 ) {
 				enemySelected = enemy;
 				break;

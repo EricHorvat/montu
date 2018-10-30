@@ -23,7 +23,7 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 						Math.max(RandomUtil.getNormalDistribution(c.characteristics().viewDistance() / 5.0, 0.1), 0.0),
 						// Warriors get 10% of the castles health points initially
 						// Of course, a normal distribution applies when born
-						(int)RandomUtil.getNormalDistribution(c.characteristics().healthPoints() / 10.0, 50.0)
+						(int)RandomUtil.getNormalDistribution(c.characteristics().maxHealthPoints() / 10.0, 50.0)
 				),
 				// Warriors get 10% of the castles attack distance initially
 				// Of course, a normal distribution applies when born

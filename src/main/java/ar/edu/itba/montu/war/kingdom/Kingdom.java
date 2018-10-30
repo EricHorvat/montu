@@ -34,6 +34,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final List<Kingdom> rivals = new ArrayList<>();
 	private final List<KingdomObjective> objectives = new ArrayList<>();
 	
+	private List<LocatableAgent> agents = new ArrayList<>();
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
 
@@ -192,7 +193,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			});
 		});
 		
-		
+		agents = agents.stream().filter(LocatableAgent::isAlive).collect(Collectors.toList());
 //		sense();
 	}
 
@@ -202,7 +203,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 //	}
 	
 	public List<LocatableAgent> agents() {
-		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), castles.stream().map(Castle::agents).flatMap(List::stream)).collect(Collectors.toList());
+		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), agents.stream()).collect(Collectors.toList());
 	}
 
 	public void castleWillDie(final Castle castle) {
@@ -240,6 +241,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public String name() {
 		return name;
+	}
+	
+	public void addAgent(LocatableAgent agent){
+		agents.add(agent);
 	}
 	
 }
