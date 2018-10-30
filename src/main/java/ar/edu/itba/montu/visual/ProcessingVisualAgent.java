@@ -110,9 +110,14 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
       
       applet.text(toHumanReadable(WarEnvironment.getInstance().time()), 10, 10);
     }
-    int sat = !locatableAgent.isAlive() ? 0 : (25 + locatableAgent.getHealthPointPercentage() * 75 / 100);
-    int c = applet.color(KingdomColorGetter.getHueValue(locatableAgent.kingdom()), 100, sat);
-    applet.fill(c);
+    
+    int color = locatableAgent.kingdom().color();
+    int r = (color & 0xff0000) >> 16;
+    int g = (color & 0x00ff00) >> 8;
+    int b = color & 0x0000ff;
+    float a = (float)Math.max(locatableAgent.getHealthPointPercentage(), 25);
+    
+    applet.fill(r, g, b, a);
   
   }
 

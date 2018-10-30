@@ -42,7 +42,8 @@ public class ProcessingApplet extends PApplet {
   @Override
   public void draw() {
     clear();
-    colorMode(HSB, 360, 100, 100, 100);
+    colorMode(RGB);
+//    colorMode(HSB, 360, 100, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
     for (int i = a.size() - 1; i >= 0; i--) {
       a.get(i).draw(this);

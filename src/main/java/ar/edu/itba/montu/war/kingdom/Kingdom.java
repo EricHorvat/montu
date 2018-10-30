@@ -8,7 +8,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ar.edu.itba.montu.war.kingdom.objective.KingdomDefendObjective;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +20,7 @@ import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.kingdom.objective.KingdomAttackObjective;
+import ar.edu.itba.montu.war.kingdom.objective.KingdomDefendObjective;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
@@ -34,6 +34,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final List<Kingdom> rivals = new ArrayList<>();
 	private final List<KingdomObjective> objectives = new ArrayList<>();
 	
+	private int color = 0xffffff;
 	private List<LocatableAgent> agents = new ArrayList<>();
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
@@ -245,6 +246,14 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public void addAgent(LocatableAgent agent){
 		agents.add(agent);
+	}
+
+	public void changeColor(final int color) {
+		this.color = color;
+	}
+
+	public int color() {
+		return color;
 	}
 	
 }

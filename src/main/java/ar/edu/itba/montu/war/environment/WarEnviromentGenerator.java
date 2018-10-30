@@ -37,6 +37,7 @@ public class WarEnviromentGenerator {
 					.withKingdomCharacteristics(
 							kingdomCharacteristics
 					)
+					.withColor(k.getColor())
 					.andCastles(
 							k.getCastles().stream().map(c -> {
 								return CastleBuilder
@@ -66,7 +67,7 @@ public class WarEnviromentGenerator {
 		logger.info("Done creating environment");
 
     WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
-		KingdomColorGetter.putKingdoms(kingdoms);
+//		KingdomColorGetter.putKingdoms(kingdoms);
   }
 	
 }

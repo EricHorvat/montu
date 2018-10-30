@@ -13,6 +13,8 @@ public class KingdomBuilder {
 	
 	private final List<CastleBuilder> castles = new ArrayList<>();
 	
+	private int color = 0xffffff;
+	
 	private KingdomBuilder(final String name) {
 		this.name = name;
 	}
@@ -32,7 +34,14 @@ public class KingdomBuilder {
 		return this;
 	}
 	
+	public KingdomBuilder withColor(final int color) {
+		this.color = color;
+		return this;
+	}
+	
 	public Kingdom build() {
-		return new Kingdom(name, kingdomCharacteristics, castles);
+		final Kingdom k = new Kingdom(name, kingdomCharacteristics, castles);
+		k.changeColor(this.color);
+		return k;
 	}
 }

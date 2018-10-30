@@ -20,6 +20,7 @@
     "faker": "^4.1.0",
     "prettyjson": "^1.2.1",
     "prompt-confirm": "^2.0.4",
+    "random-color": "^1.0.1",
     "websocket": "^1.0.28",
     "write-yaml": "^1.0.0"
   }

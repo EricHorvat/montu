@@ -125,6 +125,7 @@ public final class Configuration {
 		private int offenseCapacity;
 		private double warriorSpeed;
 		private List<CastleConfiguration> castles;
+		private int color;
 		public String getName() {
 			return name;
 		}
@@ -148,6 +149,12 @@ public final class Configuration {
 		}
 		public void setWarriorSpeed(double warriorSpeed) {
 			this.warriorSpeed = warriorSpeed;
+		}
+		public int getColor() {
+			return color;
+		}
+		public void setColor(int color) {
+			this.color = color;
 		}
 		@Override
 		public String toString() {
