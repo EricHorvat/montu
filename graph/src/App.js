@@ -3,7 +3,7 @@ import moment from 'moment';
 import momentDurationSetup from 'moment-duration-format';
 import color from 'color';
 
-import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel, VictoryScatter } from 'victory';
+import { VictoryChart, VictoryLine, VictoryAxis, VictoryLabel, VictoryScatter } from 'victory';
 
 momentDurationSetup(moment);
 
@@ -24,6 +24,7 @@ class App extends Component {
 
 		this.max_health_points = 0;
 		this.max_gas = 0;
+		this.max_warriors = 0;
 
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -41,12 +42,9 @@ class App extends Component {
 			const nextCastles = Object.assign({}, castles);
 
 			data.castles.forEach((c, i) => {
-				if (c.health_points > this.max_health_points) {
-					this.max_health_points = c.health_points;
-				}
-				if (c.gas > this.max_gas) {
-					this.max_gas = c.gas;
-				}
+				if (c.health_points > this.max_health_points) this.max_health_points = c.health_points;
+				if (c.gas > this.max_gas) this.max_gas = c.gas;
+				if (c.warriors > this.max_warriors) this.max_warriors = c.warriors;
 				if (nextCastles[c.id]) {
 					if (c.health_points >= 0) {
 						nextCastles[c.id].health_points.push({ x: data.time, y: c.health_points, y0: 0 });
@@ -56,6 +54,12 @@ class App extends Component {
 					}
 					nextCastles[c.id].gas.push({ x: data.time, y: c.gas, y0: 0 });
 					nextCastles[c.id].max_gas.push({ x: data.time, y: c.max_gas, y0: 0 });
+					nextCastles[c.id].warriors.push({ x: data.time, y: c.warriors, y0: 0 });
+					// nextCastles[c.id].available_warriors.push({ x: data.time, y: c.available_warriors, y0: 0 });
+					nextCastles[c.id].attackers.push({ x: data.time, y: c.attackers, y0: 0 });
+					// nextCastles[c.id].available_attackers.push({ x: data.time, y: c.available_attackers, y0: 0 });
+					nextCastles[c.id].defenders.push({ x: data.time, y: c.defenders, y0: 0 });
+					// nextCastles[c.id].available_defenders.push({ x: data.time, y: c.available_defenders, y0: 0 });
 					if (c.health_points <= 5) {
 						nextCastles[c.id].death_time = data.time;
 					}
@@ -66,6 +70,12 @@ class App extends Component {
 					max_health_points: [{ x: data.time, y: c.max_health_points, y0: 0 }],
 					gas: [{ x: data.time, y: c.gas, y0: 0 }],
 					max_gas: [{ x: data.time, y: c.max_gas, y0: 0 }],
+					warriors: [{ x: data.time, y: c.warriors }],
+					// available_warriors: [{ x: data.time, y: c.available_warriors }],
+					defenders: [{ x: data.time, y: c.defenders }],
+					// available_defenders: [{ x: data.time, y: c.available_defenders }],
+					attackers: [{ x: data.time, y: c.attackers }],
+					// available_attackers: [{ x: data.time, y: c.available_attackers }],
 					color: color(nextKingdoms[c.kingdom].color).darken(i / (data.castles.length || 1)).hex(),
 				});
 			});
@@ -153,24 +163,9 @@ class App extends Component {
 		));
 
 		const healthLines = (() => {
-			if (focus) {
-				return <VictoryLine
-					style={{ data: { stroke: castles[focus].color } }}
-					data={castles[focus].health_points}
-					events={[{
-						target: "data",
-						eventHandlers: {
-							onClick: this.focusCastle(focus)
-						}
-					}]} />;
-				// return [
-				// 	<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_health_points} />,
-				// 	<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].health_points} />,
-				// ]
-			}
 			const filteredCastles = (() => {
-				if (focusKingdom) {
-					return castleList.filter(c => c.kingdom === focusKingdom);
+				if (focusKingdom || focus) {
+					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
 				}
 				return castleList;
 			})();
@@ -193,24 +188,9 @@ class App extends Component {
 		));
 
 		const gasLines = (() => {
-			if (focus) {
-				return <VictoryLine
-					style={{ data: { stroke: castles[focus].color } }}
-					data={castles[focus].gas}
-					events={[{
-						target: "data",
-						eventHandlers: {
-							onClick: this.focusCastle(focus)
-						}
-					}]} />;
-				// return [
-				// 	<VictoryArea key="2" style={{ data: { fill: castles[focus].color2 } }} data={castles[focus].max_gas} />,
-				// 	<VictoryArea key="1" style={{ data: { fill: castles[focus].color } }} data={castles[focus].gas} />,
-				// ];
-			}
 			const filteredCastles = (() => {
-				if (focusKingdom) {
-					return castleList.filter(c => c.kingdom === focusKingdom);
+				if (focusKingdom || focus) {
+					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
 				}
 				return castleList;
 			})();
@@ -219,6 +199,69 @@ class App extends Component {
 					key={c.id}
 					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
 					data={c.gas}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(c.id),
+						}
+					}]} />
+			));
+		})();
+
+		const warriorLines = (() => {
+			const filteredCastles = (() => {
+				if (focusKingdom || focus) {
+					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
+				}
+				return castleList;
+			})();
+			return filteredCastles.map(c => (
+				<VictoryLine
+					key={c.id}
+					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
+					data={c.warriors}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(c.id),
+						}
+					}]} />
+			));
+		})();
+
+		const attackerLines = (() => {
+			const filteredCastles = (() => {
+				if (focusKingdom || focus) {
+					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
+				}
+				return castleList;
+			})();
+			return filteredCastles.map(c => (
+				<VictoryLine
+					key={c.id}
+					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
+					data={c.attackers}
+					events={[{
+						target: "data",
+						eventHandlers: {
+							onClick: this.focusCastle(c.id),
+						}
+					}]} />
+			));
+		})();
+
+		const defenderLines = (() => {
+			const filteredCastles = (() => {
+				if (focusKingdom || focus) {
+					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
+				}
+				return castleList;
+			})();
+			return filteredCastles.map(c => (
+				<VictoryLine
+					key={c.id}
+					style={{ data: { stroke: c.color, cursor: 'pointer', strokeDasharray: '5,5' } }}
+					data={c.defenders}
 					events={[{
 						target: "data",
 						eventHandlers: {
@@ -250,6 +293,7 @@ class App extends Component {
 									style={{
 										data: {
 											fill: d => d.color,
+											cursor: 'pointer',
 											opacity: d => Math.max(d.health_points[d.health_points.length - 1].y / d.max_health_points[d.max_health_points.length - 1].y, 0.2)
 										},
 										parent: {
@@ -258,6 +302,12 @@ class App extends Component {
 									}}
 									size={d => d.id === focus || d.kingdom === focusKingdom ? 12 : 7}
 									data={castleList}
+									events={[{
+										target: "data",
+										eventHandlers: {
+											onClick: (e, d) => this.focusCastle(d.data[d.index].id)(e),
+										}
+									}]}
 								/>
 							</div>
 						</div>
@@ -302,6 +352,41 @@ class App extends Component {
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{gasLines}
 									<VictoryAxis dependentAxis label="Gas" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />} />
+									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
+								</VictoryChart>
+							</div>
+						</div>
+					</div>
+					<div className={`col-sm-${this.state.warriors ? 12 : 6}`}>
+						<div className="card">
+							<div className="card-body">
+								<h5 className="card-title">Warriors&nbsp;
+									<button onClick={this.expand('warriors')} className="btn btn-outline-dark btn-sm">{this.state.warriors ? 'Shrink' : 'Expand'}</button>
+								</h5>
+								<VictoryChart
+									domain={{ x: [0, time], y: [0, this.max_warriors] }}
+									animate={{ duration: 1000, easing: "bounce" }}
+									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
+									{warriorLines}
+									<VictoryAxis dependentAxis label="Warriors" tickFormat={t => Math.round(t)} axisLabelComponent={<VictoryLabel dy={-20} />} />
+									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
+								</VictoryChart>
+							</div>
+						</div>
+					</div>
+					<div className={`col-sm-${this.state.attack_defend ? 12 : 6}`}>
+						<div className="card">
+							<div className="card-body">
+								<h5 className="card-title">Attackers / Defenders&nbsp;
+									<button onClick={this.expand('attack_defend')} className="btn btn-outline-dark btn-sm">{this.state.attack_defend ? 'Shrink' : 'Expand'}</button>
+								</h5>
+								<VictoryChart
+									domain={{ x: [0, time], y: [0, this.max_warriors] }}
+									animate={{ duration: 1000, easing: "bounce" }}
+									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
+									{attackerLines}
+									{defenderLines}
+									<VictoryAxis dependentAxis label="Attackers / Defenders" tickFormat={t => Math.round(t)} axisLabelComponent={<VictoryLabel dy={-20} />} />
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
 							</div>
