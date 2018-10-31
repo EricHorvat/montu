@@ -16,11 +16,13 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	private final Characteristic<Integer> offenseCapacity;
 	private Characteristic<Integer> gas;
+	private Characteristic<Double> spawnProbability;
 	
 	public CastleCharacteristics(
 			final KingdomCharacteristics kingdomCharacteristics,
 			final AttackingAgentCharacteristics attackCharacteristics,
-			final int gas
+			final int gas,
+			final double spawnProbability
 	) {
 		super(
 				LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
@@ -34,6 +36,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 				(int)Math.min(Math.max(RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 10), 0), 100)
 		);
 		this.gas = Characteristic.withChangingValue(0, gas);
+		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
 	}
 
 	public int gas() {
@@ -73,6 +76,10 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	public double defenseCapacity() {
 		return 100.0 - offenseCapacity.value();
+	}
+	
+	public double spawnProbability() {
+		return spawnProbability.value();
 	}
 
 	@Override

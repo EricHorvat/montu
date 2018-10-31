@@ -40,6 +40,7 @@ public final class Configuration {
 		private double attackDistance;
 		private int healthPoints;
 		private int gas;
+		private double spawnProbability;
 		public double getViewDistance() {
 			return viewDistance;
 		}
@@ -63,6 +64,12 @@ public final class Configuration {
 		}
 		public void setGas(int gas) {
 			this.gas = gas;
+		}
+		public double getSpawnProbability() {
+			return spawnProbability;
+		}
+		public void setSpawnProbability(double spawnProbability) {
+			this.spawnProbability = spawnProbability;
 		}
 		@Override
 		public String toString() {

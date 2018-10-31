@@ -260,8 +260,8 @@ public class Castle extends LocatableAgent implements Spawner {
 		
 		List<Warrior> warriorList =
 			IntStream
-			.range(0,quantity)
-			.filter(i -> RandomUtil.getRandom().nextDouble() < 0.01)/*TODO CHANGE THIS*/
+			.range(0, quantity)
+			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())/*TODO CHANGE THIS*/
 			.mapToObj(i -> createAWarrior(role))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());

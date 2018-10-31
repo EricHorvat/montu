@@ -56,7 +56,8 @@ public class WarEnviromentGenerator {
 																c.getCharacteristics().getAttackDistance(),
 																(int)Math.min(Math.max(RandomUtil.getNormalDistribution(100 - k.getOffenseCapacity(), 10), 0), 100)
 														),
-														c.getCharacteristics().getGas()
+														c.getCharacteristics().getGas(),
+														c.getCharacteristics().getSpawnProbability()
 												)
 										);
 							}).collect(Collectors.toList())
