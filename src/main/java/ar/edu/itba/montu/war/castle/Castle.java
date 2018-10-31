@@ -9,6 +9,7 @@ import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
+import ar.edu.itba.montu.war.people.WarriorCharacteristics;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -222,6 +223,24 @@ public class Castle extends LocatableAgent implements Spawner {
 			this.status = LocatableAgentStatus.DEAD;
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
+			int ownGas = this.characteristics.gas();
+			Castle enemyCastle = agent.castle();
+			if (!enemyCastle.isAlive()){
+				List<Castle> aliveCastles = agent.kingdom().castles();
+				if(aliveCastles.size()==0){
+					enemyCastle = null;
+				}else if(aliveCastles.size()==1){
+					enemyCastle = aliveCastles.get(0);
+				}else{
+					enemyCastle = aliveCastles.get(RandomUtil.getRandom().nextInt(aliveCastles.size()-1));
+				}
+			}
+			if (enemyCastle != null){
+				CastleCharacteristics enemyCharacteristics = agent.castle().characteristics();
+				enemyCharacteristics.boostGasBy(Integer.max(0,ownGas + enemyCharacteristics.gas() - enemyCharacteristics.maxGas()));
+				enemyCharacteristics.increaseGas(ownGas);
+				this.characteristics.useGas(ownGas);
+			}
 		}
 		characteristics.healthPoints(hp);
 	}
@@ -293,5 +312,10 @@ public class Castle extends LocatableAgent implements Spawner {
 	@Override
 	public List<Objective> defendObjectives() {
 		return objectives.stream().filter(objective -> objective instanceof DefendObjective).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Castle castle() {
+		return this;
 	}
 }

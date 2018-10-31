@@ -17,11 +17,13 @@ public abstract class MovingAgent extends LocatableAgent {
 	
 	protected PriorityQueue<Objective> targetsObjectives = new PriorityQueue<>(Comparator.comparing(o -> ((Objective) o ).priority()).reversed());
 	protected String status = MovingAgentStatus.UNASSIGNED;
+	protected Castle castle;
 	
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
 	public MovingAgent(Castle ownCastle) {
 		targetsObjectives.add(new WalkObjective(ownCastle));
+		castle = ownCastle;
 	}
 	/**
 	 * The subclass should describe how the target
@@ -73,5 +75,10 @@ public abstract class MovingAgent extends LocatableAgent {
 			return Optional.of(targetsObjectives.peek().target());
 		}
 		return Optional.empty();
+	}
+	
+	@Override
+	public Castle castle() {
+		return castle;
 	}
 }

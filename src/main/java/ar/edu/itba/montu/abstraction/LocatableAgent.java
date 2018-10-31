@@ -1,6 +1,7 @@
 package ar.edu.itba.montu.abstraction;
 
 import ar.edu.itba.montu.visual.VisualAgent;
+import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 
@@ -30,4 +31,5 @@ public abstract class LocatableAgent extends Agent{
 
   public abstract int getHealthPointPercentage();
   
+  public abstract Castle castle();
 }

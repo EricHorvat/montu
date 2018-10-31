@@ -2,7 +2,6 @@ package ar.edu.itba.montu.war.kingdom.objective;
 
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
-import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
