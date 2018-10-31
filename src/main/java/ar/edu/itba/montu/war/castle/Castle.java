@@ -227,9 +227,9 @@ public class Castle extends LocatableAgent implements Spawner {
 			Castle enemyCastle = agent.castle();
 			if (!enemyCastle.isAlive()){
 				List<Castle> aliveCastles = agent.kingdom().castles();
-				if(aliveCastles.size()==0){
+				if(aliveCastles.size() == 0){
 					enemyCastle = null;
-				}else if(aliveCastles.size()==1){
+				}else if(aliveCastles.size() == 1){
 					enemyCastle = aliveCastles.get(0);
 				}else{
 					enemyCastle = aliveCastles.get(RandomUtil.getRandom().nextInt(aliveCastles.size()-1));
