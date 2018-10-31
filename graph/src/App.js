@@ -183,8 +183,8 @@ class App extends Component {
 			));
 		})();
 
-		const deathLines = castleList.filter(c => c.death_time).map(c => (
-			<VictoryLine key={`death-line-${c.id}`} style={{ data: { stroke: c.color, strokeWidth: 4 } }} data={[{ x: c.death_time, y: 0 }, { x: c.death_time, y: this.max_health_points }]} />
+		const deathLines = castleList.filter(c => c.death_time).map(c => max => (
+			<VictoryLine key={`death-line-${c.id}`} style={{ data: { stroke: c.color, strokeWidth: 4 } }} data={[{ x: c.death_time, y: 0 }, { x: c.death_time, y: max }]} />
 		));
 
 		const gasLines = (() => {
@@ -333,7 +333,7 @@ class App extends Component {
 									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{healthLines}
-									{deathLines}
+									{deathLines.map(dl => dl(0.1 * this.max_health_points))}
 									<VictoryAxis dependentAxis label="Health Points" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />}/>
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
@@ -351,6 +351,7 @@ class App extends Component {
 									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{gasLines}
+									{deathLines.map(dl => dl(0.1 * this.max_gas))}
 									<VictoryAxis dependentAxis label="Gas" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />} />
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
@@ -368,6 +369,7 @@ class App extends Component {
 									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{warriorLines}
+									{deathLines.map(dl => dl(0.1 * this.max_warriors))}
 									<VictoryAxis dependentAxis label="Warriors" tickFormat={t => Math.round(t)} axisLabelComponent={<VictoryLabel dy={-20} />} />
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
@@ -386,6 +388,7 @@ class App extends Component {
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{attackerLines}
 									{defenderLines}
+									{deathLines.map(dl => dl(0.1 * this.max_warriors))}
 									<VictoryAxis dependentAxis label="Attackers / Defenders" tickFormat={t => Math.round(t)} axisLabelComponent={<VictoryLabel dy={-20} />} />
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
