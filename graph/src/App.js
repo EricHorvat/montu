@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import momentDurationSetup from 'moment-duration-format';
+import color from 'color';
 
 import { VictoryChart, VictoryLine, VictoryArea, VictoryAxis, VictoryLabel, VictoryScatter } from 'victory';
 
@@ -39,7 +40,7 @@ class App extends Component {
 
 			const nextCastles = Object.assign({}, castles);
 
-			data.castles.forEach(c => {
+			data.castles.forEach((c, i) => {
 				if (c.health_points > this.max_health_points) {
 					this.max_health_points = c.health_points;
 				}
@@ -65,7 +66,7 @@ class App extends Component {
 					max_health_points: [{ x: data.time, y: c.max_health_points, y0: 0 }],
 					gas: [{ x: data.time, y: c.gas, y0: 0 }],
 					max_gas: [{ x: data.time, y: c.max_gas, y0: 0 }],
-					color: `#${nextKingdoms[c.kingdom].color}`,
+					color: color(nextKingdoms[c.kingdom].color).darken(i / (data.castles.length || 1)).hex(),
 				});
 			});
 
@@ -131,13 +132,12 @@ class App extends Component {
 			return (
 				<li key={k.id} className={k.id === focusKingdom ? 'text-primary' : null}>
 					<span style={{cursor:'pointer'}} onClick={this.focusKingdom(k.id)}>
+						<i style={{backgroundColor: k.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</i>&nbsp;
 						{alive ? k.name : <s>{k.name}</s>} ({alive}/{total.length})
 					</span>
 				</li>
 			)
 		});
-
-		console.log(castleList);
 
 		const castleListComponent = castleList.map(c => (
 			<li key={c.id} className={focus === c.id || c.kingdom === focusKingdom ? 'text-primary' : null}>
