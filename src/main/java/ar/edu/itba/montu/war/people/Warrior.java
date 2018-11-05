@@ -197,7 +197,7 @@ public class Warrior extends MovingAgent {
 		return status.equals(WarriorStatus.UNASSIGNED); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
 	}
 
-	public int gasCost(){
+	public int resourcesCost(){
 		/*TODO FORMULA*/
 		return BASE_WARRIOR_COST * (isSuper ? 5 : 1);
 	}

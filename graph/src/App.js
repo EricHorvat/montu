@@ -23,7 +23,7 @@ class App extends Component {
 		}
 
 		this.max_health_points = 0;
-		this.max_gas = 0;
+		this.max_resources = 0;
 		this.max_warriors = 0;
 
 		this.socket.onmessage = (event) => {
@@ -43,7 +43,7 @@ class App extends Component {
 
 			data.castles.forEach((c, i) => {
 				if (c.health_points > this.max_health_points) this.max_health_points = c.health_points;
-				if (c.gas > this.max_gas) this.max_gas = c.gas;
+				if (c.resources > this.max_resources) this.max_resources = c.resources;
 				if (c.warriors > this.max_warriors) this.max_warriors = c.warriors;
 				if (nextCastles[c.id]) {
 					if (c.health_points >= 0) {
@@ -52,8 +52,8 @@ class App extends Component {
 					if (c.max_health_points >= 0) {
 						nextCastles[c.id].max_health_points.push({ x: data.time, y: c.max_health_points, y0: 0 });
 					}
-					nextCastles[c.id].gas.push({ x: data.time, y: c.gas, y0: 0 });
-					nextCastles[c.id].max_gas.push({ x: data.time, y: c.max_gas, y0: 0 });
+					nextCastles[c.id].resources.push({ x: data.time, y: c.resources, y0: 0 });
+					nextCastles[c.id].max_resources.push({ x: data.time, y: c.max_resources, y0: 0 });
 					nextCastles[c.id].warriors.push({ x: data.time, y: c.warriors, y0: 0 });
 					// nextCastles[c.id].available_warriors.push({ x: data.time, y: c.available_warriors, y0: 0 });
 					nextCastles[c.id].attackers.push({ x: data.time, y: c.attackers, y0: 0 });
@@ -68,8 +68,8 @@ class App extends Component {
 				nextCastles[c.id] = Object.assign({}, c, {
 					health_points: [{ x: data.time, y: c.health_points, y0: 0 }],
 					max_health_points: [{ x: data.time, y: c.max_health_points, y0: 0 }],
-					gas: [{ x: data.time, y: c.gas, y0: 0 }],
-					max_gas: [{ x: data.time, y: c.max_gas, y0: 0 }],
+					resources: [{ x: data.time, y: c.resources, y0: 0 }],
+					max_resources: [{ x: data.time, y: c.max_resources, y0: 0 }],
 					warriors: [{ x: data.time, y: c.warriors }],
 					// available_warriors: [{ x: data.time, y: c.available_warriors }],
 					defenders: [{ x: data.time, y: c.defenders }],
@@ -156,7 +156,7 @@ class App extends Component {
 				{' '}{/*<br/>*/}
 				<small>HP: <span className="text-muted">{Math.round(c.health_points[c.health_points.length - 1].y / c.max_health_points[c.max_health_points.length - 1].y * 100)}%</span></small>
 				{' '}
-				<small>Gas: <span className="text-muted">{Math.round(c.gas[c.gas.length - 1].y / c.max_gas[c.max_gas.length - 1].y * 100)}%</span></small>
+				<small>Resources: <span className="text-muted">{Math.round(c.resources[c.resources.length - 1].y / c.max_resources[c.max_resources.length - 1].y * 100)}%</span></small>
 				{c.death_time && ' '}
 				{c.death_time && <small>DT: <span className="text-muted">{moment.duration(c.death_time, 'minutes').format()}</span></small>}
 			</li>
@@ -187,7 +187,7 @@ class App extends Component {
 			<VictoryLine key={`death-line-${c.id}`} style={{ data: { stroke: c.color, strokeWidth: 4 } }} data={[{ x: c.death_time, y: 0 }, { x: c.death_time, y: max }]} />
 		));
 
-		const gasLines = (() => {
+		const resourcesLines = (() => {
 			const filteredCastles = (() => {
 				if (focusKingdom || focus) {
 					return castleList.filter(c => c.kingdom === focusKingdom || c.id === focus);
@@ -198,7 +198,7 @@ class App extends Component {
 				<VictoryLine
 					key={c.id}
 					style={{ data: { stroke: c.color, cursor: 'pointer' } }}
-					data={c.gas}
+					data={c.resources}
 					events={[{
 						target: "data",
 						eventHandlers: {
@@ -340,19 +340,19 @@ class App extends Component {
 							</div>
 						</div>
 					</div>
-					<div className={`col-sm-${this.state.gas ? 12 : 6}`}>
+					<div className={`col-sm-${this.state.resources ? 12 : 6}`}>
 						<div className="card">
 							<div className="card-body">
-								<h5 className="card-title">Gas&nbsp;
-									<button onClick={this.expand('gas')} className="btn btn-outline-dark btn-sm">{this.state.gas ? 'Shrink' : 'Expand'}</button>
+								<h5 className="card-title">Resources&nbsp;
+									<button onClick={this.expand('resources')} className="btn btn-outline-dark btn-sm">{this.state.resources ? 'Shrink' : 'Expand'}</button>
 								</h5>
 								<VictoryChart
-									domain={{ x: [0, time], y: [0, this.max_gas] }}
+									domain={{ x: [0, time], y: [0, this.max_resources] }}
 									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
-									{gasLines}
-									{deathLines.map(dl => dl(0.1 * this.max_gas))}
-									<VictoryAxis dependentAxis label="Gas" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />} />
+									{resourcesLines}
+									{deathLines.map(dl => dl(0.1 * this.max_resources))}
+									<VictoryAxis dependentAxis label="Resources" tickFormat={t => `${(t / 1000).toFixed(1)}k`} axisLabelComponent={<VictoryLabel dy={-20} />} />
 									<VictoryAxis label="Ellapsed Time" tickFormat={t => moment.duration(t, 'minutes').format('Y[y], M[m], D[d], H[h]')}/>
 								</VictoryChart>
 							</div>

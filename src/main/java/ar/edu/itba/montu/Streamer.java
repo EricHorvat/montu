@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
@@ -79,8 +78,8 @@ public class Streamer {
 			castle.put("attack_distance", c.characteristics().attackDistance());
 			castle.put("attack_harm", c.characteristics().attackHarm());
 			castle.put("offense_capacity", c.characteristics().offenseCapacity());
-			castle.put("gas", c.characteristics().gas());
-			castle.put("max_gas", c.characteristics().maxGas());
+			castle.put("resources", c.characteristics().resources());
+			castle.put("max_resources", c.characteristics().maxResources());
 			castle.put("x", c.location().X);
 			castle.put("y", ProcessingApplet.instance().getL() - c.location().Y);
 			castle.put("warriors", c.warriors().size());

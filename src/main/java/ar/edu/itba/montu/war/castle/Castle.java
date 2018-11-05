@@ -9,7 +9,6 @@ import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
-import ar.edu.itba.montu.war.people.WarriorCharacteristics;
 import ar.edu.itba.montu.war.people.WarriorRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +26,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
 	/// TODO should be retrieved from Configuration 
-	private static final int GAS_PER_MINUTE = 1;
+	private static final int RESOURCES_PER_MINUTE = 1;
 	
 	final private String name;
 	final private CastleCharacteristics characteristics;
@@ -71,7 +70,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
-  	characteristics.increaseGas(GAS_PER_MINUTE);
+  	characteristics.increaseResources(RESOURCES_PER_MINUTE);
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
@@ -148,13 +147,13 @@ public class Castle extends LocatableAgent implements Spawner {
 	
 	/*WARN CAN BE NULL*/
 	private Warrior buildWarrior(WarriorRole role, boolean isSuper) {
-		int gas = characteristics.gas();
+		int resources = characteristics.resources();
 		Warrior w = Warrior.createWarriorInCastle(this, role, isSuper);
-		if (gas - w.gasCost() < 0){
+		if (resources - w.resourcesCost() < 0){
 			w.noCreated();
 			return null;
 		}
-		this.useGas(w.gasCost());
+		this.useResources(w.resourcesCost());
 		return w;
 	}
 	
@@ -235,7 +234,7 @@ public class Castle extends LocatableAgent implements Spawner {
 			this.status = LocatableAgentStatus.DEAD;
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
-			int ownGas = this.characteristics.gas();
+			int ownResources = this.characteristics.resources();
 			Castle enemyCastle = agent.castle();
 			if (!enemyCastle.isAlive()){
 				List<Castle> aliveCastles = agent.kingdom().castles();
@@ -249,9 +248,9 @@ public class Castle extends LocatableAgent implements Spawner {
 			}
 			if (enemyCastle != null){
 				CastleCharacteristics enemyCharacteristics = agent.castle().characteristics();
-				enemyCharacteristics.boostGasBy(Integer.max(0,ownGas + enemyCharacteristics.gas() - enemyCharacteristics.maxGas()));
-				enemyCharacteristics.increaseGas(ownGas);
-				this.characteristics.useGas(ownGas);
+				enemyCharacteristics.boostResourcesBy(Integer.max(0,ownResources + enemyCharacteristics.resources() - enemyCharacteristics.maxResources()));
+				enemyCharacteristics.increaseResources(ownResources);
+				this.characteristics.useResources(ownResources);
 			}
 		}
 		characteristics.healthPoints(hp);
@@ -282,18 +281,18 @@ public class Castle extends LocatableAgent implements Spawner {
 		return warriorList;
 	}
 	
-	public boolean hasGas() {
-		return characteristics.hasGas();
+	public boolean hasResources() {
+		return characteristics.hasResources();
 	}
 
-	public Castle useGas(int gas) {
-		characteristics.useGas(gas);
+	public Castle useResources(int resources) {
+		characteristics.useResources(resources);
 		return this;
 	}
 	
 	@Override
 	public String toString() {
-		return name + " \nGas:" + characteristics.gas() + "/" + characteristics.maxGas() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
+		return name + " \nResources:" + characteristics.resources() + "/" + characteristics.maxResources() + " \nHP:" + characteristics.healthPoints() + "/" + characteristics.maxHealthPoints();
 	}
 	
 	public String name() {

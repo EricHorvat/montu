@@ -41,7 +41,7 @@ public final class Configuration {
 		private double viewDistance;
 		private double attackDistance;
 		private int healthPoints;
-		private int gas;
+		private int resources;
 		private double spawnProbability;
 		public double getViewDistance() {
 			return viewDistance;
@@ -52,8 +52,8 @@ public final class Configuration {
 		public int getHealthPoints() {
 			return healthPoints;
 		}
-		public int getGas() {
-			return gas;
+		public int getResources() {
+			return resources;
 		}
 		public void setViewDistance(double viewDistance) {
 			this.viewDistance = viewDistance;
@@ -64,8 +64,8 @@ public final class Configuration {
 		public void setHealthPoints(int healthPoints) {
 			this.healthPoints = healthPoints;
 		}
-		public void setGas(int gas) {
-			this.gas = gas;
+		public void setResources(int resources) {
+			this.resources = resources;
 		}
 		public double getSpawnProbability() {
 			return spawnProbability;

@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import ar.edu.itba.montu.abstraction.AttackingAgentCharacteristics;
 import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 import ar.edu.itba.montu.configuration.Configuration;
-import ar.edu.itba.montu.visual.KingdomColorGetter;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.castle.CastleCharacteristics;
 import ar.edu.itba.montu.war.kingdom.Kingdom;
@@ -56,7 +55,7 @@ public class WarEnviromentGenerator {
 																c.getCharacteristics().getAttackDistance(),
 																(int)Math.min(Math.max(RandomUtil.getNormalDistribution(100 - k.getOffenseCapacity(), 10), 0), 100)
 														),
-														c.getCharacteristics().getGas(),
+														c.getCharacteristics().getResources(),
 														c.getCharacteristics().getSpawnProbability()
 												)
 										);

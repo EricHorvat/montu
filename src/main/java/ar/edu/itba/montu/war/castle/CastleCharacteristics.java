@@ -7,7 +7,6 @@ import ar.edu.itba.montu.abstraction.AttackingAgentCharacteristics;
 import ar.edu.itba.montu.abstraction.Characteristic;
 import ar.edu.itba.montu.abstraction.LocatableAgentCharacteristics;
 import ar.edu.itba.montu.war.kingdom.KingdomCharacteristics;
-import ar.edu.itba.montu.war.people.WarriorCharacteristics;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class CastleCharacteristics extends AttackingAgentCharacteristics {
@@ -15,13 +14,13 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	private static final Logger logger = LogManager.getLogger(CastleCharacteristics.class);
 	
 	private final Characteristic<Integer> offenseCapacity;
-	private Characteristic<Integer> gas;
+	private Characteristic<Integer> resources;
 	private Characteristic<Double> spawnProbability;
 	
 	public CastleCharacteristics(
 			final KingdomCharacteristics kingdomCharacteristics,
 			final AttackingAgentCharacteristics attackCharacteristics,
-			final int gas,
+			final int resources,
 			final double spawnProbability
 	) {
 		super(
@@ -35,39 +34,39 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 		this.offenseCapacity = Characteristic.withFixedValue(
 				(int)Math.min(Math.max(RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 10), 0), 100)
 		);
-		this.gas = Characteristic.withChangingValue(0, gas);
+		this.resources = Characteristic.withChangingValue(0, resources);
 		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
 	}
 
-	public int gas() {
-		return gas.value();
+	public int resources() {
+		return resources.value();
 	}
 	
-	public int maxGas() {
-		return gas.maxValue();
+	public int maxResources() {
+		return resources.maxValue();
 	}
 
-	public CastleCharacteristics useGas(int gas) {
-		this.gas.updateValue(this.gas.value() - gas);
+	public CastleCharacteristics useResources(int resources) {
+		this.resources.updateValue(this.resources.value() - resources);
 		return this;
 	}
 	
-	public CastleCharacteristics increaseGas(int gas) {
-		this.gas.updateValue(this.gas.value() + gas);
+	public CastleCharacteristics increaseResources(int resources) {
+		this.resources.updateValue(this.resources.value() + resources);
 		return this;
 	}
 	
-	public boolean hasGas() {
-		return gas() > 0;
+	public boolean hasResources() {
+		return resources() > 0;
 	}
 	
-	public CastleCharacteristics boostGasBy(int gas) {
-		this.gas = Characteristic.withChangingValue(0, maxGas() + gas, gas());
+	public CastleCharacteristics boostResourcesBy(int resources) {
+		this.resources = Characteristic.withChangingValue(0, maxResources() + resources, resources());
 		return this;
 	}
 	
-	public CastleCharacteristics boostGasByWithCost(int gas, int cost) {
-		return this.useGas(cost).boostGasBy(gas);
+	public CastleCharacteristics boostResourcesByWithCost(int resources, int cost) {
+		return this.useResources(cost).boostResourcesBy(resources);
 	}
 
 	public double offenseCapacity() {
@@ -84,7 +83,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 
 	@Override
 	public String toString() {
-		return "CastleCharacteristics [offenseCapacity=" + offenseCapacity + ", gas=" + gas + ", attackDistance()="
+		return "CastleCharacteristics [offenseCapacity=" + offenseCapacity + ", resources=" + resources + ", attackDistance()="
 				+ attackDistance() + ", attackHarm()=" + attackHarm() + ", viewDistance()=" + viewDistance()
 				+ ", healthPoints()=" + healthPoints() + ", maxHealthPoints()=" + maxHealthPoints() + ", healthPercentage()="
 				+ healthPercentage() + "]";

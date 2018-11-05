@@ -157,7 +157,7 @@ enquirer.prompt([
 					viewDistance: d3.randomUniform(2, 5)(), // double
 					attackDistance: d3.randomUniform(1,1.5)(), // double
 					healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
-					gas: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)()),
+                    resources: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)()),
 					spawnProbability: d3.randomUniform(0.1, 5)() / 100
 				},
 				location: {
