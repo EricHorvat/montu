@@ -78,7 +78,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	   * */
 		
   	List<Objective> turnObjectives;
-  	if(RandomUtil.getRandom().nextDouble() * 100 < this.characteristics().offenseCapacity()){
+  	double turnOffensiveRoll = RandomUtil.getRandom().nextDouble() * (1.0 - Configuration.HEALTH_OFFENSIVE_ROLL_COEF/2.0) + (-0.5 + this.characteristics().healthPercentage()) * Configuration.HEALTH_OFFENSIVE_ROLL_COEF;
+  	if(turnOffensiveRoll * 100 < this.characteristics().offenseCapacity()){
   		turnObjectives = attackObjectives();
 	  }else{
   		turnObjectives = defendObjectives();
