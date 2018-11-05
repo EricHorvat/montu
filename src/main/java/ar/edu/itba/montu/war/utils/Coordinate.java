@@ -6,6 +6,7 @@ public class Coordinate {
 	
 	public final double X;
 	public final double Y;
+	public static final double TEN_PERCENT = 0.1;
 	
 	private Coordinate(final double x, final double y) {
 		X = x;
@@ -33,7 +34,7 @@ public class Coordinate {
 	public Coordinate applyingNoisyDeltaInDirectionTo(final double delta, final Coordinate to) {
 		final Coordinate dir = Coordinate.direction(this, to);
 		final double theta = Math.atan2(dir.Y, dir.X);
-		final double angle = RandomUtil.getNormalDistribution(theta, theta * 0.1);
+		final double angle = RandomUtil.getNormalDistribution(theta, theta * TEN_PERCENT);
 		return Coordinate.sum(this, Coordinate.at(delta * Math.cos(angle), delta * Math.sin(angle)));
 	}
 	

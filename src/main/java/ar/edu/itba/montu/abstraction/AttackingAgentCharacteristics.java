@@ -1,10 +1,16 @@
 package ar.edu.itba.montu.abstraction;
 
+import ar.edu.itba.montu.App;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AttackingAgentCharacteristics extends LocatableAgentCharacteristics {
   private Characteristic<Double> attackDistance;
   private Characteristic<Integer> attackHarm;
-
-  public AttackingAgentCharacteristics(LocatableAgentCharacteristics characteristic, double attackDistance, int attackHarm) {
+  
+	private static final Logger logger = LogManager.getLogger(AttackingAgentCharacteristics.class);
+ 
+	public AttackingAgentCharacteristics(LocatableAgentCharacteristics characteristic, double attackDistance, int attackHarm) {
   	super(characteristic.viewDistance(), characteristic.healthPoints());
     this.attackDistance = Characteristic.withFixedValue(attackDistance);
     this.attackHarm = Characteristic.withChangingValue(0, attackHarm);

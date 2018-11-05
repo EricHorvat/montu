@@ -27,22 +27,24 @@ public class Warrior extends MovingAgent {
 	
 	final WarriorCharacteristics warriorCharacteristics;
 	final WarriorRole role;
-
+  final boolean isSuper;
 	/**
 	 * Expressed in metres/delta time
 	 */
 //	private double speed = 5;// km per minute
 
-	private Warrior(final Castle castle, final WarriorRole role) {
+	private Warrior(final Castle castle, final WarriorRole role, boolean isSuper) {
 		super(castle);
 		this.kingdom = castle.kingdom();
 		this.location = castle.location();
 		this.role = role;
-		this.warriorCharacteristics = WarriorCharacteristics.fromCastle(castle);
+		this.isSuper = isSuper;
+		this.warriorCharacteristics = WarriorCharacteristics.fromCastle(castle, isSuper);
+		
 	}
 	
-	public static Warrior createWarriorInCastle(final Castle castle, WarriorRole role) {
-		final Warrior w = new Warrior(castle, role);
+	public static Warrior createWarriorInCastle(final Castle castle, WarriorRole role, boolean isSuper) {
+		final Warrior w = new Warrior(castle, role, isSuper);
 		
 		return w;
 	}
@@ -152,6 +154,8 @@ public class Warrior extends MovingAgent {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
+						}else{
+							status = WarriorStatus.MOVING;
 						}
 					} else{
 						unassign(target().get());
@@ -195,7 +199,7 @@ public class Warrior extends MovingAgent {
 
 	public int gasCost(){
 		/*TODO FORMULA*/
-		return BASE_WARRIOR_COST;
+		return BASE_WARRIOR_COST * (isSuper ? 5 : 1);
 	}
 	
 	@Override
@@ -224,5 +228,9 @@ public class Warrior extends MovingAgent {
 	
 	public WarriorCharacteristics characteristics(){
 		return this.warriorCharacteristics;
+	}
+	
+	public boolean isSuper() {
+		return isSuper;
 	}
 }

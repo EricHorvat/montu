@@ -16,8 +16,9 @@ import ar.edu.itba.montu.war.people.Warrior;
   @Override
   void draw(ProcessingApplet applet) {
     super.draw(applet);
-    final float Rx = zoomLinearMapX(R);
-    final float Ry = zoomLinearMapY(R);
+    final float scale = (((Warrior)locatableAgent).isSuper() ? 1.5f : 1);
+    final float Rx = zoomLinearMapX(R) * scale;
+    final float Ry = zoomLinearMapY(R) * scale;
   
     if (((Warrior)locatableAgent).isDefender()){
       applet.ellipse(x, y, 2 * Rx, 2 * Ry);

@@ -5,7 +5,8 @@ import java.util.List;
 public final class Configuration {
 	
 	public static final double MAX_PRIORITY = Double.MAX_VALUE/10E100;
-	public static final double MIN_PRIORITY_DISTANCE = 10E-5;
+	public static final double MIN_PRIORITY_DISTANCE = 1E-4;
+	public static final double SUPER_PERCENTAGE = 1E-4;
 	
 	public static final class EnvironmentConfiguration {
 		private int size;

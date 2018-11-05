@@ -15,7 +15,7 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 	
 	private final Characteristic<Double> speed;
 	
-	private WarriorCharacteristics(Castle c) {
+	private WarriorCharacteristics(Castle c, boolean isSuper) {
 		super(
 				LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
 						// Warriors get 20% of the castles view distance initially
@@ -33,7 +33,7 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 				// Therefore, we (100 - attack harm) and get the 10% of it
 				// Warriors get 10% of (100 - castles attack harm) initially
 				// Of course, a normal distribution applies when born
-				(int)Math.max(RandomUtil.getNormalDistribution((100.0 - c.characteristics().attackHarm()) / 100.0, 2), 0.0)
+				(int)Math.max(RandomUtil.getNormalDistribution((100.0 - c.characteristics().attackHarm())*(isSuper ? 5 : 1) / 10.0, 2), 0.0)
 		);
 		// Speed is in km/min. These come near to 0.48km/min
 		// We apply a noise of 10% that
@@ -42,8 +42,8 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 		);
 	}
 	
-	public static WarriorCharacteristics fromCastle(Castle c) {
-		return new WarriorCharacteristics(c);
+	public static WarriorCharacteristics fromCastle(Castle c, boolean isSuper) {
+		return new WarriorCharacteristics(c, isSuper);
 	}
 	
 	public double speed() {

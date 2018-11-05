@@ -22,7 +22,8 @@ import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
 public class Castle extends LocatableAgent implements Spawner {
-
+	
+	
 	private static final Logger logger = LogManager.getLogger(Castle.class);
 	
 	/// TODO should be retrieved from Configuration 
@@ -145,9 +146,9 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	/*WARN CAN BE NULL*/
-	private Warrior buildWarrior(WarriorRole role) {
+	private Warrior buildWarrior(WarriorRole role, boolean isSuper) {
 		int gas = characteristics.gas();
-		Warrior w = Warrior.createWarriorInCastle(this, role);
+		Warrior w = Warrior.createWarriorInCastle(this, role, isSuper);
 		if (gas - w.gasCost() < 0){
 			w.noCreated();
 			return null;
@@ -155,13 +156,23 @@ public class Castle extends LocatableAgent implements Spawner {
 		this.useGas(w.gasCost());
 		return w;
 	}
-
+	
 	public Warrior createAWarrior(WarriorRole role) {
 		final List<Warrior> warriors = IntStream
-				.range(0, 1)
-				.mapToObj(i -> buildWarrior(role))
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
+			.range(0, 1)
+			.mapToObj(i -> buildWarrior(role,false))
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());
+		this.warriors.addAll(warriors);
+		return warriors.size() == 0 ? null : warriors.get(0);
+	}
+	
+	public Warrior createASuperWarrior(WarriorRole role) {
+		final List<Warrior> warriors = IntStream
+			.range(0, 1)
+			.mapToObj(i -> buildWarrior(role,true))
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());
 		this.warriors.addAll(warriors);
 		return warriors.size() == 0 ? null : warriors.get(0);
 	}
@@ -262,7 +273,7 @@ public class Castle extends LocatableAgent implements Spawner {
 			IntStream
 			.range(0, quantity)
 			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())/*TODO CHANGE THIS*/
-			.mapToObj(i -> createAWarrior(role))
+			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < Configuration.SUPER_PERCENTAGE ? createASuperWarrior(role) : createAWarrior(role)))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 			
