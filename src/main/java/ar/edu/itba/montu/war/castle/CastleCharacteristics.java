@@ -15,6 +15,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	private final Characteristic<Integer> offenseCapacity;
 	private Characteristic<Integer> resources;
+	private Characteristic<Integer> deaths;
 	private Characteristic<Double> spawnProbability;
 	
 	public CastleCharacteristics(
@@ -36,6 +37,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 		);
 		this.resources = Characteristic.withChangingValue(0, resources);
 		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
+		this.deaths = Characteristic.withChangingValue(0, 0, 0);
 	}
 
 	public int resources() {
@@ -79,6 +81,16 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	public double spawnProbability() {
 		return spawnProbability.value();
+	}
+	
+	public int deaths() {
+		return deaths.value();
+	}
+	
+	
+	public void increaseDeaths() {
+		if (!this.deaths.value().equals(this.deaths.maxValue()))
+			this.deaths.updateValue(this.deaths.value() + 1);
 	}
 
 	@Override

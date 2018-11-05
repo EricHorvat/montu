@@ -231,6 +231,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		int hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
+			/* OLD DEATH
 			this.status = LocatableAgentStatus.DEAD;
 			hp = 0;
 			WarEnvironment.getInstance().onCastleDeath(this);
@@ -251,7 +252,11 @@ public class Castle extends LocatableAgent implements Spawner {
 				enemyCharacteristics.boostResourcesBy(Integer.max(0,ownResources + enemyCharacteristics.resources() - enemyCharacteristics.maxResources()));
 				enemyCharacteristics.increaseResources(ownResources);
 				this.characteristics.useResources(ownResources);
-			}
+			}*/
+			/*NEW DEATH*/
+			this.characteristics().increaseDeaths();
+			this.kingdom = agent.kingdom();
+			hp = (int)(this.characteristics().maxHealthPoints()/(1+this.characteristics().deaths()));
 		}
 		characteristics.healthPoints(hp);
 	}
