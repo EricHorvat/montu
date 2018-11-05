@@ -152,6 +152,8 @@ public class Warrior extends MovingAgent {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
+						}else{
+							status = WarriorStatus.MOVING;
 						}
 					} else{
 						unassign(target().get());
