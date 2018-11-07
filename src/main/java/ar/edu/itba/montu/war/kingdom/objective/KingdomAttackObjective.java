@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.configuration.Configuration;
@@ -68,7 +69,7 @@ public class KingdomAttackObjective implements KingdomObjective {
 					priority
 						* castle.characteristics().healthPoints()
 						/castle.characteristics().maxHealthPoints()
-						/ Double.max(Coordinate.distanceBetween(castle.location(),sourceLocation), Configuration.MIN_PRIORITY_DISTANCE)
+						/ Double.max(Coordinate.distanceBetween(castle.location(),sourceLocation), App.getConfiguration().getMinPriorityDistance())
 				))
 				.collect(Collectors.toList());
 	}

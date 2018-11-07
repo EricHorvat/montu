@@ -168,6 +168,11 @@ enquirer.prompt([
 		}
 	});
 
+	config.maxPriority = Number.MAX_SAFE_INTEGER;
+	config.minPriorityDistance = 1e-4;
+	config.superWarriorProbability = 1e-4;
+	config.healthOffensiveRollCoefficient = 0.7;
+
 	delete config.min_castles;
 	delete config.max_castles;
 	delete config.seed;

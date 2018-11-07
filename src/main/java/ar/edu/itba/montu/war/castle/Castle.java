@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.*;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
@@ -77,10 +78,10 @@ public class Castle extends LocatableAgent implements Spawner {
 	   * */
 		
   	List<Objective> turnObjectives;
-  	double turnOffensiveRoll = RandomUtil.getRandom().nextDouble() * (1.0 - Configuration.HEALTH_OFFENSIVE_ROLL_COEF/2.0) + (-0.5 + this.characteristics().healthPercentage()) * Configuration.HEALTH_OFFENSIVE_ROLL_COEF;
-  	if(turnOffensiveRoll * 100 < this.characteristics().offenseCapacity()){
+  	double turnOffensiveRoll = RandomUtil.getRandom().nextDouble() * (1.0 - App.getConfiguration().getHealthOffensiveRollCoefficient() / 2.0) + (-0.5 + this.characteristics().healthPercentage()) * App.getConfiguration().getHealthOffensiveRollCoefficient();
+  	if (turnOffensiveRoll * 100 < this.characteristics().offenseCapacity()) {
   		turnObjectives = attackObjectives();
-	  }else{
+	  } else {
   		turnObjectives = defendObjectives();
 	  }
   	
@@ -106,16 +107,16 @@ public class Castle extends LocatableAgent implements Spawner {
 	  if (!visibleRivalAgents.isEmpty()) {
 		  for (Warrior availableWarrior: availableWarriors()) {
 				LocatableAgent enemySelected = visibleRivalAgents.get(0);
-			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), Configuration.MIN_PRIORITY_DISTANCE)).sum();
+			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), App.getConfiguration().getMinPriorityDistance())).sum();
 			  double value = RandomUtil.getRandom().nextDouble() * sum;
 			  for (LocatableAgent enemy : visibleRivalAgents) {
-				  value -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), Configuration.MIN_PRIORITY_DISTANCE);
+				  value -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), App.getConfiguration().getMinPriorityDistance());
 				  if (value <= 0) {
 					  enemySelected = enemy;
 					  break;
 				  }
 			  }
-			  availableWarrior.assignToTarget(enemySelected,Configuration.MAX_PRIORITY);
+			  availableWarrior.assignToTarget(enemySelected, App.getConfiguration().getMaxPriority());
 		  }
 	  }
 	  
@@ -273,7 +274,7 @@ public class Castle extends LocatableAgent implements Spawner {
 			IntStream
 			.range(0, quantity)
 			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())/*TODO CHANGE THIS*/
-			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < Configuration.SUPER_PERCENTAGE ? createASuperWarrior(role) : createAWarrior(role)))
+			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < App.getConfiguration().getSuperWarriorProbability() ? createASuperWarrior(role) : createAWarrior(role)))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 			

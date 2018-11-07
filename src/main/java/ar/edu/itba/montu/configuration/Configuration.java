@@ -4,11 +4,6 @@ import java.util.List;
 
 public final class Configuration {
 	
-	public static final double MAX_PRIORITY = Double.MAX_VALUE/10E100;
-	public static final double MIN_PRIORITY_DISTANCE = 1E-4;
-	public static final double SUPER_PERCENTAGE = 1E-4;
-	public static final double HEALTH_OFFENSIVE_ROLL_COEF = 0.7;
-	
 	public static final class EnvironmentConfiguration {
 		private int size;
 		private long time;
@@ -196,7 +191,10 @@ public final class Configuration {
 		}
 	}
 	
-	
+	private double maxPriority;
+	private double minPriorityDistance;
+	private double superWarriorProbability;
+	private double healthOffensiveRollCoefficient;
 	
 	private EnvironmentConfiguration environment;
 	private ViewportConfiguration viewport;
@@ -219,6 +217,30 @@ public final class Configuration {
 	}
 	public void setViewport(ViewportConfiguration viewport) {
 		this.viewport = viewport;
+	}
+	public double getMaxPriority() {
+		return maxPriority;
+	}
+	public void setMaxPriority(double maxPriority) {
+		this.maxPriority = maxPriority;
+	}
+	public double getMinPriorityDistance() {
+		return minPriorityDistance;
+	}
+	public void setMinPriorityDistance(double minPriorityDistance) {
+		this.minPriorityDistance = minPriorityDistance;
+	}
+	public double getSuperWarriorProbability() {
+		return superWarriorProbability;
+	}
+	public void setSuperWarriorProbability(double superWarriorProbability) {
+		this.superWarriorProbability = superWarriorProbability;
+	}
+	public double getHealthOffensiveRollCoefficient() {
+		return healthOffensiveRollCoefficient;
+	}
+	public void setHealthOffensiveRollCoefficient(double healthOffensiveRollCoefficient) {
+		this.healthOffensiveRollCoefficient = healthOffensiveRollCoefficient;
 	}
 	@Override
 	public String toString() {

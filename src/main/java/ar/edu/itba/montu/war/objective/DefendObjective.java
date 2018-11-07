@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
 import ar.edu.itba.montu.configuration.Configuration;
@@ -73,7 +74,7 @@ public class DefendObjective implements Objective {
 		
 		spawner.availableDefenders()
 			.forEach(defender -> {
-				defender.assignToTarget(target, Configuration.MAX_PRIORITY /10.0);
+				defender.assignToTarget(target, App.getConfiguration().getMaxPriority() /10.0);
 				spawner.defendObjectives().stream().filter(defendObjective -> !this.equals(defendObjective)).forEach(defendObjective -> defender.assignToTarget(defendObjective.target(),defendObjective.priority()));
 			});
 	}

@@ -10,6 +10,7 @@ import ar.edu.itba.montu.war.objective.AttackObjective;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.abstraction.MovingAgentStatus;
@@ -97,10 +98,10 @@ public class Warrior extends MovingAgent {
 		LocatableAgent enemySelected = enemies.get(0);
 		
 		// get the random enemy and attack him (with prioritized value)
-		double prioritySum = enemies.stream().mapToDouble(attacker -> Double.max(1.0/Coordinate.distanceBetween(this.location(),attacker.location()),Configuration.MIN_PRIORITY_DISTANCE)).sum();
+		double prioritySum = enemies.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), App.getConfiguration().getMinPriorityDistance())).sum();
 		double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
 		for (LocatableAgent enemy: enemies) {
-			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location()),Configuration.MIN_PRIORITY_DISTANCE);
+			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location()), App.getConfiguration().getMinPriorityDistance());
 			if (priorityValue <= 0 ) {
 				enemySelected = enemy;
 				break;
@@ -109,7 +110,7 @@ public class Warrior extends MovingAgent {
 		
 		logger.debug(status + " warrior of {} will attack {}", kingdom, enemySelected);
 		
-		this.assignTarget(enemySelected, Configuration.MAX_PRIORITY);
+		this.assignTarget(enemySelected, App.getConfiguration().getMaxPriority());
 	}
 	
 	public void assignToTarget(final LocatableAgent target, double priority) {
@@ -154,7 +155,7 @@ public class Warrior extends MovingAgent {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
-						}else{
+						} else {
 							status = WarriorStatus.MOVING;
 						}
 					} else{

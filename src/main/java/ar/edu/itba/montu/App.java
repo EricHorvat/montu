@@ -34,6 +34,8 @@ public class App {
 	
 	private static final Logger logger = LogManager.getLogger(App.class);
 	
+	private static Configuration configuration;
+	
 	public static void main(String[] args) throws Exception {
 
 		if (args.length != 1) {
@@ -60,6 +62,8 @@ public class App {
 		logger.info("Generating war environment");
 		
     WarEnviromentGenerator.generateWithConfiguration(config);
+    
+    setConfiguration(config);
 
 		final WarEnvironment warEnvironment = WarEnvironment.getInstance();
 
@@ -75,5 +79,13 @@ public class App {
 		
 		logger.info("Starting war environment for {} minutes", config.getEnvironment().getTime());
 		warEnvironment.start(config.getEnvironment().getTime());
+	}
+
+	public static Configuration getConfiguration() {
+		return configuration;
+	}
+
+	private static void setConfiguration(Configuration configuration) {
+		App.configuration = configuration;
 	}
 }
