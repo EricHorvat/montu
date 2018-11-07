@@ -9,18 +9,25 @@ momentDurationSetup(moment);
 
 class App extends Component {
 	state = {
-		loading: true,
+		loading: false,
+		connected: false,
 		kingdoms: {},
 		castles: {},
 		time: 0
 	}
 
-	componentWillMount = () => {
-		this.socket = new WebSocket("ws://localhost:1337");
+	connect = () => {
 
-		this.socket.onopen = () => {
-			this.setState({ loading: false });
-		}
+		console.log('connectin')
+		
+		this.setState({ loading: true });
+		
+		this.socket = new WebSocket(`ws://${this.state.address}`);
+
+		this.socket.onopen = () => this.setState({
+			loading: false,
+			connected: true
+		});
 
 		this.max_health_points = 0;
 		this.max_resources = 0;
@@ -128,17 +135,34 @@ class App extends Component {
 	}
 
 	expand = (what) => () => this.setState({ [what]: !this.state[what] })
-
-	reset = () => {
-		this.setState({
-			kingdoms: {},
-			castles: {},
-			time: 0
-		});
-	}
+	handleChange = key => e => this.setState({ [key]: e.target.value })
 
 	render = () =>  {
-		const { loading, kingdoms, castles, time, focus, focusKingdom } = this.state;
+		const { loading, connected, kingdoms, castles, time, focus, focusKingdom } = this.state;
+
+		if (!connected) {
+			return (
+				<div className="modal fade show" style={{display:'block'}}>
+					<div className="modal-dialog">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h5 className="modal-title">Connect to Server</h5>
+							</div>
+							<div className="modal-body">
+								<form>
+									<div className="form-group">
+										<input className="form-control" placeholder="Server Address" onChange={this.handleChange('address')} />
+									</div>
+								</form>
+							</div>
+							<div className="modal-footer">
+								<button type="button" className="btn btn-primary" onClick={this.connect}>Connect</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			);
+		}
 
 		if (loading) {
 			return <div className="App"><h1>Loading...</h1></div>;
@@ -283,9 +307,7 @@ class App extends Component {
 
 		return (
 			<div className="container">
-				<h1>Time: {moment.duration(time, 'minutes').format()}&nbsp;
-				<button onClick={this.reset} className="btn btn-outline-dark btn-sm">Reset</button>
-				</h1>
+				<h1>Time: {moment.duration(time, 'minutes').format()}</h1>
 				<div className="row">
 					<div className="col-sm-6">
 						<div className="card">
