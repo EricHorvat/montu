@@ -19,7 +19,7 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
 
 public class Streamer {
 
-	private static final long SEND_EVERY = 30; 
+	private static final long SEND_EVERY = 10; 
 	private static final Logger logger = LogManager.getLogger(Streamer.class);
 	private static Streamer instance;
 	
@@ -39,6 +39,7 @@ public class Streamer {
     	ws = null;
     	return;
     }
+    ws.sendText("init");
 	}
 	
 	public static Streamer currentStreamer() {

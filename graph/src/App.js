@@ -28,6 +28,16 @@ class App extends Component {
 
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+
+			if (data.init) {
+				this.setState({
+					kingdoms: {},
+					castles: {},
+					time: 0
+				});
+				return;
+			}
+
 			const { kingdoms, castles } = this.state;
 
 			let nextKingdoms = kingdoms;
@@ -330,7 +340,6 @@ class App extends Component {
 								</h5>
 								<VictoryChart
 									domain={{ x: [0, time], y: [0, this.max_health_points] }}
-									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{healthLines}
 									{deathLines.map(dl => dl(0.1 * this.max_health_points))}
@@ -348,7 +357,6 @@ class App extends Component {
 								</h5>
 								<VictoryChart
 									domain={{ x: [0, time], y: [0, this.max_resources] }}
-									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{resourcesLines}
 									{deathLines.map(dl => dl(0.1 * this.max_resources))}
@@ -366,7 +374,6 @@ class App extends Component {
 								</h5>
 								<VictoryChart
 									domain={{ x: [0, time], y: [0, this.max_warriors] }}
-									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{warriorLines}
 									{deathLines.map(dl => dl(0.1 * this.max_warriors))}
@@ -384,7 +391,6 @@ class App extends Component {
 								</h5>
 								<VictoryChart
 									domain={{ x: [0, time], y: [0, this.max_warriors] }}
-									animate={{ duration: 1000, easing: "bounce" }}
 									padding={{ top: 10, left: 60, right: 50, bottom: 50 }} >
 									{attackerLines}
 									{defenderLines}
