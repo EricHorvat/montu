@@ -31,6 +31,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
 	private final List<Kingdom> rivals = new ArrayList<>();
+	private final List<Kingdom> friends = new ArrayList<>();
 	private final List<KingdomObjective> objectives = new ArrayList<>();
 	
 	private int color = 0xffffff;
@@ -53,11 +54,49 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return status;
 	}
 	
+	private void findFriends(int friendsToFind, List<Kingdom> kingdoms){
+		//TODO FRIEND LIST ITS TIMED, HERE SHOULD ENFORCE FRIENDSHIP OR MAKE NEW
+	}
+	
+	private void findRivals(int rivalsToFind, List<Kingdom> kingdoms){
+		rivals.addAll(kingdoms.stream().limit(rivalsToFind).collect(Collectors.toList()));
+	}
+	
 	private void negotiate() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> otherKingdoms = environment.kingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
 		// TODO Should negotiate based on PQ, that should modify strategies or new actions but MUSTN'T edit PQ
     // TODO MUST DEFINE HOW ACTIONS WILL BE TAKEN AND THEN FILL
+		
+		otherKingdoms.sort(Comparator.comparingDouble(Kingdom::power));
+		int friendsToFind = (int)(Configuration.FRIEND_PERCENTAGE * otherKingdoms.size());
+		int rivalsToFind = (int) (Configuration.RIVAL_PERCENTAGE* otherKingdoms.size());
+		friendsToFind -= friends.size();
+		rivalsToFind -= rivals.size();
+		
+		findRivals(rivalsToFind, otherKingdoms);
+		findFriends(friendsToFind, otherKingdoms);
+		
+		//TODO HERE CLEAR AND RECALCULATE OBJETIVES
+		
+		/*OLD TODO REMOVE*/
+		otherKingdoms.forEach(kingdom -> {
+			final double coinFlip = RandomUtil.getRandom().nextDouble();
+			
+			if (coinFlip > 0.9) return;
+			
+			final List<KingdomObjective> objectiveIntersection = objectiveIntersectionWith(kingdom);
+			
+			if (objectiveIntersection.isEmpty()) return;
+			
+			logger.debug("{} neg with {} over {}", this.name, kingdom.name, objectiveIntersection);
+			
+			objectiveIntersection.forEach(objective -> {
+				if (objective.priority() > 50) {
+					objective.alterPriority(objective.priority() / 2);
+				}
+			});
+		});
 
 	}
 	
@@ -151,6 +190,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
     		.collect(Collectors.toList());
 }
 
+	public boolean shouldNegociate(double timeElapsed){
+		return timeElapsed % 100 == 0;
+	}
+
 	public void tick(final long timeEllapsed) {
 		/// TODO: template what a kingdom does on each tick
 		
@@ -170,28 +213,9 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		
 		logger.debug("{} tick={}", name, timeEllapsed);
 		
-		final WarEnvironment environment = WarEnvironment.getInstance();
-		final List<Kingdom> kingdoms = environment.kingdoms();
-		
-		kingdoms.forEach(kingdom -> {
-			if (kingdom.equals(this)) return;
-			
-			final double coinFlip = RandomUtil.getRandom().nextDouble();
-			
-			if (coinFlip > 0.9) return;
-			
-			final List<KingdomObjective> objectiveIntersection = objectiveIntersectionWith(kingdom);
-			
-			if (objectiveIntersection.isEmpty()) return;
-			
-			logger.debug("{} neg with {} over {}", this.name, kingdom.name, objectiveIntersection);
-			
-			objectiveIntersection.forEach(objective -> {
-				if (objective.priority() > 50) {
-					objective.alterPriority(objective.priority() / 2);
-				}
-			});
-		});
+		if(shouldNegociate()){
+			negotiate();
+		}
 		
 		agents = agents.stream().filter(LocatableAgent::isAlive).collect(Collectors.toList());
 //		sense();
