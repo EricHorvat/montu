@@ -115,7 +115,7 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
     int r = (color & 0xff0000) >> 16;
     int g = (color & 0x00ff00) >> 8;
     int b = color & 0x0000ff;
-    float a = (float)Math.max(locatableAgent.getHealthPointPercentage(), 25);
+    float a = (float)(Math.max(locatableAgent.getHealthPointPercentage(), 25)*2.55);
     
     applet.fill(r, g, b, a);
   
