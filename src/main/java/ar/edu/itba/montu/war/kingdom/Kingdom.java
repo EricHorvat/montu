@@ -1,13 +1,12 @@
 package ar.edu.itba.montu.war.kingdom;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ar.edu.itba.montu.configuration.Configuration;
+import ar.edu.itba.montu.war.people.Warrior;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -256,4 +255,15 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return color;
 	}
 	
+	public double power() {
+		OptionalDouble hpTotalPercentage = castles.stream().mapToDouble(Castle::getHealthPointPercentage).average();
+		if (hpTotalPercentage.isPresent()){
+			long totalWarriors = agents.stream().filter(LocatableAgent::isAlive).filter(agent -> agent instanceof Warrior).count();
+			return  Configuration.CASTLE_POWER_COEF * castles.size() +
+				Configuration.HP_POWER_COEF * hpTotalPercentage.getAsDouble() +
+				Configuration.WARRIOR_POWER_COEF * totalWarriors;
+		}else{
+			return 0;
+		}
+	}
 }

@@ -4,6 +4,10 @@ import java.util.List;
 
 public final class Configuration {
 	
+	public static double CASTLE_POWER_COEF = 100;
+	public static double HP_POWER_COEF = 100;
+	public static double WARRIOR_POWER_COEF = 100;
+	
 	public static final class EnvironmentConfiguration {
 		private int size;
 		private long time;
