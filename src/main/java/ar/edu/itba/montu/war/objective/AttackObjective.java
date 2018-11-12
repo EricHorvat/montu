@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.objective;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
@@ -29,7 +30,7 @@ public class AttackObjective implements Objective {
 		
 		spawner.availableAttackers()
 			.forEach(attacker -> {
-				attacker.assignToTarget(target, Configuration.MAX_PRIORITY);
+				attacker.assignToTarget(target, App.getConfiguration().getMaxPriority());
 				spawner.attackObjectives().stream().filter(attackObjective -> !attackObjective.equals(this)).forEach(attackObjective -> attacker.assignToTarget(attackObjective.target(),attackObjective.priority()));
 			});
 		

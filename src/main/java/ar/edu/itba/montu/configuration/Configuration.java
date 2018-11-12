@@ -4,10 +4,18 @@ import java.util.List;
 
 public final class Configuration {
 	
-	public static final double MAX_PRIORITY = Double.MAX_VALUE/10E100;
-	public static final double MIN_PRIORITY_DISTANCE = 1E-4;
-	public static final double SUPER_PERCENTAGE = 1E-4;
-	public static final double HEALTH_OFFENSIVE_ROLL_COEF = 0.7;
+	public static double CASTLE_POWER_COEF = 100;
+	public static double HP_POWER_COEF = 100;
+	public static double WARRIOR_POWER_COEF = 100;
+	public static double FRIEND_PERCENTAGE = 0.2;
+	public static double RIVAL_PERCENTAGE = 0.6;
+	public static int UPDATE_NEGOTATION_TICKS = 100;
+	public static int FRIENDSHIP_TICKS = 100;
+	public static double RIVAL_PRIORITY_COEF = 2.5;
+	public static double FRIEND_PRIORITY_COEF = 0.4;
+	public static boolean FRIEND_WEAKERS = true;
+	public static final int RESOURCES_PER_MINUTE = 1;
+	
 	
 	public static final class EnvironmentConfiguration {
 		private int size;
@@ -196,7 +204,10 @@ public final class Configuration {
 		}
 	}
 	
-	
+	private double maxPriority;
+	private double minPriorityDistance;
+	private double superWarriorProbability;
+	private double healthOffensiveRollCoefficient;
 	
 	private EnvironmentConfiguration environment;
 	private ViewportConfiguration viewport;
@@ -219,6 +230,30 @@ public final class Configuration {
 	}
 	public void setViewport(ViewportConfiguration viewport) {
 		this.viewport = viewport;
+	}
+	public double getMaxPriority() {
+		return maxPriority;
+	}
+	public void setMaxPriority(double maxPriority) {
+		this.maxPriority = maxPriority;
+	}
+	public double getMinPriorityDistance() {
+		return minPriorityDistance;
+	}
+	public void setMinPriorityDistance(double minPriorityDistance) {
+		this.minPriorityDistance = minPriorityDistance;
+	}
+	public double getSuperWarriorProbability() {
+		return superWarriorProbability;
+	}
+	public void setSuperWarriorProbability(double superWarriorProbability) {
+		this.superWarriorProbability = superWarriorProbability;
+	}
+	public double getHealthOffensiveRollCoefficient() {
+		return healthOffensiveRollCoefficient;
+	}
+	public void setHealthOffensiveRollCoefficient(double healthOffensiveRollCoefficient) {
+		this.healthOffensiveRollCoefficient = healthOffensiveRollCoefficient;
 	}
 	@Override
 	public String toString() {

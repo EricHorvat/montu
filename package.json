@@ -18,6 +18,7 @@
     "d3-random": "^1.1.2",
     "enquirer": "^1.0.3",
     "faker": "^4.1.0",
+    "moment": "^2.22.2",
     "prettyjson": "^1.2.1",
     "prompt-confirm": "^2.0.4",
     "random-color": "^1.0.1",

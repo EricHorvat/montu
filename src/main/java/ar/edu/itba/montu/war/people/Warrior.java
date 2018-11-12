@@ -1,15 +1,13 @@
 package ar.edu.itba.montu.war.people;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import ar.edu.itba.montu.configuration.Configuration;
-import ar.edu.itba.montu.interfaces.Objective;
-import ar.edu.itba.montu.war.objective.AttackObjective;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.MovingAgent;
 import ar.edu.itba.montu.abstraction.MovingAgentStatus;
@@ -28,6 +26,9 @@ public class Warrior extends MovingAgent {
 	final WarriorCharacteristics warriorCharacteristics;
 	final WarriorRole role;
   final boolean isSuper;
+  
+  Optional<LocatableAgent> immediateTarget = Optional.empty();
+  
 	/**
 	 * Expressed in metres/delta time
 	 */
@@ -55,14 +56,23 @@ public class Warrior extends MovingAgent {
 	 */
 	@Override
 	protected void displace() {
+		
 		// Displace will get called only if target is not null
-		if (target().isPresent()) {
+		if (immediateTarget.isPresent()) {
+			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), immediateTarget.get().location());
+		} else if (target().isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
 			/*IF WE WANT, THIS IS FOR BATTLING IN THE PATH* /
 			if (Coordinate.distanceBetween(this.location,target().get().location()) < this.characteristics().viewDistance()){
 				defending();
 			}
 			*/
+		}
+	}
+	
+	private void moveToImmediateTarget() {
+		if (immediateTarget.isPresent()) {
+			this.displace();
 		}
 	}
 	
@@ -84,11 +94,15 @@ public class Warrior extends MovingAgent {
 		defending();
 	}
 	
-	private void defending(){
+	private void defending() {
 		// get from the environment the enemies within viewing distance
 		/// based on warrior characteristics; this should be called only
 		final WarEnvironment environment = WarEnvironment.getInstance();
-		final List<LocatableAgent> enemies = environment.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance()).stream().filter(e -> !e.kingdom().equals(this.kingdom())).collect(Collectors.toList());
+		final List<LocatableAgent> enemies = environment
+				.agentsWithinRadiusOfCoordinate(this.location, warriorCharacteristics.viewDistance())
+				.stream()
+				.filter(e -> !e.kingdom().equals(this.kingdom()))
+				.collect(Collectors.toList());
 		
 		if (enemies.isEmpty()) {
 			return;
@@ -97,10 +111,13 @@ public class Warrior extends MovingAgent {
 		LocatableAgent enemySelected = enemies.get(0);
 		
 		// get the random enemy and attack him (with prioritized value)
-		double prioritySum = enemies.stream().mapToDouble(attacker -> Double.max(1.0/Coordinate.distanceBetween(this.location(),attacker.location()),Configuration.MIN_PRIORITY_DISTANCE)).sum();
+		double prioritySum = enemies.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), App.getConfiguration().getMinPriorityDistance())).sum();
 		double priorityValue = RandomUtil.getRandom().nextDouble() * prioritySum;
 		for (LocatableAgent enemy: enemies) {
-			priorityValue -= Double.max(1.0/Coordinate.distanceBetween(this.location(),enemy.location()),Configuration.MIN_PRIORITY_DISTANCE);
+			priorityValue -= Double.max(
+					1.0 / Coordinate.distanceBetween(this.location(),enemy.location()),
+					App.getConfiguration().getMinPriorityDistance()
+			);
 			if (priorityValue <= 0 ) {
 				enemySelected = enemy;
 				break;
@@ -109,7 +126,7 @@ public class Warrior extends MovingAgent {
 		
 		logger.debug(status + " warrior of {} will attack {}", kingdom, enemySelected);
 		
-		this.assignTarget(enemySelected, Configuration.MAX_PRIORITY);
+		this.assignTarget(enemySelected, App.getConfiguration().getMaxPriority());
 	}
 	
 	public void assignToTarget(final LocatableAgent target, double priority) {
@@ -118,7 +135,7 @@ public class Warrior extends MovingAgent {
 			return;
 		}
 		
-		super.assignTarget(target,priority);
+		super.assignTarget(target, priority);
 	}
 	
 	public void tick(final long timeElapsed) {
@@ -128,6 +145,14 @@ public class Warrior extends MovingAgent {
 				this.unassigned(timeElapsed);
 				return;
 			case WarriorStatus.MOVING:
+				if (immediateTarget.isPresent()) {
+					if (Coordinate.distanceBetween(location, immediateTarget.get().location()) < warriorCharacteristics.attackDistance()) {
+						status = WarriorStatus.ATTACKING;
+						return;
+					}
+					this.moveToImmediateTarget();
+					return;
+				}
 				// if we are headed toward a target then keep moving
 				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 					if (kingdom().castles().contains(target().get())) {
@@ -136,6 +161,16 @@ public class Warrior extends MovingAgent {
 					}
 					status = WarriorStatus.ATTACKING;
 				} else {
+					final List<LocatableAgent> nearbyEnemies = WarEnvironment
+							.getInstance()
+							.agentsWithinRadiusOfCoordinate(location, warriorCharacteristics.viewDistance())
+							.stream()
+							.filter(a -> !a.kingdom().equals(kingdom))
+							.filter(a -> !(a instanceof Castle))
+							.collect(Collectors.toList());
+					if (!nearbyEnemies.isEmpty()) {
+						immediateTarget = Optional.of(nearbyEnemies.get(0));
+					}
 					this.move();
 				}
 				break;
@@ -149,12 +184,25 @@ public class Warrior extends MovingAgent {
 				}
 				return;
 			case WarriorStatus.ATTACKING:
-				if (target().isPresent()) {
+				if (immediateTarget.isPresent()) {
+					if (immediateTarget.get().isAlive()) {
+						if (Coordinate.distanceBetween(location, immediateTarget.get().location()) < warriorCharacteristics.attackDistance()) {
+							immediateTarget.get().defend(this, warriorCharacteristics.attackHarm());
+							return;
+						} else {
+							status = WarriorStatus.MOVING;
+						}
+					} else{
+						immediateTarget = Optional.empty();
+						status = WarriorStatus.MOVING;
+					}
+					return;
+				} else if (target().isPresent()) {
 					if (target().get().isAlive()) {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
-						}else{
+						} else {
 							status = WarriorStatus.MOVING;
 						}
 					} else{
@@ -184,7 +232,7 @@ public class Warrior extends MovingAgent {
 		return (int)(100 * warriorCharacteristics.healthPercentage());
 	}
 
-	public int getAttackD() {
+	public int attackDistance() {
 		return (int)(warriorCharacteristics.attackDistance());
 	}
 
@@ -198,18 +246,16 @@ public class Warrior extends MovingAgent {
 	}
 
 	public int resourcesCost(){
-		/*TODO FORMULA*/
+		/*Warn, this should be a better formula in base of WarriorCharacteristic*/
 		return BASE_WARRIOR_COST * (isSuper ? 5 : 1);
 	}
 	
 	@Override
 	public String toString() {
-		//return this.hashCode() + "";
-		//return status.substring(0,3);//this.hashCode() + "";
-		return this.uid().toString();
+		return this.uid().toString();// + "\n"+ status.substring(0,3) + " " + getHealthPointPercentage();
 	}
 	
-	public void noCreated(){
+	public void noCreated() {
 		this.status = WarriorStatus.DEAD;
 		this.warriorCharacteristics.healthPoints(0);
 	}
@@ -218,15 +264,15 @@ public class Warrior extends MovingAgent {
 		return role;
 	}
 	
-	public boolean isAttacker(){
+	public boolean isAttacker() {
 		return role.equals(WarriorRole.ATTACKER);
 	}
 	
-	public boolean isDefender(){
+	public boolean isDefender() {
 		return role.equals(WarriorRole.DEFENDER);
 	}
 	
-	public WarriorCharacteristics characteristics(){
+	public WarriorCharacteristics characteristics() {
 		return this.warriorCharacteristics;
 	}
 	

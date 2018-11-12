@@ -1,6 +1,5 @@
 package ar.edu.itba.montu.interfaces;
 
-import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.Spawner;
 

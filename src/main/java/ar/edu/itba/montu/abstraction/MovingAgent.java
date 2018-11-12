@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.abstraction;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.castle.Castle;
@@ -61,7 +62,12 @@ public abstract class MovingAgent extends LocatableAgent {
 		if (targetsObjectives.size() == 0) {
 			status = MovingAgentStatus.UNASSIGNED;
 		} else {
-			targetsObjectives.forEach(targetObjective -> targetObjective.updatePriority(1.0/Double.max(Coordinate.distanceBetween(this.location(),targetObjective.target().location()), Configuration.MIN_PRIORITY_DISTANCE)));
+			targetsObjectives.forEach(targetObjective -> targetObjective.updatePriority(
+					1.0 / Double.max(
+							Coordinate.distanceBetween(this.location(), targetObjective.target().location()),
+							App.getConfiguration().getMinPriorityDistance())
+					)
+			);
 			status = MovingAgentStatus.MOVING;
 		}
 	}

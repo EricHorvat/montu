@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.*;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
@@ -20,13 +21,13 @@ import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import static ar.edu.itba.montu.war.people.WarriorRole.ATTACKER;
+import static ar.edu.itba.montu.war.people.WarriorRole.DEFENDER;
+
 public class Castle extends LocatableAgent implements Spawner {
 	
 	
 	private static final Logger logger = LogManager.getLogger(Castle.class);
-	
-	/// TODO should be retrieved from Configuration 
-	private static final int RESOURCES_PER_MINUTE = 1;
 	
 	final private String name;
 	final private CastleCharacteristics characteristics;
@@ -70,17 +71,17 @@ public class Castle extends LocatableAgent implements Spawner {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
-  	characteristics.increaseResources(RESOURCES_PER_MINUTE);
+  	characteristics.increaseResources(Configuration.RESOURCES_PER_MINUTE);
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
 	   * */
 		
   	List<Objective> turnObjectives;
-  	double turnOffensiveRoll = RandomUtil.getRandom().nextDouble() * (1.0 - Configuration.HEALTH_OFFENSIVE_ROLL_COEF/2.0) + (-0.5 + this.characteristics().healthPercentage()) * Configuration.HEALTH_OFFENSIVE_ROLL_COEF;
-  	if(turnOffensiveRoll * 100 < this.characteristics().offenseCapacity()){
+  	double turnOffensiveRoll = RandomUtil.getRandom().nextDouble() * (1.0 - App.getConfiguration().getHealthOffensiveRollCoefficient() / 2.0) + (-0.5 + this.characteristics().healthPercentage()) * App.getConfiguration().getHealthOffensiveRollCoefficient();
+  	if (turnOffensiveRoll * 100 < this.characteristics().offenseCapacity()) {
   		turnObjectives = attackObjectives();
-	  }else{
+	  } else {
   		turnObjectives = defendObjectives();
 	  }
   	
@@ -90,7 +91,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	  for (Objective objective : turnObjectives) {
 		  priorityValue -= objective.priority();
 		  if (priorityValue <= 0 ) {
-		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
+		  	WarriorRole warriorRole = objective instanceof AttackObjective ? ATTACKER : DEFENDER;
 		  	createWarriors(1, warriorRole);
 		    objective.apply(this);
 			  break;
@@ -106,16 +107,16 @@ public class Castle extends LocatableAgent implements Spawner {
 	  if (!visibleRivalAgents.isEmpty()) {
 		  for (Warrior availableWarrior: availableWarriors()) {
 				LocatableAgent enemySelected = visibleRivalAgents.get(0);
-			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), Configuration.MIN_PRIORITY_DISTANCE)).sum();
+			  double sum = visibleRivalAgents.stream().mapToDouble(attacker -> Double.max(1.0 / Coordinate.distanceBetween(this.location(), attacker.location()), App.getConfiguration().getMinPriorityDistance())).sum();
 			  double value = RandomUtil.getRandom().nextDouble() * sum;
 			  for (LocatableAgent enemy : visibleRivalAgents) {
-				  value -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), Configuration.MIN_PRIORITY_DISTANCE);
+				  value -= Double.max(1.0 / Coordinate.distanceBetween(this.location(), enemy.location()), App.getConfiguration().getMinPriorityDistance());
 				  if (value <= 0) {
 					  enemySelected = enemy;
 					  break;
 				  }
 			  }
-			  availableWarrior.assignToTarget(enemySelected,Configuration.MAX_PRIORITY);
+			  availableWarrior.assignToTarget(enemySelected, App.getConfiguration().getMaxPriority());
 		  }
 	  }
 	  
@@ -133,7 +134,6 @@ public class Castle extends LocatableAgent implements Spawner {
 	public List<LocatableAgent> visibleAgents() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		
-		///TODO: make the proper calculations to get the value of radius
 		return environment
 				.agentsWithinRadiusOfCoordinate(location, characteristics.viewDistance())
 				.stream()
@@ -272,13 +272,13 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	@Override
-	public List<Warrior> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
+	public List<Warrior> createWarriors(final int quantity, WarriorRole role){
 		
 		List<Warrior> warriorList =
 			IntStream
 			.range(0, quantity)
-			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())/*TODO CHANGE THIS*/
-			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < Configuration.SUPER_PERCENTAGE ? createASuperWarrior(role) : createAWarrior(role)))
+			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())
+			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < App.getConfiguration().getSuperWarriorProbability() ? createASuperWarrior(role) : createAWarrior(role)))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 			
@@ -305,11 +305,10 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	public void updateObjetives() {
-		/*TODO IDEA PROXIMITY OR STH LIKE THAT*/
 		List<Objective> objectives = new ArrayList<>();
 		kingdom.objectivePriorityList().stream().forEach(kingdomObjective -> {
 			List<Objective> partialObjectives = kingdomObjective.translate(location);
-			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
+			/*Can alter before assignment*/
 			objectives.addAll(partialObjectives);
 		});
 		this.objectives = objectives;
