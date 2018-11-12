@@ -35,6 +35,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final List<Kingdom> rivals = new ArrayList<>();
 	private final Map<Kingdom,Integer> friends = new HashMap<>();
 	private final List<KingdomObjective> objectives = new ArrayList<>();
+	private long lastNegotiation;
 	
 	private int color = 0xffffff;
 	private List<LocatableAgent> agents = new ArrayList<>();
@@ -159,10 +160,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return castles.stream().map(Castle::location).collect(Collectors.toList());
 	}
 	
-	public boolean shouldNegociate(double timeElapsed){
+	public boolean shouldNegotiate(double timeElapsed){
 		WarEnvironment warEnvironment = WarEnvironment.getInstance();
 		int friendsDesiredSize = (int)(Configuration.FRIEND_PERCENTAGE * (warEnvironment.kingdoms().size() - 1));
-		return timeElapsed % Configuration.UPDATE_NEGOTATION_TICKS == 0
+		return (timeElapsed - lastNegotiation) >= Configuration.UPDATE_NEGOTATION_TICKS
 			|| friends.size() < Math.min(friendsDesiredSize,lastFriendNumber);
 	}
 
@@ -191,7 +192,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			}
 		}*/
 		
-		if(shouldNegociate(timeEllapsed)){
+		if(shouldNegotiate(timeEllapsed)){
+			lastNegotiation = timeEllapsed;
 			negotiate();
 		}
 		
