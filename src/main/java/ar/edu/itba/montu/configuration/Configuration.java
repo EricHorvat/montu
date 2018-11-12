@@ -7,8 +7,13 @@ public final class Configuration {
 	public static double CASTLE_POWER_COEF = 100;
 	public static double HP_POWER_COEF = 100;
 	public static double WARRIOR_POWER_COEF = 100;
-	public static double FRIEND_PERCENTAGE = 100;
-	public static double RIVAL_PERCENTAGE = 100;
+	public static double FRIEND_PERCENTAGE = 0.2;
+	public static double RIVAL_PERCENTAGE = 0.6;
+	public static int UPDATE_NEGOTATION_TICKS = 100;
+	public static int FRIENDSHIP_TICKS = 100;
+	public static double RIVAL_PRIORITY_COEF = 2.5;
+	public static double FRIEND_PRIORITY_COEF = 0.4;
+	public static boolean FRIEND_WEAKERS = true;
 	
 	public static final class EnvironmentConfiguration {
 		private int size;

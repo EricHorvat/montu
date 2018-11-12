@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.war.people.Warrior;
+import com.google.common.collect.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,14 +31,16 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private final String name;
 	private final KingdomCharacteristics characteristics;
 	private final List<Castle> castles;
+	private final List<Kingdom> enemies = new ArrayList<>();
 	private final List<Kingdom> rivals = new ArrayList<>();
-	private final List<Kingdom> friends = new ArrayList<>();
+	private final Map<Kingdom,Integer> friends = new HashMap<>();
 	private final List<KingdomObjective> objectives = new ArrayList<>();
 	
 	private int color = 0xffffff;
 	private List<LocatableAgent> agents = new ArrayList<>();
 	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
+	private int lastFriendNumber;
 
 	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<CastleBuilder> castles) {
 	  super();
@@ -54,50 +57,62 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		return status;
 	}
 	
-	private void findFriends(int friendsToFind, List<Kingdom> kingdoms){
-		//TODO FRIEND LIST ITS TIMED, HERE SHOULD ENFORCE FRIENDSHIP OR MAKE NEW
+	private void findFriends(int friendsToFind, List<Kingdom> possibleFriendKingdoms){
+		if(Configuration.FRIEND_WEAKERS) {
+			possibleFriendKingdoms = Lists.reverse(possibleFriendKingdoms);
+		}
+		
+		possibleFriendKingdoms = possibleFriendKingdoms.stream()
+			.filter(possibleFriend -> !(friends.keySet().contains(possibleFriend) || rivals.contains(possibleFriend)))
+			.collect(Collectors.toList());
+		
+		for (Kingdom possibleFriend: possibleFriendKingdoms) {
+			if (friendsToFind > 0) {
+				/*EVALUATE FRIENDSHIP?*/
+				if(possibleFriend.befriend(this)){
+					friends.put(possibleFriend,Configuration.FRIENDSHIP_TICKS);
+					friendsToFind--;
+				}
+			}
+		}
+		
+		lastFriendNumber = friends.size();
+	}
+	
+	private boolean befriend(Kingdom kingdom){
+		WarEnvironment environment = WarEnvironment.getInstance();
+		if (friends.size() < Configuration.FRIEND_PERCENTAGE * (environment.kingdoms().size()-1)) {
+			//      rand * myPower < theirPower => more prob true if its strong
+			boolean itsStrong = RandomUtil.getRandom().nextDouble() * this.power() < kingdom.power();
+			// itsStrong XOR true = !itsStrong; itsStrong XOR false = itsStrong
+			boolean befriend = itsStrong ^ Configuration.FRIEND_WEAKERS;
+			if (befriend){
+				friends.put(kingdom, Configuration.FRIENDSHIP_TICKS);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void findRivals(int rivalsToFind, List<Kingdom> kingdoms){
-		rivals.addAll(kingdoms.stream().limit(rivalsToFind).collect(Collectors.toList()));
+		rivals.clear();
+		enemies.clear();
+		rivals.addAll(kingdoms.stream().filter(k -> !friends.keySet().contains(k)).limit(rivalsToFind).collect(Collectors.toList()));
 	}
 	
-	private void negotiate() {
+	public void negotiate() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> otherKingdoms = environment.kingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
-		// TODO Should negotiate based on PQ, that should modify strategies or new actions but MUSTN'T edit PQ
-    // TODO MUST DEFINE HOW ACTIONS WILL BE TAKEN AND THEN FILL
 		
 		otherKingdoms.sort(Comparator.comparingDouble(Kingdom::power));
 		int friendsToFind = (int)(Configuration.FRIEND_PERCENTAGE * otherKingdoms.size());
 		int rivalsToFind = (int) (Configuration.RIVAL_PERCENTAGE* otherKingdoms.size());
 		friendsToFind -= friends.size();
-		rivalsToFind -= rivals.size();
 		
 		findRivals(rivalsToFind, otherKingdoms);
 		findFriends(friendsToFind, otherKingdoms);
 		
-		//TODO HERE CLEAR AND RECALCULATE OBJETIVES
-		
-		/*OLD TODO REMOVE*/
-		otherKingdoms.forEach(kingdom -> {
-			final double coinFlip = RandomUtil.getRandom().nextDouble();
-			
-			if (coinFlip > 0.9) return;
-			
-			final List<KingdomObjective> objectiveIntersection = objectiveIntersectionWith(kingdom);
-			
-			if (objectiveIntersection.isEmpty()) return;
-			
-			logger.debug("{} neg with {} over {}", this.name, kingdom.name, objectiveIntersection);
-			
-			objectiveIntersection.forEach(objective -> {
-				if (objective.priority() > 50) {
-					objective.alterPriority(objective.priority() / 2);
-				}
-			});
-		});
-
+		buildStrategy();
 	}
 	
 	/**
@@ -106,9 +121,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	 * We have to construct initial objective PQ
 	 * This has to be done based on characteristics
 	 */
-	public void buildInitialStrategy() {
+	public void buildStrategy() {
 		
-		logger.debug("[{}] {} is building initial strategy", uid(), name);
+		logger.debug("[{}] {} is building strategy", uid(), name);
+		objectives.clear();
 		
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		final List<Kingdom> kingdoms = environment.kingdoms();
@@ -123,6 +139,12 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 				ko = KingdomDefendObjective.fromWithPriority(this,priority);
 			} else{
 				priority = RandomUtil.getRandom().nextDouble() * characteristics().offenseCapacity();
+				if (rivals.contains(kingdom)){
+					priority *= Configuration.RIVAL_PRIORITY_COEF;
+				}
+				if (friends.keySet().contains(kingdom)){
+					priority *= Configuration.FRIEND_PRIORITY_COEF;
+				}
 				ko = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
 			}
 			logger.debug("{} has objective {}", name, ko);
@@ -131,100 +153,50 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		});
 		
 		return;
-		
-		
-		
-		///TODO: algorithm to build initial strategy
-		
-//		double d = RandomUtil.getRandom().nextDouble();
-//		
-//		
-//		
-//		
-//		if (d > 0.5) {
-//			/// attack first agent
-//			final Spawner enemy = visibleAgents.get(RandomUtil.getRandom().nextInt(kingdoms.size()));
-//			logger.debug("[{}] {} will attack {}", uid(), name, ((Agent)enemy).uid());
-//			objectives.add(AttackObjective.headedToWithPriority(enemy, 100));
-//			status = KingdomStatus.ATTACKING;
-//			return;
-//		}
-//		
-//		logger.debug("[{}] {} will negotiate", uid(), name);
-//		
-//		final Map<Boolean, List<Kingdom>> otherKingdoms =
-//				kingdoms
-//				.stream()
-//				.filter(k -> !k.equals(this))
-//				.collect(Collectors.partitioningBy(v -> RandomUtil.getRandom().nextDouble() > 0.5));
-//		
-//		final List<Kingdom> friendKingdoms = otherKingdoms.get(true);
-//		final List<Kingdom> enemyKingdoms = otherKingdoms.get(false);
-//		
-//		objectives.add(NegotiateObjective.withOtherToIntentTargetsAndPriority(friendKingdoms, Intention.ATTACK, enemyKingdoms, 100));
-//		status = KingdomStatus.NEGOTIATING;
 	}
-
-	private void sense() {
-		final WarEnvironment environment = WarEnvironment.getInstance();
-		final List<Kingdom> kingdoms = environment.kingdoms();
-		final Map<Kingdom, List<Coordinate>> kingdomCastleCoordinates = kingdoms.stream().collect(Collectors.toMap(Function.identity(), Kingdom::castleCoordinates));
-		final List<LocatableAgent> visibleAgents = castles.stream().map(Castle::visibleAgents).flatMap(List::stream).collect(Collectors.toList());
-
-		/*TODO Now I got castle & warriors, with my castles status -> Objective list*/
-//		PriorityQueue<IObjective> newObjectives = findObjectives(kingdomCastleCoordinates, visibleAgents);
-		// Compare new Objectives with old, relies in PQ equals so relies in Objective equals (and hashCode)
-//		if(!newObjectives.equals(objectives)){
-//			negotiate();
-//		}
-
-	}
-
+	
 	public List<Coordinate> castleCoordinates() {
 		return castles.stream().map(Castle::location).collect(Collectors.toList());
 	}
 	
-	public List<KingdomObjective> objectiveIntersectionWith(final Kingdom other) {
-    return objectives.stream()
-    		.filter(other.objectives::contains)
-    		.collect(Collectors.toList());
-}
-
 	public boolean shouldNegociate(double timeElapsed){
-		return timeElapsed % 100 == 0;
+		WarEnvironment warEnvironment = WarEnvironment.getInstance();
+		int friendsDesiredSize = (int)(Configuration.FRIEND_PERCENTAGE * (warEnvironment.kingdoms().size() - 1));
+		return timeElapsed % Configuration.UPDATE_NEGOTATION_TICKS == 0
+			|| friends.size() < Math.min(friendsDesiredSize,lastFriendNumber);
 	}
 
 	public void tick(final long timeEllapsed) {
-		/// TODO: template what a kingdom does on each tick
-		
-//		KingdomObjective objective = objectives.peek();
-		
-//		switch (status) {
-//			case IDLE:
-//				this.sense();
-//				break;
-//			case ATTACKING:
-//				break;
-//			case NEGOTIATING:
-//				break;
-//			default:
-//				break;
-//		}
 		
 		logger.debug("{} tick={}", name, timeEllapsed);
 		
-		if(shouldNegociate()){
+		Iterator<Kingdom> iterator = friends.keySet().iterator();
+		
+		while (iterator.hasNext()){
+			Kingdom friend = iterator.next();
+			int updatedValue = friends.get(friend) -1;
+			if(updatedValue <= 0){
+				iterator.remove();
+			}else{
+				friends.replace(friend,updatedValue);
+			}
+		}
+		
+		/*for (Kingdom friend: friends.keySet()) {
+			int updatedValue = friends.get(friend) -1;
+			if(updatedValue <= 0){
+				friends.remove(friend);
+			}else{
+				friends.replace(friend,updatedValue);
+			}
+		}*/
+		
+		if(shouldNegociate(timeEllapsed)){
 			negotiate();
 		}
 		
 		agents = agents.stream().filter(LocatableAgent::isAlive).collect(Collectors.toList());
-//		sense();
 	}
-
-//	private PriorityQueue<Objective> findObjectives(Map<Kingdom,List<Coordinate>> kingdomCastleMap, List<WarFieldAgent> visibleAgents){
-		/*TODO */
-//		return new PriorityQueue<>();
-//	}
 	
 	public List<LocatableAgent> agents() {
 		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), agents.stream()).collect(Collectors.toList());
@@ -243,11 +215,12 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	}
 	
 	public boolean isEnemy(Kingdom k){
-		return rivals.contains(k);
+		return enemies.contains(k);
 	}
 	
 	public void addEnemy(Kingdom k){
-		rivals.add(k);
+		if (!isEnemy(k))
+			enemies.add(k);
 	}
 	
 	public KingdomCharacteristics characteristics() {
