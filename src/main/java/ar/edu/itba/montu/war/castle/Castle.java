@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.*;
+import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
@@ -20,7 +21,8 @@ import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
-import static ar.edu.itba.montu.configuration.Configuration.RESOURCES_PER_MINUTE;
+import static ar.edu.itba.montu.war.people.WarriorRole.ATTACKER;
+import static ar.edu.itba.montu.war.people.WarriorRole.DEFENDER;
 
 public class Castle extends LocatableAgent implements Spawner {
 	
@@ -69,7 +71,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
-  	characteristics.increaseResources(RESOURCES_PER_MINUTE);
+  	characteristics.increaseResources(Configuration.RESOURCES_PER_MINUTE);
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
@@ -89,7 +91,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	  for (Objective objective : turnObjectives) {
 		  priorityValue -= objective.priority();
 		  if (priorityValue <= 0 ) {
-		  	WarriorRole warriorRole = objective instanceof AttackObjective ? WarriorRole.ATTACKER : WarriorRole.DEFENDER;
+		  	WarriorRole warriorRole = objective instanceof AttackObjective ? ATTACKER : DEFENDER;
 		  	createWarriors(1, warriorRole);
 		    objective.apply(this);
 			  break;
