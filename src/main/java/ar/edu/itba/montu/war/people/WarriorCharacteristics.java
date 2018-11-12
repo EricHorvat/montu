@@ -27,7 +27,7 @@ public class WarriorCharacteristics extends AttackingAgentCharacteristics {
 				),
 				// Warriors get 10% of the castles attack distance initially
 				// Of course, a normal distribution applies when born
-				Math.max(RandomUtil.getNormalDistribution(c.characteristics().attackDistance() / 6.0, 0.05), 0.0),
+				Math.max(RandomUtil.getNormalDistribution(c.characteristics().attackDistance() / 3.0, 0.05), 0.0),
 				// A castles attack harm is (100 - offense capacity) of the kingdom
 				// This means the castles best attack is his defense = (100 - offense)
 				// Therefore, we (100 - attack harm) and get the 10% of it

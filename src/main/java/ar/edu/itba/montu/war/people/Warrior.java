@@ -57,12 +57,10 @@ public class Warrior extends MovingAgent {
 	@Override
 	protected void displace() {
 		
+		// Displace will get called only if target is not null
 		if (immediateTarget.isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), immediateTarget.get().location());
-		}
-		
-		// Displace will get called only if target is not null
-		if (target().isPresent()) {
+		} else if (target().isPresent()) {
 			this.location = this.location.applyingNoisyDeltaInDirectionTo(warriorCharacteristics.speed(), target().get().location());
 			/*IF WE WANT, THIS IS FOR BATTLING IN THE PATH* /
 			if (Coordinate.distanceBetween(this.location,target().get().location()) < this.characteristics().viewDistance()){
@@ -148,7 +146,7 @@ public class Warrior extends MovingAgent {
 				return;
 			case WarriorStatus.MOVING:
 				if (immediateTarget.isPresent()) {
-					if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
+					if (Coordinate.distanceBetween(location, immediateTarget.get().location()) < warriorCharacteristics.attackDistance()) {
 						status = WarriorStatus.ATTACKING;
 						return;
 					}
@@ -168,10 +166,10 @@ public class Warrior extends MovingAgent {
 							.agentsWithinRadiusOfCoordinate(location, warriorCharacteristics.viewDistance())
 							.stream()
 							.filter(a -> !a.kingdom().equals(kingdom))
+							.filter(a -> !(a instanceof Castle))
 							.collect(Collectors.toList());
 					if (!nearbyEnemies.isEmpty()) {
 						immediateTarget = Optional.of(nearbyEnemies.get(0));
-						status = WarriorStatus.ATTACKING;
 					}
 					this.move();
 				}
@@ -187,7 +185,7 @@ public class Warrior extends MovingAgent {
 				return;
 			case WarriorStatus.ATTACKING:
 				if (immediateTarget.isPresent()) {
-					if (target().get().isAlive()) {
+					if (immediateTarget.get().isAlive()) {
 						if (Coordinate.distanceBetween(location, immediateTarget.get().location()) < warriorCharacteristics.attackDistance()) {
 							immediateTarget.get().defend(this, warriorCharacteristics.attackHarm());
 							return;
@@ -196,10 +194,10 @@ public class Warrior extends MovingAgent {
 						}
 					} else{
 						immediateTarget = Optional.empty();
+						status = WarriorStatus.MOVING;
 					}
 					return;
-				}
-				if (target().isPresent()) {
+				} else if (target().isPresent()) {
 					if (target().get().isAlive()) {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
@@ -254,9 +252,7 @@ public class Warrior extends MovingAgent {
 	
 	@Override
 	public String toString() {
-		//return this.hashCode() + "";
-		//return status.substring(0,3);//this.hashCode() + "";
-		return this.uid().toString();
+		return this.uid().toString();// + "\n"+ status.substring(0,3) + " " + getHealthPointPercentage();
 	}
 	
 	public void noCreated() {
