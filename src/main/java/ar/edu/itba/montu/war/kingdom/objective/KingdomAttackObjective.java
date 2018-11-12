@@ -68,7 +68,7 @@ public class KingdomAttackObjective implements KingdomObjective {
 				.map(castle -> AttackObjective.headedToWithPriority(castle,
 					priority
 						* castle.characteristics().healthPoints()
-						/castle.characteristics().maxHealthPoints()
+						/ castle.characteristics().maxHealthPoints()
 						/ Double.max(Coordinate.distanceBetween(castle.location(),sourceLocation), App.getConfiguration().getMinPriorityDistance())
 				))
 				.collect(Collectors.toList());

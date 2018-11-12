@@ -25,7 +25,8 @@ import ar.edu.itba.montu.war.people.Warrior;
     }else if (((Warrior)locatableAgent).isAttacker()) {
       applet.triangle(x-Rx, y-Ry, x + Rx, y, x-Rx, y + Ry);
     }else{
-      //TODO
+      //WARN: Should never get here
+      return;
     }
   
     applet.noFill();

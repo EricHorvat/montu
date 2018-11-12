@@ -64,7 +64,7 @@ public class WarEnvironment {
 		// we could think about it as time=0
 		// since we are using LongStream.rangeClosed(-> 1 <-, time)
 		// from time =1
-		kingdoms.forEach(Kingdom::buildInitialStrategy);
+		kingdoms.forEach(Kingdom::negotiate);
 		Streamer.currentStreamer().streamNow(0);
 		LongStream.rangeClosed(1, time).forEach(this::tick);
 	}
