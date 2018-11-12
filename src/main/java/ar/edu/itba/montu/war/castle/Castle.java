@@ -6,7 +6,6 @@ import java.util.stream.IntStream;
 
 import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.*;
-import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
@@ -21,13 +20,12 @@ import ar.edu.itba.montu.war.people.Warrior;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import static ar.edu.itba.montu.configuration.Configuration.RESOURCES_PER_MINUTE;
+
 public class Castle extends LocatableAgent implements Spawner {
 	
 	
 	private static final Logger logger = LogManager.getLogger(Castle.class);
-	
-	/// TODO should be retrieved from Configuration 
-	private static final int RESOURCES_PER_MINUTE = 1;
 	
 	final private String name;
 	final private CastleCharacteristics characteristics;
@@ -134,7 +132,6 @@ public class Castle extends LocatableAgent implements Spawner {
 	public List<LocatableAgent> visibleAgents() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
 		
-		///TODO: make the proper calculations to get the value of radius
 		return environment
 				.agentsWithinRadiusOfCoordinate(location, characteristics.viewDistance())
 				.stream()
@@ -268,12 +265,12 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	@Override
-	public List<Warrior> createWarriors(final int quantity, WarriorRole role /*, Characteristics?*/){
+	public List<Warrior> createWarriors(final int quantity, WarriorRole role){
 		
 		List<Warrior> warriorList =
 			IntStream
 			.range(0, quantity)
-			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())/*TODO CHANGE THIS*/
+			.filter(i -> RandomUtil.getRandom().nextDouble() < characteristics.spawnProbability())
 			.mapToObj(i -> (RandomUtil.getRandom().nextDouble() < App.getConfiguration().getSuperWarriorProbability() ? createASuperWarrior(role) : createAWarrior(role)))
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
@@ -301,11 +298,10 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 	
 	public void updateObjetives() {
-		/*TODO IDEA PROXIMITY OR STH LIKE THAT*/
 		List<Objective> objectives = new ArrayList<>();
 		kingdom.objectivePriorityList().stream().forEach(kingdomObjective -> {
 			List<Objective> partialObjectives = kingdomObjective.translate(location);
-			partialObjectives.forEach(objective -> {/*TODO 19/10 ALTER PRIORITY*/});
+			/*Can alter before assignment*/
 			objectives.addAll(partialObjectives);
 		});
 		this.objectives = objectives;

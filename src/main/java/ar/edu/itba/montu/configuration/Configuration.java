@@ -14,6 +14,8 @@ public final class Configuration {
 	public static double RIVAL_PRIORITY_COEF = 2.5;
 	public static double FRIEND_PRIORITY_COEF = 0.4;
 	public static boolean FRIEND_WEAKERS = true;
+	public static final int RESOURCES_PER_MINUTE = 1;
+	
 	
 	public static final class EnvironmentConfiguration {
 		private int size;

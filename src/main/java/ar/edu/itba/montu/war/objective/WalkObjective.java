@@ -22,13 +22,11 @@ public class WalkObjective implements Objective {
 	public WalkObjective(final LocatableAgent target) {
 		this.target = target;
 		this.priority = 0;
-		this.basePriority = 0;
+		this.basePriority = 1;
 	}
 	
 	@Override
-	public void apply(Spawner spawner) {
-		//MUST BE EMPTY TODO REVISE
-	}
+	public void apply(Spawner spawner) {}
 	
 	@Override
 	public double priority() {
@@ -37,7 +35,8 @@ public class WalkObjective implements Objective {
 	
 	@Override
 	public void updatePriority(double coefficient) {
-		//MUST BE EMPTY TODO REVISE
+		//WARN Should be wise when to call this method
+		this.priority = basePriority * coefficient;
 	}
 	
 	

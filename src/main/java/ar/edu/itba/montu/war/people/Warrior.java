@@ -199,7 +199,7 @@ public class Warrior extends MovingAgent {
 	}
 
 	public int resourcesCost(){
-		/*TODO FORMULA*/
+		/*Warn, this should be a better formula in base of WarriorCharacteristic*/
 		return BASE_WARRIOR_COST * (isSuper ? 5 : 1);
 	}
 	

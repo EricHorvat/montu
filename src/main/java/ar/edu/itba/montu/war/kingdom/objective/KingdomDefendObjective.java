@@ -53,7 +53,7 @@ public class KingdomDefendObjective implements KingdomObjective {
 	
 	@Override
 	public Kingdom target() {
-		return target; /*TODO*/
+		return target;
 	}
 	
 	@Override
