@@ -14,6 +14,7 @@ public class KingdomBuilder {
 	private final List<CastleBuilder> castles = new ArrayList<>();
 	
 	private int color = 0xffffff;
+	private boolean alliesWithWeakFriends = false;
 	
 	private KingdomBuilder(final String name) {
 		this.name = name;
@@ -39,9 +40,15 @@ public class KingdomBuilder {
 		return this;
 	}
 	
+	public KingdomBuilder alliesWithWeakFriends(final boolean v) {
+		this.alliesWithWeakFriends = v;
+		return this;
+	}
+	
 	public Kingdom build() {
 		final Kingdom k = new Kingdom(name, kingdomCharacteristics, castles);
 		k.changeColor(this.color);
+		k.alliesWithWeakFriends(this.alliesWithWeakFriends);
 		return k;
 	}
 }

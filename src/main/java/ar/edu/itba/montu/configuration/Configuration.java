@@ -6,24 +6,11 @@ import java.util.List;
 
 public final class Configuration {
 	
-	public static double CASTLE_POWER_COEF = 100;
-	public static double HP_POWER_COEF = 100;
-	public static double WARRIOR_POWER_COEF = 100;
-	public static double FRIEND_PERCENTAGE = 0.2;
-	public static double RIVAL_PERCENTAGE = 0.6;
-	public static int UPDATE_NEGOTATION_TICKS = 100;
-	public static int FRIENDSHIP_TICKS = 100;
-	public static double RIVAL_PRIORITY_COEF = 2.5;
-	public static double FRIEND_PRIORITY_COEF = 0.4;
-	public static boolean FRIEND_WEAKERS = true;
-	public static final int RESOURCES_PER_MINUTE = 1;
-	public static WarStrategy WAR_STRATEGY = WarStrategy.DOMINATION_BY_OCCUPATION;
-	
-	
 	public static final class EnvironmentConfiguration {
 		private int size;
 		private long time;
 		private long seed;
+		private WarStrategy strategy;
 		public int getSize() {
 			return size;
 		}
@@ -41,6 +28,12 @@ public final class Configuration {
 		}
 		public void setSeed(long seed) {
 			this.seed = seed;
+		}
+		public WarStrategy getStrategy() {
+			return strategy;
+		}
+		public void setStrategy(WarStrategy strategy) {
+			this.strategy = strategy;
 		}
 		@Override
 		public String toString() {
@@ -146,6 +139,7 @@ public final class Configuration {
 		private double warriorSpeed;
 		private List<CastleConfiguration> castles;
 		private int color;
+		private boolean weakFriends;
 		public String getName() {
 			return name;
 		}
@@ -175,6 +169,12 @@ public final class Configuration {
 		}
 		public void setColor(int color) {
 			this.color = color;
+		}
+		public boolean isWeakFriends() {
+			return weakFriends;
+		}
+		public void setWeakFriends(boolean weakFriends) {
+			this.weakFriends = weakFriends;
 		}
 		@Override
 		public String toString() {
@@ -211,6 +211,17 @@ public final class Configuration {
 	private double minPriorityDistance;
 	private double superWarriorProbability;
 	private double healthOffensiveRollCoefficient;
+	
+	private double castlePowerCoefficient;
+	private double hpPowerCoefficient;
+	private double warriorPowerCoefficient;
+	private double friendProbability;
+	private double rivalProbability;
+	private int updateNegotationTicks;
+	private int friendshipTicks;
+	private double rivalPriorityCoefficient;
+	private double friendPriorityCoefficient;
+	private int resourcesPerMinute;
 	
 	private EnvironmentConfiguration environment;
 	private ViewportConfiguration viewport;
@@ -257,6 +268,68 @@ public final class Configuration {
 	}
 	public void setHealthOffensiveRollCoefficient(double healthOffensiveRollCoefficient) {
 		this.healthOffensiveRollCoefficient = healthOffensiveRollCoefficient;
+	}
+	
+	
+	public double getCastlePowerCoefficient() {
+		return castlePowerCoefficient;
+	}
+	public double getHpPowerCoefficient() {
+		return hpPowerCoefficient;
+	}
+	public double getWarriorPowerCoefficient() {
+		return warriorPowerCoefficient;
+	}
+	public double getFriendProbability() {
+		return friendProbability;
+	}
+	public double getRivalProbability() {
+		return rivalProbability;
+	}
+	public int getUpdateNegotationTicks() {
+		return updateNegotationTicks;
+	}
+	public int getFriendshipTicks() {
+		return friendshipTicks;
+	}
+	public double getRivalPriorityCoefficient() {
+		return rivalPriorityCoefficient;
+	}
+	public double getFriendPriorityCoefficient() {
+		return friendPriorityCoefficient;
+	}
+	public int getResourcesPerMinute() {
+		return resourcesPerMinute;
+	}
+	public void setCastlePowerCoefficient(double castlePowerCoefficient) {
+		this.castlePowerCoefficient = castlePowerCoefficient;
+	}
+	public void setHpPowerCoefficient(double hpPowerCoefficient) {
+		this.hpPowerCoefficient = hpPowerCoefficient;
+	}
+	public void setWarriorPowerCoefficient(double warriorPowerCoefficient) {
+		this.warriorPowerCoefficient = warriorPowerCoefficient;
+	}
+	public void setFriendProbability(double friendProbability) {
+		this.friendProbability = friendProbability;
+	}
+	public void setRivalProbability(double rivalProbability) {
+		this.rivalProbability = rivalProbability;
+	}
+	public void setUpdateNegotationTicks(int updateNegotationTicks) {
+		this.updateNegotationTicks = updateNegotationTicks;
+	}
+	public void setFriendshipTicks(int friendshipTicks) {
+		this.friendshipTicks = friendshipTicks;
+	}
+	public void setRivalPriorityCoefficient(double rivalPriorityCoefficient) {
+		this.rivalPriorityCoefficient = rivalPriorityCoefficient;
+	}
+	public void setFriendPriorityCoefficient(double friendPriorityCoefficient) {
+		this.friendPriorityCoefficient = friendPriorityCoefficient;
+	}
+	public void setResourcesPerMinute(int resourcesPerMinute) {
+		this.resourcesPerMinute = resourcesPerMinute;
 	}
 	@Override
 	public String toString() {

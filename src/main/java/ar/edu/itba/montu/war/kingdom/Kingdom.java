@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.Agent;
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.abstraction.NonLocatableAgent;
@@ -40,6 +41,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	private List<LocatableAgent> agents = new ArrayList<>();
 	private KingdomStatus status = KingdomStatus.IDLE;
 	private int lastFriendNumber;
+	
+	private boolean alliesWithWeakFriends = false;
 
 	/* package */protected Kingdom(final String name, final KingdomCharacteristics kingdomCharacteristics, final List<CastleBuilder> castles) {
 	  super();
@@ -53,19 +56,20 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	}
 	
 	private void findFriends(int friendsToFind, List<Kingdom> possibleFriendKingdoms){
-		if(Configuration.FRIEND_WEAKERS) {
+		if (this.alliesWithWeakFriends) {
 			possibleFriendKingdoms = Lists.reverse(possibleFriendKingdoms);
 		}
 		
-		possibleFriendKingdoms = possibleFriendKingdoms.stream()
+		possibleFriendKingdoms = possibleFriendKingdoms
+			.stream()
 			.filter(possibleFriend -> !(friends.keySet().contains(possibleFriend) || rivals.contains(possibleFriend)))
 			.collect(Collectors.toList());
 		
 		for (Kingdom possibleFriend: possibleFriendKingdoms) {
 			if (friendsToFind > 0) {
 				/*EVALUATE FRIENDSHIP?*/
-				if(possibleFriend.befriend(this)){
-					friends.put(possibleFriend,Configuration.FRIENDSHIP_TICKS);
+				if (possibleFriend.befriend(this)) {
+					friends.put(possibleFriend, App.getConfiguration().getFriendshipTicks());
 					friendsToFind--;
 				}
 			}
@@ -76,13 +80,13 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	private boolean befriend(Kingdom kingdom){
 		WarEnvironment environment = WarEnvironment.getInstance();
-		if (friends.size() < Configuration.FRIEND_PERCENTAGE * (environment.kingdoms().size()-1)) {
+		if (friends.size() < App.getConfiguration().getFriendProbability() * (environment.kingdoms().size() - 1)) {
 			//      rand * myPower < theirPower => more prob true if its strong
 			boolean itsStrong = RandomUtil.getRandom().nextDouble() * this.power() < kingdom.power();
 			// itsStrong XOR true = !itsStrong; itsStrong XOR false = itsStrong
-			boolean befriend = itsStrong ^ Configuration.FRIEND_WEAKERS;
+			boolean befriend = itsStrong ^ this.alliesWithWeakFriends;
 			if (befriend){
-				friends.put(kingdom, Configuration.FRIENDSHIP_TICKS);
+				friends.put(kingdom, App.getConfiguration().getFriendshipTicks());
 				return true;
 			}
 		}
@@ -100,8 +104,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final List<Kingdom> otherKingdoms = environment.kingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
 		
 		otherKingdoms.sort(Comparator.comparingDouble(Kingdom::power));
-		int friendsToFind = (int)(Configuration.FRIEND_PERCENTAGE * otherKingdoms.size());
-		int rivalsToFind = (int) (Configuration.RIVAL_PERCENTAGE* otherKingdoms.size());
+		int friendsToFind = (int)(App.getConfiguration().getFriendProbability() * otherKingdoms.size());
+		int rivalsToFind = (int)(App.getConfiguration().getRivalProbability() * otherKingdoms.size());
 		friendsToFind -= friends.size();
 		
 		findRivals(rivalsToFind, otherKingdoms);
@@ -135,10 +139,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			} else{
 				priority = RandomUtil.getRandom().nextDouble() * characteristics().offenseCapacity();
 				if (rivals.contains(kingdom)){
-					priority *= Configuration.RIVAL_PRIORITY_COEF;
+					priority *= App.getConfiguration().getRivalPriorityCoefficient();
 				}
 				if (friends.keySet().contains(kingdom)){
-					priority *= Configuration.FRIEND_PRIORITY_COEF;
+					priority *= App.getConfiguration().getFriendPriorityCoefficient();
 				}
 				ko = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
 			}
@@ -156,9 +160,8 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public boolean shouldNegotiate(double timeElapsed){
 		WarEnvironment warEnvironment = WarEnvironment.getInstance();
-		int friendsDesiredSize = (int)(Configuration.FRIEND_PERCENTAGE * (warEnvironment.kingdoms().size() - 1));
-		return (timeElapsed - lastNegotiation) >= Configuration.UPDATE_NEGOTATION_TICKS
-			|| friends.size() < Math.min(friendsDesiredSize,lastFriendNumber);
+		int friendsDesiredSize = (int)(App.getConfiguration().getFriendProbability() * (warEnvironment.kingdoms().size() - 1));
+		return (timeElapsed - lastNegotiation) >= App.getConfiguration().getUpdateNegotationTicks() || friends.size() < Math.min(friendsDesiredSize, lastFriendNumber);
 	}
 
 	public void tick(final long timeEllapsed) {
@@ -167,13 +170,13 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		
 		Iterator<Kingdom> iterator = friends.keySet().iterator();
 		
-		while (iterator.hasNext()){
+		while (iterator.hasNext()) {
 			Kingdom friend = iterator.next();
 			int updatedValue = friends.get(friend) -1;
-			if(updatedValue <= 0){
+			if (updatedValue <= 0) {
 				iterator.remove();
-			}else{
-				friends.replace(friend,updatedValue);
+			} else {
+				friends.replace(friend, updatedValue);
 			}
 		}
 		
@@ -186,7 +189,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			}
 		}*/
 		
-		if(shouldNegotiate(timeEllapsed)){
+		if (shouldNegotiate(timeEllapsed)) {
 			lastNegotiation = timeEllapsed;
 			negotiate();
 		}
@@ -243,6 +246,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	public void changeColor(final int color) {
 		this.color = color;
 	}
+	
+	public void alliesWithWeakFriends(final boolean v) {
+		this.alliesWithWeakFriends = v;
+	}
 
 	public int color() {
 		return color;
@@ -252,11 +259,11 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		OptionalDouble hpTotalPercentage = castles.stream().mapToDouble(Castle::getHealthPointPercentage).average();
 		if (hpTotalPercentage.isPresent()){
 			long totalWarriors = agents.stream().filter(LocatableAgent::isAlive).filter(agent -> agent instanceof Warrior).count();
-			return  Configuration.CASTLE_POWER_COEF * castles.size() +
-				Configuration.HP_POWER_COEF * hpTotalPercentage.getAsDouble() +
-				Configuration.WARRIOR_POWER_COEF * totalWarriors;
-		}else{
-			return 0;
+			return 
+					App.getConfiguration().getCastlePowerCoefficient() * castles.size() +
+					App.getConfiguration().getHpPowerCoefficient() * hpTotalPercentage.getAsDouble() +
+					App.getConfiguration().getWarriorPowerCoefficient() * totalWarriors;
 		}
+		return 0;
 	}
 }

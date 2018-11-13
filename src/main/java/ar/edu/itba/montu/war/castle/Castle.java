@@ -72,7 +72,7 @@ public class Castle extends LocatableAgent implements Spawner {
 	
   	logger.trace("{} tick={}", name, timeEllapsed);
   	
-  	characteristics.increaseResources(Configuration.RESOURCES_PER_MINUTE);
+  	characteristics.increaseResources(App.getConfiguration().getResourcesPerMinute());
   	updateObjetives();
   	/*TODO EVALUATE OBJECTIVES AND NEGOTIATE WITH OWN CASTLES
 	   *
@@ -232,7 +232,7 @@ public class Castle extends LocatableAgent implements Spawner {
 		int hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
-			if (Configuration.WAR_STRATEGY.equals(WarStrategy.DOMINATION_BY_DESTRUCTION)) {
+			if (WarEnvironment.getInstance().strategy().equals(WarStrategy.DOMINATION_BY_DESTRUCTION)) {
 				this.status = LocatableAgentStatus.DEAD;
 				hp = 0;
 				WarEnvironment.getInstance().onCastleDeath(this);
@@ -254,7 +254,7 @@ public class Castle extends LocatableAgent implements Spawner {
 					enemyCharacteristics.increaseResources(ownResources);
 					this.characteristics.useResources(ownResources);
 				}
-			}else {
+			} else {
 				this.characteristics().increaseDeaths();
 				this.kingdom = agent.kingdom();
 				hp = (int) (this.characteristics().maxHealthPoints() / (1 + this.characteristics().deaths()));

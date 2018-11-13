@@ -26,14 +26,16 @@ public class WarEnvironment {
 	private final List<Kingdom> kingdoms;
 	
 	private long time;
+	private WarStrategy strategy;
 
-	private WarEnvironment(final List<Kingdom> kingdoms) {
+	private WarEnvironment(final List<Kingdom> kingdoms, final WarStrategy strategy) {
 		this.kingdoms = kingdoms;
+		this.strategy = strategy;
 	}
 	
-	/*package*/ static WarEnvironment withKingdoms(final List<Kingdom> kingdoms) {
+	/*package*/ static WarEnvironment withKingdomsAndStrategy(final List<Kingdom> kingdoms, final WarStrategy strategy) {
 		if (environment == null) {
-			environment = new WarEnvironment(kingdoms);
+			environment = new WarEnvironment(kingdoms, strategy);
 		}
 		return environment;
 	}
@@ -107,7 +109,9 @@ public class WarEnvironment {
 		return time;
 	}
 	
-	
+	public WarStrategy strategy() {
+		return strategy;
+	}
 	
 
 }

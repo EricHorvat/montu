@@ -142,6 +142,7 @@ enquirer.prompt([
 	}
 
 	config.environment.time *= MINUTES_IN_A_MONTH;
+	config.environment.strategy = 'DOMINATION_BY_OCCUPATION';
 
 	
 	config.kingdoms = range(config.kingdom_count, 1).map(i => {
@@ -151,13 +152,14 @@ enquirer.prompt([
 			offenseCapacity,
 			color: randomColor().rgbNumber(),
 			warriorSpeed: d3.randomNormal(0.23, 0.023)(), // double
+			weakFriends: d3.randomUniform()() > 0.5,
 			castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
 				name: faker.address.city(),
 				characteristics: {
 					viewDistance: d3.randomUniform(2, 5)(), // double
 					attackDistance: d3.randomUniform(1,1.5)(), // double
 					healthPoints: Math.round(d3.randomUniform(5000, 10000)()),
-                    resources: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)()),
+					resources: BASE_WARRIOR_COST * Math.round(d3.randomNormal(25, 5)()),
 					spawnProbability: d3.randomUniform(0.1, 5)() / 100
 				},
 				location: {
@@ -172,6 +174,17 @@ enquirer.prompt([
 	config.minPriorityDistance = 1e-4;
 	config.superWarriorProbability = 1e-4;
 	config.healthOffensiveRollCoefficient = 0.7;
+	
+	config.castlePowerCoefficient = 100;
+	config.hpPowerCoefficient = 100;
+	config.warriorPowerCoefficient = 100;
+	config.friendProbability = 0.2;
+	config.rivalProbability = 0.6;
+	config.updateNegotationTicks = 100;
+	config.friendshipTicks = 100;
+	config.rivalPriorityCoefficient = 2.5;
+	config.friendPriorityCoefficient = 0.4;
+	config.resourcesPerMinute = 1;
 
 	delete config.min_castles;
 	delete config.max_castles;
