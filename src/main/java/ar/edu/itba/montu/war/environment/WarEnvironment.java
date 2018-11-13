@@ -24,21 +24,16 @@ public class WarEnvironment {
 	private static WarEnvironment environment;
 
 	private final List<Kingdom> kingdoms;
-	private final WarStrategy strategy;
 	
 	private long time;
 
-	private WarEnvironment(final WarStrategy strategy, final List<Kingdom> kingdoms) {
-		kingdoms.forEach(kingdom -> {
-			kingdom.applyStrategy(strategy);
-		});
+	private WarEnvironment(final List<Kingdom> kingdoms) {
 		this.kingdoms = kingdoms;
-		this.strategy = strategy;
 	}
 	
-	/*package*/ static WarEnvironment withKingdomsAndStrategy(final WarStrategy strategy, final List<Kingdom> kingdoms) {
+	/*package*/ static WarEnvironment withKingdoms(final List<Kingdom> kingdoms) {
 		if (environment == null) {
-			environment = new WarEnvironment(strategy, kingdoms);
+			environment = new WarEnvironment(kingdoms);
 		}
 		return environment;
 	}

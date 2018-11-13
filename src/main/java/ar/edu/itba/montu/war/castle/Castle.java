@@ -8,6 +8,7 @@ import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.abstraction.*;
 import ar.edu.itba.montu.configuration.Configuration;
 import ar.edu.itba.montu.interfaces.Objective;
+import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.objective.AttackObjective;
 import ar.edu.itba.montu.war.objective.DefendObjective;
 import ar.edu.itba.montu.war.people.WarriorRole;
@@ -231,32 +232,33 @@ public class Castle extends LocatableAgent implements Spawner {
 		int hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
-			/* OLD DEATH
-			this.status = LocatableAgentStatus.DEAD;
-			hp = 0;
-			WarEnvironment.getInstance().onCastleDeath(this);
-			int ownResources = this.characteristics.resources();
-			Castle enemyCastle = agent.castle();
-			if (!enemyCastle.isAlive()){
-				List<Castle> aliveCastles = agent.kingdom().castles();
-				if(aliveCastles.size() == 0){
-					enemyCastle = null;
-				}else if(aliveCastles.size() == 1){
-					enemyCastle = aliveCastles.get(0);
-				}else{
-					enemyCastle = aliveCastles.get(RandomUtil.getRandom().nextInt(aliveCastles.size()-1));
+			if (Configuration.WAR_STRATEGY.equals(WarStrategy.DOMINATION_BY_DESTRUCTION)) {
+				this.status = LocatableAgentStatus.DEAD;
+				hp = 0;
+				WarEnvironment.getInstance().onCastleDeath(this);
+				int ownResources = this.characteristics.resources();
+				Castle enemyCastle = agent.castle();
+				if (!enemyCastle.isAlive()) {
+					List<Castle> aliveCastles = agent.kingdom().castles();
+					if (aliveCastles.size() == 0) {
+						enemyCastle = null;
+					} else if (aliveCastles.size() == 1) {
+						enemyCastle = aliveCastles.get(0);
+					} else {
+						enemyCastle = aliveCastles.get(RandomUtil.getRandom().nextInt(aliveCastles.size() - 1));
+					}
 				}
+				if (enemyCastle != null) {
+					CastleCharacteristics enemyCharacteristics = agent.castle().characteristics();
+					enemyCharacteristics.boostResourcesBy(Integer.max(0, ownResources + enemyCharacteristics.resources() - enemyCharacteristics.maxResources()));
+					enemyCharacteristics.increaseResources(ownResources);
+					this.characteristics.useResources(ownResources);
+				}
+			}else {
+				this.characteristics().increaseDeaths();
+				this.kingdom = agent.kingdom();
+				hp = (int) (this.characteristics().maxHealthPoints() / (1 + this.characteristics().deaths()));
 			}
-			if (enemyCastle != null){
-				CastleCharacteristics enemyCharacteristics = agent.castle().characteristics();
-				enemyCharacteristics.boostResourcesBy(Integer.max(0,ownResources + enemyCharacteristics.resources() - enemyCharacteristics.maxResources()));
-				enemyCharacteristics.increaseResources(ownResources);
-				this.characteristics.useResources(ownResources);
-			}*/
-			/*NEW DEATH*/
-			this.characteristics().increaseDeaths();
-			this.kingdom = agent.kingdom();
-			hp = (int)(this.characteristics().maxHealthPoints()/(1+this.characteristics().deaths()));
 		}
 		characteristics.healthPoints(hp);
 	}

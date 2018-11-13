@@ -1,5 +1,7 @@
 package ar.edu.itba.montu.configuration;
 
+import ar.edu.itba.montu.war.environment.WarStrategy;
+
 import java.util.List;
 
 public final class Configuration {
@@ -15,6 +17,7 @@ public final class Configuration {
 	public static double FRIEND_PRIORITY_COEF = 0.4;
 	public static boolean FRIEND_WEAKERS = true;
 	public static final int RESOURCES_PER_MINUTE = 1;
+	public static WarStrategy WAR_STRATEGY = WarStrategy.DOMINATION_BY_OCCUPATION;
 	
 	
 	public static final class EnvironmentConfiguration {

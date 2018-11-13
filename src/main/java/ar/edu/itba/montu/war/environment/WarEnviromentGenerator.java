@@ -66,7 +66,7 @@ public class WarEnviromentGenerator {
 		
 		logger.info("Done creating environment");
 
-    WarEnvironment.withKingdomsAndStrategy(WarStrategy.CAPTURE_THE_FLAG, kingdoms);
+    WarEnvironment.withKingdoms(kingdoms);
 //		KingdomColorGetter.putKingdoms(kingdoms);
   }
 	

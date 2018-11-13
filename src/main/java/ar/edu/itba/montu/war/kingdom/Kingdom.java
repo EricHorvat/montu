@@ -18,7 +18,6 @@ import ar.edu.itba.montu.interfaces.KingdomObjective;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.castle.CastleBuilder;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
-import ar.edu.itba.montu.war.environment.WarStrategy;
 import ar.edu.itba.montu.war.kingdom.objective.KingdomAttackObjective;
 import ar.edu.itba.montu.war.kingdom.objective.KingdomDefendObjective;
 import ar.edu.itba.montu.war.utils.Coordinate;
@@ -39,7 +38,6 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	private int color = 0xffffff;
 	private List<LocatableAgent> agents = new ArrayList<>();
-	private Optional<WarStrategy> strategy;
 	private KingdomStatus status = KingdomStatus.IDLE;
 	private int lastFriendNumber;
 
@@ -48,10 +46,6 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	  this.name = name;
 		this.characteristics = kingdomCharacteristics;
 		this.castles = castles.stream().map(c -> c.kingdom(this).build()).collect(Collectors.toList());
-	}
-
-	public void applyStrategy(final WarStrategy strategy) {
-		this.strategy = Optional.of(strategy);
 	}
 
 	public KingdomStatus currentStatus() {
