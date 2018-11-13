@@ -16,6 +16,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 
 import ar.edu.itba.montu.visual.ProcessingApplet;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 
 public class Streamer {
 
@@ -65,6 +66,9 @@ public class Streamer {
 			kingdom.put("offense_capcity", k.characteristics().offenseCapacity());
 			kingdom.put("warrior_speed", k.characteristics().warriorSpeed());
 			kingdom.put("color", "#" + Integer.toHexString(k.color()));
+			kingdom.put("friends", k.friends().stream().map(Kingdom::uid).collect(Collectors.toList()));
+			kingdom.put("rivals", k.rivals().stream().map(Kingdom::uid).collect(Collectors.toList()));
+			kingdom.put("enemies", k.enemies().stream().map(Kingdom::uid).collect(Collectors.toList()));
 			return kingdom;
 		}).collect(Collectors.toList()));
     

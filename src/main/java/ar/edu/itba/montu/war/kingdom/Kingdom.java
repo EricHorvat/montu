@@ -65,7 +65,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			.filter(possibleFriend -> !(friends.keySet().contains(possibleFriend) || rivals.contains(possibleFriend)))
 			.collect(Collectors.toList());
 		
-		for (Kingdom possibleFriend: possibleFriendKingdoms) {
+		for (Kingdom possibleFriend : possibleFriendKingdoms) {
 			if (friendsToFind > 0) {
 				/*EVALUATE FRIENDSHIP?*/
 				if (possibleFriend.befriend(this)) {
@@ -85,7 +85,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 			boolean itsStrong = RandomUtil.getRandom().nextDouble() * this.power() < kingdom.power();
 			// itsStrong XOR true = !itsStrong; itsStrong XOR false = itsStrong
 			boolean befriend = itsStrong ^ this.alliesWithWeakFriends;
-			if (befriend){
+			if (befriend) {
 				friends.put(kingdom, App.getConfiguration().getFriendshipTicks());
 				return true;
 			}
@@ -101,7 +101,11 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	public void negotiate() {
 		final WarEnvironment environment = WarEnvironment.getInstance();
-		final List<Kingdom> otherKingdoms = environment.kingdoms().stream().filter(k -> !k.equals(this)).collect(Collectors.toList());
+		final List<Kingdom> otherKingdoms = environment
+				.kingdoms()
+				.stream()
+				.filter(k -> !k.equals(this))
+				.collect(Collectors.toList());
 		
 		otherKingdoms.sort(Comparator.comparingDouble(Kingdom::power));
 		int friendsToFind = (int)(App.getConfiguration().getFriendProbability() * otherKingdoms.size());
@@ -131,11 +135,11 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 		final List<LocatableAgent> visibleAgents = castles.stream().map(Castle::visibleAgents).flatMap(List::stream).collect(Collectors.toList());
 		
 		kingdoms.forEach(kingdom -> {
-			KingdomObjective ko;
+			KingdomObjective kingdomObjective;
 			double priority;
 			if (kingdom.equals(this)) {
 				priority = RandomUtil.getRandom().nextDouble()* characteristics().defenseCapacity();
-				ko = KingdomDefendObjective.fromWithPriority(this,priority);
+				kingdomObjective = KingdomDefendObjective.fromWithPriority(this, priority);
 			} else{
 				priority = RandomUtil.getRandom().nextDouble() * characteristics().offenseCapacity();
 				if (rivals.contains(kingdom)){
@@ -144,10 +148,10 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 				if (friends.keySet().contains(kingdom)){
 					priority *= App.getConfiguration().getFriendPriorityCoefficient();
 				}
-				ko = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
+				kingdomObjective = KingdomAttackObjective.headedToWithPriority(kingdom,priority);
 			}
-			logger.debug("{} has objective {}", name, ko);
-			objectives.add(ko);
+			logger.debug("{} has objective {}", name, kingdomObjective);
+			objectives.add(kingdomObjective);
 			//}
 		});
 		
@@ -253,6 +257,18 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 
 	public int color() {
 		return color;
+	}
+	
+	public List<Kingdom> rivals() {
+		return rivals;
+	}
+	
+	public List<Kingdom> enemies() {
+		return enemies;
+	}
+	
+	public Set<Kingdom> friends() {
+		return friends.keySet();
 	}
 	
 	public double power() {

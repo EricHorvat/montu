@@ -15,6 +15,13 @@ class App extends Component {
 		castles: {},
 		time: 0
 	}
+	
+	connectUsingDefault = () => {
+		this.setState({ address: '127.0.0.1:1337' });
+		setTimeout(() => {
+			this.connect();
+		}, 200);
+	}
 
 	connect = () => {
 
@@ -47,14 +54,10 @@ class App extends Component {
 
 			const { kingdoms, castles } = this.state;
 
-			let nextKingdoms = kingdoms;
-
-			if (!Object.keys(kingdoms).length) {
-				nextKingdoms = Object.assign({}, kingdoms);
-				data.kingdoms.forEach(k => {
-					nextKingdoms[k.id] = k;
-				});
-			}
+			let nextKingdoms = Object.assign({}, kingdoms);
+			data.kingdoms.forEach(k => {
+				nextKingdoms[k.id] = k;
+			});
 
 			const nextCastles = Object.assign({}, castles);
 
@@ -138,7 +141,7 @@ class App extends Component {
 	handleChange = key => e => this.setState({ [key]: e.target.value })
 
 	render = () =>  {
-		const { loading, connected, kingdoms, castles, time, focus, focusKingdom } = this.state;
+		const { loading, connected, kingdoms, castles, time, focus, focusKingdom, address } = this.state;
 
 		if (!connected) {
 			return (
@@ -151,12 +154,13 @@ class App extends Component {
 							<div className="modal-body">
 								<form>
 									<div className="form-group">
-										<input className="form-control" placeholder="Server Address" onChange={this.handleChange('address')} />
+										<input className="form-control" placeholder="Server Address" value={address} onChange={this.handleChange('address')} />
 									</div>
 								</form>
 							</div>
 							<div className="modal-footer">
 								<button type="button" className="btn btn-primary" onClick={this.connect}>Connect</button>
+								<button type="button" className="btn btn-secondary" onClick={this.connectUsingDefault}>Connect to Default Server</button>
 							</div>
 						</div>
 					</div>
@@ -305,11 +309,34 @@ class App extends Component {
 			));
 		})();
 
+		const kingdomFriendships = (
+			<table className="table table-sm">
+				<thead>
+					<th></th>
+					{Object.values(kingdoms).map(k => <th key={k.id}>{k.name}</th>)}
+				</thead>
+				<tbody>
+					{Object.values(kingdoms).map(k1 => (
+						<tr key={k1.id}>
+							<td>{k1.name}</td>
+							{Object.values(kingdoms).map(k2 => {
+								const friends = ~k1.friends.indexOf(k2.id);
+								const enemies = ~k1.enemies.indexOf(k2.id);
+								const rivals = ~k1.rivals.indexOf(k2.id);
+								return <td key={k2.id}>{[friends ? 'F' : ' ', enemies ? 'E' : ' ', rivals ? 'R': ' '].join('|')}</td>
+							})}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		);
+			
+
 		return (
-			<div className="container">
+			<div className="container-fluid">
 				<h1>Time: {moment.duration(time, 'minutes').format()}</h1>
 				<div className="row">
-					<div className="col-sm-6">
+					<div className="col-sm-4">
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title">Castles</h5>
@@ -317,7 +344,7 @@ class App extends Component {
 							</div>
 						</div>
 					</div>
-					<div className="col-sm-3">
+					<div className="col-sm-2">
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title">Map</h5>
@@ -344,11 +371,19 @@ class App extends Component {
 							</div>
 						</div>
 					</div>
-					<div className="col-sm-3">
+					<div className="col-sm-2">
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title">Kingdoms</h5>
 								<ul className="list-unstyled">{kingdomList}</ul>
+							</div>
+						</div>
+					</div>
+					<div className="col-sm-4">
+						<div className="card">
+							<div className="card-body">
+								<h5 className="card-title">Kingdom Friendships</h5>
+								{kingdomFriendships}
 							</div>
 						</div>
 					</div>
