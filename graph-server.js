@@ -57,7 +57,7 @@ wsServer.on('request', (request) => {
 					conn.sendUTF(JSON.stringify({ init: 1 }));
 				});
 			} else {
-				fileStream.write(JSON.stringify(message));
+				fileStream.write(message.utf8Data);
 				fileStream.write('\n');
 				connections.forEach(conn => {
 					console.log('sending to connection ' + conn.id);

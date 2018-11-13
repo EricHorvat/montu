@@ -313,7 +313,7 @@ class App extends Component {
 			<table className="table table-sm">
 				<thead>
 					<th></th>
-					{Object.values(kingdoms).map(k => <th key={k.id}>{k.name}</th>)}
+					{Object.values(kingdoms).map(k => <th className="text-center" key={k.id}>{k.name}</th>)}
 				</thead>
 				<tbody>
 					{Object.values(kingdoms).map(k1 => (
@@ -323,7 +323,7 @@ class App extends Component {
 								const friends = ~k1.friends.indexOf(k2.id);
 								const enemies = ~k1.enemies.indexOf(k2.id);
 								const rivals = ~k1.rivals.indexOf(k2.id);
-								return <td key={k2.id}>{[friends ? 'F' : ' ', enemies ? 'E' : ' ', rivals ? 'R': ' '].join('|')}</td>
+								return <td className="text-center" key={k2.id}>{[friends ? '👫' : '', enemies ? '💣' : '', rivals ? '😡': ''].filter(Boolean).join('   ')}</td>
 							})}
 						</tr>
 					))}
