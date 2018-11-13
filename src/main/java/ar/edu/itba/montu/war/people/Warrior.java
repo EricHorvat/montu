@@ -198,7 +198,7 @@ public class Warrior extends MovingAgent {
 					}
 					return;
 				} else if (target().isPresent()) {
-					if (target().get().isAlive()) {
+					if (target().get().isAlive() && !target().get().kingdom().equals(kingdom())) {
 						if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 							target().get().defend(this, warriorCharacteristics.attackHarm());
 							return;
@@ -207,6 +207,7 @@ public class Warrior extends MovingAgent {
 						}
 					} else{
 						unassign(target().get());
+						status = WarriorStatus.MOVING;
 					}
 				}
 			case WarriorStatus.DEAD:
