@@ -11,6 +11,7 @@ public class ProcessingApplet extends PApplet {
 	
 	private static ProcessingApplet instance;
 	public static boolean drawDistance = false;
+	public static boolean drawLabels = false;
 	int zoomLevel = 0;
   
   @Override
@@ -103,6 +104,11 @@ public class ProcessingApplet extends PApplet {
 			case 'v':
 			case 'V':
 				drawDistance = !drawDistance;
+				break;
+			case 'l':
+			case 'L':
+				drawLabels = !drawLabels;
+				break;
 		}
 	}
 	

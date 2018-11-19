@@ -10,6 +10,8 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.environment.WarEnvironment;
 
+import static ar.edu.itba.montu.visual.ProcessingApplet.drawLabels;
+
 /*package*/ abstract class ProcessingVisualAgent extends VisualAgent{
 
   private static List<ProcessingVisualAgent> visualAgents = new ArrayList<>();
@@ -90,7 +92,7 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
     return inverseZoomLinearMapY(value,true);
   }
   
-  private static String toHumanReadable(final Long time) {
+  /*package*/ static String toHumanReadable(final Long time) {
   	final long days = TimeUnit.MINUTES.toDays(time);
     return String.format("%d days", days);
   }
@@ -99,17 +101,9 @@ import ar.edu.itba.montu.war.environment.WarEnvironment;
     x = zoomLinearMapXfromOrigin(locatableAgent.location().X);
     y = zoomLinearMapYfromOrigin(locatableAgent.location().Y);
     		
-    		//(float) locatableAgent.location().X + MAX_R;
-//    y = (float) locatableAgent.location().Y + MAX_R;
-  
-    if (DEBUG) {
-    	applet.fill(applet.color(255));
-    	if (locatableAgent instanceof Castle) {
-    		applet.text(locatableAgent.toString(), x - 20, y + 20);
-    	}
-      
-      applet.text(toHumanReadable(WarEnvironment.getInstance().time()), 10, 10);
-    }
+    //x = (float) locatableAgent.location().X + MAX_R;
+	  //y = (float) locatableAgent.location().Y + MAX_R;
+	  
     
     int color = locatableAgent.kingdom().color();
     int r = (color & 0xff0000) >> 16;

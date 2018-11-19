@@ -4,6 +4,10 @@ import java.util.UUID;
 
 import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.war.castle.Castle;
+import ar.edu.itba.montu.war.environment.WarEnvironment;
+
+import static ar.edu.itba.montu.visual.ProcessingApplet.drawDistance;
+import static ar.edu.itba.montu.visual.ProcessingApplet.drawLabels;
 
 /*package*/ class CastleProcessingVisualAgent extends ProcessingVisualAgent{
   private static final float R = 0.7f;
@@ -19,7 +23,7 @@ import ar.edu.itba.montu.war.castle.Castle;
     final float Ry = zoomLinearMapY(R);
     applet.rect(x - Rx, y - Ry, 2 * Rx, 2 * Ry);
     applet.noFill();
-    if (ProcessingApplet.drawDistance) {
+    if (drawDistance) {
     	final Castle castle = (Castle)locatableAgent; 
       final float viewDistance = (float)castle.characteristics().viewDistance();
       final float attackDistance = (float)castle.characteristics().attackDistance();
@@ -36,6 +40,16 @@ import ar.edu.itba.montu.war.castle.Castle;
       applet.ellipse(x, y, zoomLinearMapX(2 * attackDistance), zoomLinearMapY(2 * attackDistance));
       
       applet.stroke(0x000000);
+  
     }
+    if (drawLabels) {
+      applet.fill(applet.color(255));
+      if (locatableAgent instanceof Castle) {
+        applet.text(locatableAgent.toString(), x - 20, y + 20);
+      }
+    
+      applet.text(toHumanReadable(WarEnvironment.getInstance().time()), 10, 10);
+    }
+  
   }
 }

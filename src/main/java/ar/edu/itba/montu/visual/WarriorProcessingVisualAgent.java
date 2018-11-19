@@ -6,6 +6,8 @@ import ar.edu.itba.montu.abstraction.LocatableAgent;
 import ar.edu.itba.montu.war.castle.Castle;
 import ar.edu.itba.montu.war.people.Warrior;
 
+import static ar.edu.itba.montu.visual.ProcessingApplet.drawDistance;
+
 /*package*/ class WarriorProcessingVisualAgent extends ProcessingVisualAgent{
   private static final float R = 0.35f;
 
@@ -30,7 +32,7 @@ import ar.edu.itba.montu.war.people.Warrior;
     }
   
     applet.noFill();
-    if (ProcessingApplet.drawDistance) {
+    if (drawDistance) {
     	final Warrior w = (Warrior) locatableAgent;
       final float viewDistance = (float)w.characteristics().viewDistance();
       final float attackDistance = (float)w.characteristics().attackDistance();
