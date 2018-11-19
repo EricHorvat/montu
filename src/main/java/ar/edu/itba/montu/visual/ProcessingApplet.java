@@ -11,6 +11,7 @@ public class ProcessingApplet extends PApplet {
 	float originX = 0, originY = 0;
 	
 	private static ProcessingApplet instance;
+	private static Background background;
 	public static boolean drawDistance = false;
 	public static boolean drawLabels = false;
 	public static boolean paused = false;
@@ -19,6 +20,7 @@ public class ProcessingApplet extends PApplet {
   @Override
   public void setup() {
     super.setup();
+	  background = new Background(this);
   }
   
   public static ProcessingApplet instance() {
@@ -47,7 +49,7 @@ public class ProcessingApplet extends PApplet {
     clear();
     colorMode(RGB);
     
-    background(loadImage("balcan.png"));
+    background.draw(this);
     
 //    colorMode(HSB, 360, 100, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();

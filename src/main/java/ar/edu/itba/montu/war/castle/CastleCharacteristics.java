@@ -37,7 +37,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 		);
 		this.resources = Characteristic.withChangingValue(0, resources);
 		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
-		this.deaths = Characteristic.withChangingValue(0, 0, 0);
+		this.deaths = Characteristic.withChangingValue(0, 2, 0);
 	}
 
 	public int resources() {

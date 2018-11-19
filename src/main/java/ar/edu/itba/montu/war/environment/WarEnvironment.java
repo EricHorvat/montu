@@ -112,7 +112,7 @@ public class WarEnvironment {
 	private void updateVisual(final long timeElapsed) {
 		ProcessingApplet.instance().noLoop();
 		ProcessingApplet.instance().redraw();
-		try{Thread.sleep(1L);}catch (InterruptedException e){}
+		try{Thread.sleep(10L);}catch (InterruptedException e){}
 	}
 
 	public List<Kingdom> kingdoms() {
