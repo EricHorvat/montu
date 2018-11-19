@@ -6,6 +6,7 @@ environment:
 viewport:
   width: 800
   height: 800
+  backgroundImage: null
 kingdoms:
   - name: Equatorial Guinea
     offenseCapacity: 49
@@ -15,6 +16,7 @@ kingdoms:
     castles:
       - name: New Rosemary
         characteristics:
+          deaths: 3
           viewDistance: 2.0927074389168627
           attackDistance: 1.067112647702228
           healthPoints: 5996
@@ -31,6 +33,7 @@ kingdoms:
     castles:
       - name: East Bryonchester
         characteristics:
+          deaths: 3
           viewDistance: 2.747556659271229
           attackDistance: 1.1295995937784622
           healthPoints: 9943
@@ -41,6 +44,7 @@ kingdoms:
           lng: 37.23814636750383
       - name: South Henri
         characteristics:
+          deaths: 0
           viewDistance: 4.351841527172499
           attackDistance: 1.3511158755881016
           healthPoints: 8239
@@ -57,6 +61,7 @@ kingdoms:
     castles:
       - name: Danielview
         characteristics:
+          deaths: 3
           viewDistance: 4.403869298993244
           attackDistance: 1.284106332502577
           healthPoints: 5114
@@ -67,6 +72,7 @@ kingdoms:
           lng: 64.26600714421816
       - name: Othaland
         characteristics:
+          deaths: 2
           viewDistance: 2.844023633451277
           attackDistance: 1.0711013558235645
           healthPoints: 5463
@@ -83,6 +89,7 @@ kingdoms:
     castles:
       - name: West Godfrey
         characteristics:
+          deaths: 3
           viewDistance: 4.326292768192189
           attackDistance: 1.1036346610137218
           healthPoints: 5009
@@ -99,6 +106,7 @@ kingdoms:
     castles:
       - name: Davidhaven
         characteristics:
+          deaths: 0
           viewDistance: 2.350567529776975
           attackDistance: 1.370920039937535
           healthPoints: 5152
@@ -109,6 +117,7 @@ kingdoms:
           lng: 21.8344969650051
       - name: Aureliafurt
         characteristics:
+          deaths: 0
           viewDistance: 3.567747842937866
           attackDistance: 1.3723999573065093
           healthPoints: 5763
