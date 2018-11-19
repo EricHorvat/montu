@@ -63,7 +63,7 @@ public class Streamer {
 			Map<String, Object> kingdom = new HashMap<String, Object>();
 			kingdom.put("id", k.uid().toString());
 			kingdom.put("name", k.name());
-			kingdom.put("offense_capcity", k.characteristics().offenseCapacity());
+			kingdom.put("offense_capacity", k.characteristics().offenseCapacity());
 			kingdom.put("warrior_speed", k.characteristics().warriorSpeed());
 			kingdom.put("color", "#" + Integer.toHexString(k.color()));
 			kingdom.put("friends", k.friends().stream().map(Kingdom::uid).collect(Collectors.toList()));
