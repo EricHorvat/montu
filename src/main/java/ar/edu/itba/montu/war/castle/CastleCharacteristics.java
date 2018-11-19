@@ -22,7 +22,8 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 			final KingdomCharacteristics kingdomCharacteristics,
 			final AttackingAgentCharacteristics attackCharacteristics,
 			final int resources,
-			final double spawnProbability
+			final double spawnProbability,
+			final int deaths
 	) {
 		super(
 				LocatableAgentCharacteristics.withViewDistanceAndHealthPoints(
@@ -37,7 +38,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 		);
 		this.resources = Characteristic.withChangingValue(0, resources);
 		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
-		this.deaths = Characteristic.withChangingValue(0, 0, 0);
+		this.deaths = Characteristic.withChangingValue(0, deaths, 0);
 	}
 
 	public int resources() {
@@ -89,8 +90,9 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	
 	public void increaseDeaths() {
-		if (!this.deaths.value().equals(this.deaths.maxValue()))
+		if (!this.deaths.value().equals(this.deaths.maxValue())) {
 			this.deaths.updateValue(this.deaths.value() + 1);
+		}
 	}
 
 	@Override

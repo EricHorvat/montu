@@ -15,6 +15,7 @@ kingdoms:
     castles:
       - name: Podgorica
         characteristics:
+          deaths: 3
           viewDistance: 4.019721058779183
           attackDistance: 1.2850992042338176
           healthPoints: 7146
@@ -31,6 +32,7 @@ kingdoms:
     castles:
       - name: Sarajevo
         characteristics:
+          deaths: 2
           viewDistance: 4.191220202620336
           attackDistance: 1.174976008639634
           healthPoints: 8711
@@ -41,6 +43,7 @@ kingdoms:
           lng: 446.09989455901336
       - name: Banja Luka
         characteristics:
+          deaths: 1
           viewDistance: 4.634682675743818
           attackDistance: 1.460519953418319
           healthPoints: 9340
@@ -57,6 +60,7 @@ kingdoms:
     castles:
       - name: Ljubljana
         characteristics:
+          deaths: 2
           viewDistance: 4.273831657783104
           attackDistance: 1.4174246824747783
           healthPoints: 5362
@@ -73,6 +77,7 @@ kingdoms:
     castles:
       - name: Skopje
         characteristics:
+          deaths: 3
           viewDistance: 3.1221456142824557
           attackDistance: 1.100130999818237
           healthPoints: 7283
@@ -89,6 +94,7 @@ kingdoms:
     castles:
       - name: Zagreb
         characteristics:
+          deaths: 2
           viewDistance: 4.343021003251944
           attackDistance: 1.1552357765377268
           healthPoints: 5873
@@ -99,6 +105,7 @@ kingdoms:
           lng: 144.1742795856806
       - name: Split
         characteristics:
+          deaths: 2
           viewDistance: 4.535356583252965
           attackDistance: 1.1020062295544175
           healthPoints: 5115
@@ -115,6 +122,7 @@ kingdoms:
     castles:
       - name: Belgrade
         characteristics:
+          deaths: 0
           viewDistance: 2.9308129078749925
           attackDistance: 1.2333795920005595
           healthPoints: 6440
@@ -125,6 +133,7 @@ kingdoms:
           lng: 308.4944585856807
       - name: Novi
         characteristics:
+          deaths: 2
           viewDistance: 4.121783863126263
           attackDistance: 1.1921116084010879
           healthPoints: 7928

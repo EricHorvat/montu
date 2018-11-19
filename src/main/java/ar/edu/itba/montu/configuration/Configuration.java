@@ -47,6 +47,7 @@ public final class Configuration {
 		private int healthPoints;
 		private int resources;
 		private double spawnProbability;
+		private int deaths;
 		public double getViewDistance() {
 			return viewDistance;
 		}
@@ -76,6 +77,12 @@ public final class Configuration {
 		}
 		public void setSpawnProbability(double spawnProbability) {
 			this.spawnProbability = spawnProbability;
+		}
+		public int getDeaths() {
+			return deaths;
+		}
+		public void setDeaths(int deaths) {
+			this.deaths = deaths;
 		}
 		@Override
 		public String toString() {
