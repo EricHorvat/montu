@@ -8,6 +8,8 @@ import java.util.stream.LongStream;
 
 import ar.edu.itba.montu.App;
 import ar.edu.itba.montu.configuration.Configuration;
+import ar.edu.itba.montu.war.people.Warrior;
+import ar.edu.itba.montu.war.people.WarriorStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,7 +77,6 @@ public class WarEnvironment {
 			if (!paused) {
 				tick(timeElapsed);
 				timeElapsed++;
-				/*TODO CHECK ENDED CONDITION*/
 			}
 			updateVisual(timeElapsed);
 		}
@@ -101,16 +102,17 @@ public class WarEnvironment {
 	private void checkEndCondition(){
 		WarStrategy warStrategy = App.getConfiguration().getEnvironment().getStrategy();
 		if( warStrategy.equals(WarStrategy.DOMINATION_BY_DESTRUCTION)){
-			ended = false;
+			ended = locatableAgents().stream().filter(agent -> agent instanceof Castle).map(LocatableAgent::kingdom).distinct().count() <= 1;
+			ended &= locatableAgents().stream().filter(agent -> !(agent instanceof Castle)).map(agent -> ((Warrior)agent).status().equals(WarriorStatus.DEFENDING) || ((Warrior)agent).status().equals(WarriorStatus.UNASSIGNED)).reduce(Boolean::logicalAnd).orElse(true);
 		}else{
-			ended = false;
+			ended = locatableAgents().stream().map(LocatableAgent::kingdom).distinct().count() == 1;
 		}
 	}
 	
 	private void updateVisual(final long timeElapsed) {
 		ProcessingApplet.instance().noLoop();
 		ProcessingApplet.instance().redraw();
-		try{Thread.sleep(20L);}catch (InterruptedException e){}
+		try{Thread.sleep(1L);}catch (InterruptedException e){}
 	}
 
 	public List<Kingdom> kingdoms() {

@@ -2,7 +2,7 @@ environment:
   size: 80
   time: 518400
   seed: 9159
-  strategy: DOMINATION_BY_OCCUPATION
+  strategy: DOMINATION_BY_DESTRUCTION
 viewport:
   width: 800
   height: 800
