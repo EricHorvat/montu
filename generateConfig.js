@@ -144,6 +144,8 @@ enquirer.prompt([
 	config.environment.time *= MINUTES_IN_A_MONTH;
 	config.environment.strategy = 'DOMINATION_BY_OCCUPATION';
 
+	config.viewport.backgroundImage = null;
+
 	
 	config.kingdoms = range(config.kingdom_count, 1).map(i => {
 		const offenseCapacity = Math.round(d3.randomUniform(1, 100)());

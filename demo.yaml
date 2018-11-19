@@ -6,6 +6,7 @@ environment:
 viewport:
   width: 800
   height: 800
+  backgroundImage: null
 kingdoms:
   - name: Equatorial Guinea
     offenseCapacity: 49
@@ -70,8 +71,8 @@ kingdoms:
           lat: 34.06908081718807
           lng: 64.26600714421816
       - name: Othaland
-        characteristic
-          deaths: 2s:
+        characteristics:
+          deaths: 2
           viewDistance: 2.844023633451277
           attackDistance: 1.0711013558235645
           healthPoints: 5463

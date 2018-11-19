@@ -196,6 +196,7 @@ public final class Configuration {
 	public final static class ViewportConfiguration {
 		private int width;
 		private int height;
+		private String backgroundImage;
 		public int getWidth() {
 			return width;
 		}
@@ -207,6 +208,12 @@ public final class Configuration {
 		}
 		public void setHeight(int height) {
 			this.height = height;
+		}
+		public String getBackgroundImage() {
+			return backgroundImage;
+		}
+		public void setBackgroundImage(String backgroundImage) {
+			this.backgroundImage = backgroundImage;
 		}
 		@Override
 		public String toString() {

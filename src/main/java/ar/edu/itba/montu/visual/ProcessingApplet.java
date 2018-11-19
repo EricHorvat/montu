@@ -1,7 +1,9 @@
 package ar.edu.itba.montu.visual;
 
 import java.util.List;
+import java.util.Optional;
 
+import ar.edu.itba.montu.App;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -46,8 +48,12 @@ public class ProcessingApplet extends PApplet {
   public void draw() {
     clear();
     colorMode(RGB);
+	
+	  Optional.ofNullable(App.getConfiguration().getViewport().getBackgroundImage()).ifPresent(backgroundImage -> {
+	  	background(loadImage(backgroundImage));
+	  });
     
-    background(loadImage("balcan.png"));
+   
     
 //    colorMode(HSB, 360, 100, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
