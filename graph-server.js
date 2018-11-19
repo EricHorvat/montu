@@ -60,7 +60,7 @@ wsServer.on('request', (request) => {
 				fileStream.write(message.utf8Data);
 				fileStream.write('\n');
 				connections.forEach(conn => {
-					console.log('sending to connection ' + conn.id);
+//					console.log('sending to connection ' + conn.id);
 					conn.sendUTF(message.utf8Data);
 				});
 			}

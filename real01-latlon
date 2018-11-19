@@ -1,0 +1,15 @@
+  - name: Montenegro
+      - name: Podgorica: 42.438061, 19.265551
+  - name: Bosnia and Herzegovina
+      - name: Sarajevo: 43.858181, 18.412340
+      - name: Banja Luka: 44.772350, 17.191681
+  - name: Slovenia
+      - name: Ljubljana: 46.051430, 14.505970
+  - name: Macedonia
+      - name: Skopje: 41.997345, 21.427996
+  - name: Croatia
+      - name: Zagreb: 45.815010, 15.981919
+      - name: Split: 43.508133, 16.440193
+  - name: Serbia
+      - name: Belgrade: 44.815071, 20.460480
+      - name: Novi: 45.254410, 19.842550

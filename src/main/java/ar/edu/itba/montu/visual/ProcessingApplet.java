@@ -3,6 +3,7 @@ package ar.edu.itba.montu.visual;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class ProcessingApplet extends PApplet {
 	
@@ -44,6 +45,9 @@ public class ProcessingApplet extends PApplet {
   public void draw() {
     clear();
     colorMode(RGB);
+    
+    background(loadImage("balcan.png"));
+    
 //    colorMode(HSB, 360, 100, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
     for (int i = a.size() - 1; i >= 0; i--) {

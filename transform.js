@@ -1,0 +1,1 @@
+require('fs').readFileSync('./real01-proj.list').toString().split('\n').map(l => l.split(';').map(parseFloat)).map(([x, y]) => [x - 6857660.54501570, -(y - 5194896.94206926)]).map(([x, y]) => [x / 1000, y / 1000])

@@ -153,6 +153,7 @@ public class Warrior extends MovingAgent {
 					this.moveToImmediateTarget();
 					return;
 				}
+				if (!target().isPresent()) return;
 				// if we are headed toward a target then keep moving
 				if (Coordinate.distanceBetween(location, target().get().location()) < warriorCharacteristics.attackDistance()) {
 					if (kingdom().castles().contains(target().get())) {
@@ -230,6 +231,7 @@ public class Warrior extends MovingAgent {
 
 	@Override
 	public int getHealthPointPercentage() {
+		if (warriorCharacteristics == null) return 0;
 		return (int)(100 * warriorCharacteristics.healthPercentage());
 	}
 
@@ -239,11 +241,11 @@ public class Warrior extends MovingAgent {
 
 	@Override
 	public boolean isAlive() {
-		return !status.equals(WarriorStatus.DEAD);
+		return !WarriorStatus.DEAD.equals(status);
 	}
 	
 	public boolean isAvailable() {
-		return status.equals(WarriorStatus.UNASSIGNED); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
+		return WarriorStatus.UNASSIGNED.equals(status); // status != WarriorStatus.SPAWNING && status != WarriorStatus.DEAD && !target.isPresent();
 	}
 
 	public int resourcesCost(){

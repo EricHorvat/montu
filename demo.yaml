@@ -1,0 +1,133 @@
+environment:
+  size: 80
+  time: 518400
+  seed: 9159
+  strategy: DOMINATION_BY_OCCUPATION
+viewport:
+  width: 1024
+  height: 1024
+kingdoms:
+  - name: Equatorial Guinea
+    offenseCapacity: 49
+    color: 15890825
+    warriorSpeed: 0.20983376491393388
+    weakFriends: true
+    castles:
+      - name: New Rosemary
+        characteristics:
+          viewDistance: 2.0927074389168627
+          attackDistance: 1.067112647702228
+          healthPoints: 5996
+          resources: 95040
+          spawnProbability: 0.008332275021463697
+        location:
+          lat: 3.630336200470392
+          lng: 61.931103467628446
+  - name: Pakistan
+    offenseCapacity: 35
+    color: 7974642
+    warriorSpeed: 0.21494562773410375
+    weakFriends: false
+    castles:
+      - name: East Bryonchester
+        characteristics:
+          viewDistance: 2.747556659271229
+          attackDistance: 1.1295995937784622
+          healthPoints: 9943
+          resources: 116640
+          spawnProbability: 0.035377179407377994
+        location:
+          lat: 78.67160779875528
+          lng: 37.23814636750383
+      - name: South Henri
+        characteristics:
+          viewDistance: 4.351841527172499
+          attackDistance: 1.3511158755881016
+          healthPoints: 8239
+          resources: 86400
+          spawnProbability: 0.021330591657940202
+        location:
+          lat: 61.94505210630895
+          lng: 63.632622340739395
+  - name: Zambia
+    offenseCapacity: 30
+    color: 13693561
+    warriorSpeed: 0.2306244529800625
+    weakFriends: true
+    castles:
+      - name: Danielview
+        characteristics:
+          viewDistance: 4.403869298993244
+          attackDistance: 1.284106332502577
+          healthPoints: 5114
+          resources: 112320
+          spawnProbability: 0.01954938798509941
+        location:
+          lat: 34.06908081718807
+          lng: 64.26600714421816
+      - name: Othaland
+        characteristics:
+          viewDistance: 2.844023633451277
+          attackDistance: 1.0711013558235645
+          healthPoints: 5463
+          resources: 108000
+          spawnProbability: 0.012095440927427028
+        location:
+          lat: 24.21177319487489
+          lng: 42.73724982341923
+  - name: Saint Barthelemy
+    offenseCapacity: 34
+    color: 15759858
+    warriorSpeed: 0.21030007594925326
+    weakFriends: true
+    castles:
+      - name: West Godfrey
+        characteristics:
+          viewDistance: 4.326292768192189
+          attackDistance: 1.1036346610137218
+          healthPoints: 5009
+          resources: 108000
+          spawnProbability: 0.04942453378547321
+        location:
+          lat: 66.81043299128856
+          lng: 77.97031558781511
+  - name: Heard Island and McDonald Islands
+    offenseCapacity: 90
+    color: 7992014
+    warriorSpeed: 0.23936222323265915
+    weakFriends: true
+    castles:
+      - name: Davidhaven
+        characteristics:
+          viewDistance: 2.350567529776975
+          attackDistance: 1.370920039937535
+          healthPoints: 5152
+          resources: 133920
+          spawnProbability: 0.01293431728482846
+        location:
+          lat: 46.679165980336435
+          lng: 21.8344969650051
+      - name: Aureliafurt
+        characteristics:
+          viewDistance: 3.567747842937866
+          attackDistance: 1.3723999573065093
+          healthPoints: 5763
+          resources: 86400
+          spawnProbability: 0.0439871220708545
+        location:
+          lat: 75.82311064872601
+          lng: 51.0080628549872
+maxPriority: 9007199254740991
+minPriorityDistance: 0.0001
+superWarriorProbability: 0.0001
+healthOffensiveRollCoefficient: 0.7
+castlePowerCoefficient: 100
+hpPowerCoefficient: 100
+warriorPowerCoefficient: 100
+friendProbability: 0.2
+rivalProbability: 0.6
+updateNegotationTicks: 100
+friendshipTicks: 100
+rivalPriorityCoefficient: 2.5
+friendPriorityCoefficient: 0.4
+resourcesPerMinute: 1

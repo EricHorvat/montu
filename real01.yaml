@@ -1,0 +1,149 @@
+environment:
+  size: 798
+  time: 5184000
+  seed: 2963
+  strategy: DOMINATION_BY_OCCUPATION
+viewport:
+  width: 800
+  height: 800
+kingdoms:
+  - name: Montenegro
+    offenseCapacity: 62
+    color: 7962610
+    warriorSpeed: 0.25770644019328637
+    weakFriends: false
+    castles:
+      - name: Podgorica
+        characteristics:
+          viewDistance: 4.019721058779183
+          attackDistance: 1.2850992042338176
+          healthPoints: 7146
+          resources: 133920
+          spawnProbability: 0.013930562633497512
+        location:
+          lat: 500.07431649430004
+          lng: 494.1272403592607
+  - name: Bosnia and Herzegovina
+    offenseCapacity: 33
+    color: 10809977
+    warriorSpeed: 0.2429028095725219
+    weakFriends: true
+    castles:
+      - name: Sarajevo
+        characteristics:
+          viewDistance: 4.191220202620336
+          attackDistance: 1.174976008639634
+          healthPoints: 8711
+          resources: 112320
+          spawnProbability: 0.010077766386850675
+        location:
+          lat: 434.7501077042995
+          lng: 334.57492091926
+      - name: Banja Luka
+        characteristics:
+          viewDistance: 4.634682675743818
+          attackDistance: 1.460519953418319
+          healthPoints: 9340
+          resources: 108000
+          spawnProbability: 0.03499856984386718
+        location:
+          lat: 341.3394253342999
+          lng: 229.19878673925996
+  - name: Slovenia
+    offenseCapacity: 9
+    color: 15890886
+    warriorSpeed: 0.21789901699905723
+    weakFriends: true
+    castles:
+      - name: Ljubljana
+        characteristics:
+          viewDistance: 4.273831657783104
+          attackDistance: 1.4174246824747783
+          healthPoints: 5362
+          resources: 125280
+          spawnProbability: 0.04785929079237776
+        location:
+          lat: 140.2783014743002
+          lng: 73.57047288926039
+  - name: Macedonia
+    offenseCapacity: 68
+    color: 7990002
+    warriorSpeed: 0.22800624795081567
+    weakFriends: true
+    castles:
+      - name: Skopje
+        characteristics:
+          viewDistance: 3.1221456142824557
+          attackDistance: 1.100130999818237
+          healthPoints: 7283
+          resources: 73440
+          spawnProbability: 0.003468565868979936
+        location:
+          lat: 558.9390873491536
+          lng: 544.4453006792609
+  - name: Croatia
+    offenseCapacity: 98
+    color: 15915129
+    warriorSpeed: 0.21628760497056776
+    weakFriends: true
+    castles:
+      - name: Zagreb
+        characteristics:
+          viewDistance: 4.343021003251944
+          attackDistance: 1.1552357765377268
+          healthPoints: 5873
+          resources: 108000
+          spawnProbability: 0.011410466375795398
+        location:
+          lat: 252.8138769843001
+          lng: 108.13070968926046
+      - name: Split
+        characteristics:
+          viewDistance: 4.535356583252965
+          attackDistance: 1.1020062295544175
+          healthPoints: 5115
+          resources: 90720
+          spawnProbability: 0.03696714201181663
+        location:
+          lat: 274.0552288843002
+          lng: 366.6075765192602
+  - name: Serbia
+    offenseCapacity: 38
+    color: 11827698
+    warriorSpeed: 0.2352108310522037
+    weakFriends: true
+    castles:
+      - name: Belgrade
+        characteristics:
+          viewDistance: 2.9308129078749925
+          attackDistance: 1.2333795920005595
+          healthPoints: 6440
+          resources: 95040
+          spawnProbability: 0.023686276382867737
+        location:
+          lat: 600.1013283743001
+          lng: 231.37084393926057
+      - name: Novi
+        characteristics:
+          viewDistance: 4.121783863126263
+          attackDistance: 1.1921116084010879
+          healthPoints: 7928
+          resources: 73440
+          spawnProbability: 0.031496153956668424
+        location:
+          lat: 551.9255202442994
+          lng: 182.04049276925997
+maxPriority: 9007199254740991
+minPriorityDistance: 0.0001
+superWarriorProbability: 0.0001
+healthOffensiveRollCoefficient: 0.7
+castlePowerCoefficient: 100
+hpPowerCoefficient: 100
+warriorPowerCoefficient: 100
+friendProbability: 0.2
+rivalProbability: 0.6
+updateNegotationTicks: 100
+friendshipTicks: 100
+rivalPriorityCoefficient: 2.5
+friendPriorityCoefficient: 0.4
+resourcesPerMinute: 1

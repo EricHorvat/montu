@@ -76,6 +76,7 @@ public class Streamer {
 			Map<String, Object> castle = new HashMap<String, Object>();
 			castle.put("id", c.uid().toString());
 			castle.put("kingdom", c.kingdom().uid().toString());
+			castle.put("country", c.kingdom().name());
 			castle.put("name", c.name());
 			castle.put("view_distance", c.characteristics().viewDistance());
 			castle.put("health_points", c.characteristics().healthPoints());
