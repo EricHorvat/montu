@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import ar.edu.itba.montu.App;
+import ar.edu.itba.montu.configuration.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +19,8 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import static ar.edu.itba.montu.visual.ProcessingApplet.paused;
+
 public class WarEnvironment {
 
 	private static final Logger logger = LogManager.getLogger(WarEnvironment.class);
@@ -24,6 +28,8 @@ public class WarEnvironment {
 	private static WarEnvironment environment;
 
 	private final List<Kingdom> kingdoms;
+	
+	private boolean ended = false;
 	
 	private long time;
 	private WarStrategy strategy;
@@ -63,7 +69,16 @@ public class WarEnvironment {
 		// from time =1
 		kingdoms.forEach(Kingdom::negotiate);
 		Streamer.currentStreamer().streamNow(0);
-		LongStream.rangeClosed(1, time).forEach(this::tick);
+		
+		long timeElapsed = 0L;
+		while(!ended) {
+			if (!paused) {
+				tick(timeElapsed);
+				timeElapsed++;
+				/*TODO CHECK ENDED CONDITION*/
+			}
+			updateVisual(timeElapsed);
+		}
 	}
 
 	private void tick(final long timeElapsed) {
@@ -79,6 +94,17 @@ public class WarEnvironment {
 		updateVisual(timeElapsed);
 		
 		Streamer.currentStreamer().streamOnTick(timeElapsed);
+		
+		checkEndCondition();
+	}
+	
+	private void checkEndCondition(){
+		WarStrategy warStrategy = App.getConfiguration().getEnvironment().getStrategy();
+		if( warStrategy.equals(WarStrategy.DOMINATION_BY_DESTRUCTION)){
+			ended = false;
+		}else{
+			ended = false;
+		}
 	}
 	
 	private void updateVisual(final long timeElapsed) {

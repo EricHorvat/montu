@@ -13,6 +13,7 @@ public class ProcessingApplet extends PApplet {
 	private static ProcessingApplet instance;
 	public static boolean drawDistance = false;
 	public static boolean drawLabels = false;
+	public static boolean paused = false;
 	int zoomLevel = 0;
   
   @Override
@@ -112,6 +113,10 @@ public class ProcessingApplet extends PApplet {
 			case 'l':
 			case 'L':
 				drawLabels = !drawLabels;
+				break;
+			case 'p':
+			case 'P':
+				paused = !paused;
 				break;
 		}
 	}
