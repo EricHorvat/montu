@@ -4,8 +4,8 @@ environment:
   seed: 9159
   strategy: DOMINATION_BY_OCCUPATION
 viewport:
-  width: 1024
-  height: 1024
+  width: 800
+  height: 800
 kingdoms:
   - name: Equatorial Guinea
     offenseCapacity: 49

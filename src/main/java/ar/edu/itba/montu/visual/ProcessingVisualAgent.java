@@ -98,7 +98,9 @@ import static ar.edu.itba.montu.visual.ProcessingApplet.drawLabels;
   }
 
   /*package*/ void draw(ProcessingApplet applet) {
-    if (locatableAgent == null) return;
+    if (locatableAgent == null || locatableAgent.location() == null) {
+      return;
+    }
     x = zoomLinearMapXfromOrigin(locatableAgent.location().X);
     y = zoomLinearMapYfromOrigin(locatableAgent.location().Y);
     		

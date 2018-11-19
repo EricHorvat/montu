@@ -230,6 +230,7 @@ public class Warrior extends MovingAgent {
 
 	@Override
 	public int getHealthPointPercentage() {
+		if (warriorCharacteristics == null) return 0;
 		return (int)(100 * warriorCharacteristics.healthPercentage());
 	}
 
