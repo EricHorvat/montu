@@ -79,8 +79,8 @@ kingdoms:
           resources: 73440
           spawnProbability: 0.003468565868979936
         location:
-          lat: 558.9390873491536
-          lng: 680.5566258490761
+          lat: 678.9390873491536
+          lng: 678.5566258490761
   - name: Croatia
     offenseCapacity: 98
     color: 15915129
