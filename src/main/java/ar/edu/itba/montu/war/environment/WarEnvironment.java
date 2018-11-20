@@ -92,7 +92,6 @@ public class WarEnvironment {
 
 		shuffledKingdoms.forEach(k -> k.tick(timeElapsed));
 		shuffledAgents.forEach(a -> a.tick(timeElapsed));
-		updateVisual(timeElapsed);
 		
 		Streamer.currentStreamer().streamOnTick(timeElapsed);
 		
