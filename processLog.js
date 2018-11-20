@@ -23,7 +23,8 @@ writeStream.write([
 	'Resources',
 	'Max Resources',
 	'Attackers',
-	'Defenders'
+	'Defenders',
+	'Power'
 ].join(';') + '\n');
 
 lineReader.on('line', line => {
@@ -40,11 +41,12 @@ lineReader.on('line', line => {
 	}
 
 	json.castles.forEach(castle => {
+	    const k = json.kingdoms.find(k => k.id === castle.kingdom);
 		writeStream.write([
 			json.time,
 			castle.kingdom,
 			castle.country,
-			json.kingdoms.find(k => k.id === castle.kingdom).color,
+			k.color,
 			castle.id,
 			castle.name,
 			castle.health_points,
@@ -52,7 +54,8 @@ lineReader.on('line', line => {
 			castle.resources,
 			castle.max_resources,
 			castle.attackers,
-			castle.defenders
+			castle.defenders,
+			k.power,
 		].join(';') + '\n')
 	});
 

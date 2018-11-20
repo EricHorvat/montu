@@ -153,7 +153,7 @@ enquirer.prompt([
 			name: faker.address.country(),
 			offenseCapacity,
 			color: randomColor().rgbNumber(),
-			warriorSpeed: d3.randomNormal(0.23, 0.023)(), // double
+			warriorSpeed: d3.randomNormal(0.12, 0.012)(), // double
 			weakFriends: d3.randomUniform()() > 0.5,
 			castles: range(Math.round(d3.randomUniform(config.min_castles, config.max_castles)()), 1).map(j => ({
 				name: faker.address.city(),
