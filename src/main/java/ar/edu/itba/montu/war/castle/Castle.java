@@ -256,7 +256,9 @@ public class Castle extends LocatableAgent implements Spawner {
 				}
 			} else {
 				this.characteristics().increaseDeaths();
+				this.kingdom.castles().remove(this);
 				this.kingdom = agent.kingdom();
+				this.kingdom.castles().add(this);
 				hp = (int) (this.characteristics().maxHealthPoints() / (1 + this.characteristics().deaths()));
 			}
 		}
