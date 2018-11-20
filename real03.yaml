@@ -71,7 +71,7 @@ kingdoms:
           lat: 140.2783014743002
           lng: 91.96309111157548
   - name: Macedonia
-    offenseCapacity: 68
+    offenseCapacity: 10
     color: 7990002
     warriorSpeed: 0.22800624795081567
     weakFriends: true

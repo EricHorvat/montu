@@ -1,5 +1,6 @@
 package ar.edu.itba.montu.war.castle;
 
+import ar.edu.itba.montu.war.kingdom.Kingdom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	
 	private static final Logger logger = LogManager.getLogger(CastleCharacteristics.class);
 	
-	private final Characteristic<Integer> offenseCapacity;
+	private Characteristic<Integer> offenseCapacity;
 	private Characteristic<Integer> resources;
 	private Characteristic<Integer> deaths;
 	private Characteristic<Double> spawnProbability;
@@ -33,9 +34,7 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 				attackCharacteristics.attackDistance(),
 				attackCharacteristics.attackHarm()
 		);
-		this.offenseCapacity = Characteristic.withFixedValue(
-				(int)Math.min(Math.max(RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 10), 0), 100)
-		);
+		setOffenseCapacity(kingdomCharacteristics);
 		this.resources = Characteristic.withChangingValue(0, resources);
 		this.spawnProbability = Characteristic.withFixedValue(spawnProbability);
 		this.deaths = Characteristic.withChangingValue(0, deaths, 0);
@@ -71,9 +70,14 @@ public class CastleCharacteristics extends AttackingAgentCharacteristics {
 	public CastleCharacteristics boostResourcesByWithCost(int resources, int cost) {
 		return this.useResources(cost).boostResourcesBy(resources);
 	}
-
+	
 	public double offenseCapacity() {
 		return offenseCapacity.value();
+	}
+	
+	public void setOffenseCapacity(KingdomCharacteristics kingdomCharacteristics) {
+		this.offenseCapacity = Characteristic.withFixedValue(
+			(int)Math.min(Math.max(RandomUtil.getNormalDistribution(kingdomCharacteristics.offenseCapacity(), 10), 0), 100));
 	}
 	
 	public double defenseCapacity() {
