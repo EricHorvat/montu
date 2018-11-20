@@ -69,6 +69,7 @@ public class Streamer {
 			kingdom.put("friends", k.friends().stream().map(Kingdom::uid).collect(Collectors.toList()));
 			kingdom.put("rivals", k.rivals().stream().map(Kingdom::uid).collect(Collectors.toList()));
 			kingdom.put("enemies", k.enemies().stream().map(Kingdom::uid).collect(Collectors.toList()));
+			kingdom.put("power", k.power());
 			return kingdom;
 		}).collect(Collectors.toList()));
     
