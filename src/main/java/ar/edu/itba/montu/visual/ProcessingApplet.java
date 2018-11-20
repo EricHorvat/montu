@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.montu.App;
+import ar.edu.itba.montu.war.environment.WarEnvironment;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import static ar.edu.itba.montu.visual.ProcessingVisualAgent.toHumanReadable;
 
 public class ProcessingApplet extends PApplet {
 	
@@ -52,7 +55,10 @@ public class ProcessingApplet extends PApplet {
     colorMode(RGB);
 	
     background.draw(this);
-    
+	  fill(color(255));
+	  text(toHumanReadable(WarEnvironment.getInstance().time()), 10, 10);
+	  noFill();
+
 //    colorMode(HSB, 360, 100, 100, 100);
     List<ProcessingVisualAgent> a = ProcessingVisualAgent.getAgents();
     for (int i = a.size() - 1; i >= 0; i--) {

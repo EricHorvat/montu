@@ -42,13 +42,12 @@ import static ar.edu.itba.montu.visual.ProcessingApplet.drawLabels;
       applet.stroke(0x000000);
   
     }
+    
     if (drawLabels) {
       applet.fill(applet.color(255));
       if (locatableAgent instanceof Castle) {
         applet.text(locatableAgent.toString(), x - 20, y + 20);
       }
-    
-      applet.text(toHumanReadable(WarEnvironment.getInstance().time()), 10, 10);
     }
   
   }
