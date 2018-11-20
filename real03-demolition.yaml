@@ -2,7 +2,7 @@ environment:
   size: 798
   time: 5184000
   seed: 2963
-  strategy: DOMINATION_BY_OCCUPATION
+  strategy: DOMINATION_BY_DESTRUCTION
 viewport:
   width: 800
   height: 800
@@ -71,7 +71,7 @@ kingdoms:
           lat: 140.2783014743002
           lng: 91.96309111157548
   - name: Macedonia
-    offenseCapacity: 10
+    offenseCapacity: 68
     color: 7990002
     warriorSpeed: 0.22800624795081567
     weakFriends: true

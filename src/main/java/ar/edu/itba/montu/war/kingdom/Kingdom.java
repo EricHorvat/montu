@@ -24,6 +24,8 @@ import ar.edu.itba.montu.war.kingdom.objective.KingdomDefendObjective;
 import ar.edu.itba.montu.war.utils.Coordinate;
 import ar.edu.itba.montu.war.utils.RandomUtil;
 
+import static java.lang.Double.NaN;
+
 public class Kingdom extends Agent implements NonLocatableAgent {
 	
 	private static final Logger logger = LogManager.getLogger(Kingdom.class);
@@ -202,7 +204,7 @@ public class Kingdom extends Agent implements NonLocatableAgent {
 	}
 	
 	public List<LocatableAgent> agents() {
-		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), agents.stream()).collect(Collectors.toList());
+		return Stream.concat(castles.stream().map(v -> (LocatableAgent)v), agents.stream().filter(agent -> !Double.isNaN(agent.location().X) )).collect(Collectors.toList());
 	}
 
 	public void castleWillDie(final Castle castle) {
