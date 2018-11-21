@@ -71,12 +71,13 @@ public class App {
 			throw new Exception("Run WarEnviromentGenerator.generate before getting an instance of WarEnvironment");
 		}
 		
-		logger.info("Initializing visual environment");
-		ProcessingApplet.init(config.getViewport().getWidth(), config.getViewport().getHeight(), config.getEnvironment().getSize());
-		logger.info("Starting visual environment");
-		String[] processingArgs = {"Montu"};
-		ProcessingApplet.runSketch(processingArgs, ProcessingApplet.instance());
-		
+		if (WarEnvironment.DRAW) {
+			logger.info("Initializing visual environment");
+			ProcessingApplet.init(config.getViewport().getWidth(), config.getViewport().getHeight(), config.getEnvironment().getSize());
+			logger.info("Starting visual environment");
+			String[] processingArgs = {"Montu"};
+			ProcessingApplet.runSketch(processingArgs, ProcessingApplet.instance());
+		}
 		logger.info("Starting war environment for {} minutes", config.getEnvironment().getTime());
 		warEnvironment.start(config.getEnvironment().getTime());
 	}

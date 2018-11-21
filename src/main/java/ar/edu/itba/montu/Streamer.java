@@ -88,7 +88,7 @@ public class Streamer {
 			castle.put("resources", c.characteristics().resources());
 			castle.put("max_resources", c.characteristics().maxResources());
 			castle.put("x", c.location().X);
-			castle.put("y", ProcessingApplet.instance().getL() - c.location().Y);
+			castle.put("y", App.getConfiguration().getEnvironment().getSize() - c.location().Y);
 			castle.put("warriors", c.warriors().size());
 			castle.put("available_warriors", c.availableWarriors().size());
 			castle.put("attackers", c.attackers().size());
