@@ -146,6 +146,7 @@ enquirer.prompt([
 
 	config.viewport.backgroundImage = null;
 	config.viewport.enabled = true;
+	config.viewport.updateEvery = 1;
 
 	config.stream = {
 	    host: '127.0.0.1',

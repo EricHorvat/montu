@@ -198,6 +198,7 @@ public final class Configuration {
 		private int height;
 		private String backgroundImage;
 		private boolean enabled;
+		private long updateEvery;
 		public int getWidth() {
 			return width;
 		}
@@ -221,6 +222,12 @@ public final class Configuration {
 		}
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
+		}
+		public long getUpdateEvery() {
+			return updateEvery;
+		}
+		public void setUpdateEvery(long updateEvery) {
+			this.updateEvery = updateEvery;
 		}
 		@Override
 		public String toString() {
