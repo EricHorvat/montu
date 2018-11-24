@@ -197,6 +197,7 @@ public final class Configuration {
 		private int width;
 		private int height;
 		private String backgroundImage;
+		private boolean enabled;
 		public int getWidth() {
 			return width;
 		}
@@ -214,6 +215,12 @@ public final class Configuration {
 		}
 		public void setBackgroundImage(String backgroundImage) {
 			this.backgroundImage = backgroundImage;
+		}
+		public boolean isEnabled() {
+			return enabled;
+		}
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
 		}
 		@Override
 		public String toString() {

@@ -64,8 +64,6 @@ public class WarEnvironment {
 		return indexList.stream().map(agents::get).collect(Collectors.toList());
 	}
 	
-	public static boolean DRAW = true;
-	
 	public void start(final long time) {
 		// before we start kingdoms should build initial strategy
 		// we could think about it as time=0
@@ -80,7 +78,7 @@ public class WarEnvironment {
 				tick(timeElapsed);
 				timeElapsed++;
 			}
-			if (DRAW) {
+			if (App.getConfiguration().getViewport().isEnabled()) {
 				updateVisual(timeElapsed);
 			}
 		}

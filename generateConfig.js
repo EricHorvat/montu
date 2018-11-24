@@ -145,6 +145,7 @@ enquirer.prompt([
 	config.environment.strategy = 'DOMINATION_BY_OCCUPATION';
 
 	config.viewport.backgroundImage = null;
+	config.viewport.enabled = true;
 
 	
 	config.kingdoms = range(config.kingdom_count, 1).map(i => {

@@ -71,7 +71,7 @@ public class App {
 			throw new Exception("Run WarEnviromentGenerator.generate before getting an instance of WarEnvironment");
 		}
 		
-		if (WarEnvironment.DRAW) {
+		if (config.getViewport().isEnabled()) {
 			logger.info("Initializing visual environment");
 			ProcessingApplet.init(config.getViewport().getWidth(), config.getViewport().getHeight(), config.getEnvironment().getSize());
 			logger.info("Starting visual environment");
