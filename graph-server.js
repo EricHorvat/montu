@@ -7,8 +7,9 @@ const server = http.createServer(function(request, response) {
 	// process HTTP request. Since we're writing just WebSockets
 	// server we don't have to implement anything.
 });
-server.listen(1337, () => {
-	console.log('listening on port 1337');
+const PORT = process.env.PORT || 1337;
+server.listen(PORT, () => {
+	console.log(`listening on port ${PORT}`);
 });
 
 // create the server
@@ -30,7 +31,7 @@ try {
 }
 
 
-const createFileStream = () => fs.createWriteStream(`logs/montu-log-${moment().format('DDMMHHmm')}.log`, {
+const createFileStream = () => fs.createWriteStream(`logs/montu-log-${PORT}-${moment().format('DDHHmmss')}.log`, {
 	flags: 'a',
 	encoding: null,
 	mode: 0666
