@@ -228,6 +228,24 @@ public final class Configuration {
 		}
 	}
 	
+	public final static class StreamConfiguration {
+		private String host;
+		private int port;
+		
+		public String getHost() {
+			return host;
+		}
+		public void setHost(String host) {
+			this.host = host;
+		}
+		public int getPort() {
+			return port;
+		}
+		public void setPort(int port) {
+			this.port = port;
+		}
+	}
+	
 	private double maxPriority;
 	private double minPriorityDistance;
 	private double superWarriorProbability;
@@ -244,6 +262,7 @@ public final class Configuration {
 	private double friendPriorityCoefficient;
 	private int resourcesPerMinute;
 	
+	private StreamConfiguration stream;
 	private EnvironmentConfiguration environment;
 	private ViewportConfiguration viewport;
 	private List<KingdomConfiguration> kingdoms;
@@ -253,7 +272,12 @@ public final class Configuration {
 	public void setEnvironment(EnvironmentConfiguration environment) {
 		this.environment = environment;
 	}
-	
+	public StreamConfiguration getStream() {
+		return stream;
+	}
+	public void setStream(StreamConfiguration stream) {
+		this.stream = stream;
+	}
 	public List<KingdomConfiguration> getKingdoms() {
 		return kingdoms;
 	}

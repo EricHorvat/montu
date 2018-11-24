@@ -147,6 +147,11 @@ enquirer.prompt([
 	config.viewport.backgroundImage = null;
 	config.viewport.enabled = true;
 
+	config.stream = {
+	    host: '127.0.0.1',
+	    port: 1337
+	};
+
 	
 	config.kingdoms = range(config.kingdom_count, 1).map(i => {
 		const offenseCapacity = Math.round(d3.randomUniform(1, 100)());

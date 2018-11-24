@@ -51,7 +51,7 @@ public class App {
     }
     
     // initialize streamer
-    Streamer.currentStreamer();
+    Streamer.currentStreamer(config.getStream().getHost(), config.getStream().getPort());
 		
 //		final long seed = 1;//78;//1;6;
 //		logger.info("Initializing RandomUtil with seed={}", seed);

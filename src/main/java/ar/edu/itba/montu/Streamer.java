@@ -26,9 +26,9 @@ public class Streamer {
 	
 	private WebSocket ws;
 	
-	private void init() {
+	private void init(String host, int port) {
 		try {
-			ws = new WebSocketFactory().createSocket("ws://localhost:1337/");
+			ws = new WebSocketFactory().createSocket(String.format("ws://%s:%d/", host, port));
 		} catch (IOException e) {
 			ws = null;
 			return;
@@ -43,10 +43,10 @@ public class Streamer {
     ws.sendText("init");
 	}
 	
-	public static Streamer currentStreamer() {
+	public static Streamer currentStreamer(String host, int port) {
 		if (instance == null) {
 			instance = new Streamer();
-			instance.init();
+			instance.init(host, port);
 		}
 		return instance;
 	}
