@@ -27,20 +27,32 @@ public class Streamer {
 	private WebSocket ws;
 	
 	private void init(String host, int port) {
+		String url = String.format("ws://%s:%d/", host, port);
 		try {
-			ws = new WebSocketFactory().createSocket(String.format("ws://%s:%d/", host, port));
+			logger.info("creating socket to url {}", url);
+			
+			ws = new WebSocketFactory().createSocket(url);
 		} catch (IOException e) {
 			ws = null;
 			return;
 		}
     
     try {
+	    logger.info("connecting to socket url {}", url);
     	ws.connect();
     } catch (WebSocketException e) {
     	ws = null;
     	return;
     }
     ws.sendText("init");
+	}
+	
+	public static Streamer currentStreamer() {
+		if (instance == null) {
+			instance = new Streamer();
+			instance.init("127.0.0.1", 1337);
+		}
+		return instance;
 	}
 	
 	public static Streamer currentStreamer(String host, int port) {

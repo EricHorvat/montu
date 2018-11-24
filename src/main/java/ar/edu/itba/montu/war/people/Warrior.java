@@ -268,11 +268,11 @@ public class Warrior extends MovingAgent {
 	}
 	
 	public boolean isAttacker() {
-		return role.equals(WarriorRole.ATTACKER);
+		return WarriorRole.ATTACKER.equals(role);
 	}
 	
 	public boolean isDefender() {
-		return role.equals(WarriorRole.DEFENDER);
+		return WarriorRole.DEFENDER.equals(role);
 	}
 	
 	public WarriorCharacteristics characteristics() {

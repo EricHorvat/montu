@@ -3,7 +3,11 @@ environment:
   time: 5184000
   seed: 2963
   strategy: DOMINATION_BY_OCCUPATION
+stream:
+  host: 127.0.0.1
+  port: 1337
 viewport:
+  enabled: true
   width: 800
   height: 800
   backgroundImage: balcan.png
