@@ -6,12 +6,13 @@ environment:
 stream:
   host: 127.0.0.1
   port: 1337
+  every: 60
 viewport:
   enabled: true
   width: 800
   height: 800
   backgroundImage: balcan.png
-  updateEvery: 1
+  updateEvery: 20
 kingdoms:
   - name: Montenegro
     offenseCapacity: 62

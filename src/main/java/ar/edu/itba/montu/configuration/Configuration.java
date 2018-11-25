@@ -238,6 +238,7 @@ public final class Configuration {
 	public final static class StreamConfiguration {
 		private String host;
 		private int port;
+		private int every;
 		
 		public String getHost() {
 			return host;
@@ -250,6 +251,12 @@ public final class Configuration {
 		}
 		public void setPort(int port) {
 			this.port = port;
+		}
+		public int getEvery() {
+			return every;
+		}
+		public void setEvery(int every) {
+			this.every = every;
 		}
 	}
 	

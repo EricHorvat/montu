@@ -25,7 +25,7 @@ class App extends Component {
 
 	connect = () => {
 
-		console.log('connectin')
+		console.log('connecting');
 		
 		this.setState({ loading: true });
 		
@@ -312,8 +312,10 @@ class App extends Component {
 		const kingdomFriendships = (
 			<table className="table table-sm">
 				<thead>
-					<th></th>
-					{Object.values(kingdoms).map(k => <th className="text-center" key={k.id}>{k.name}</th>)}
+					<tr>
+						<th></th>
+						{Object.values(kingdoms).map(k => <th className="text-center" key={k.id}>{k.name}</th>)}
+					</tr>
 				</thead>
 				<tbody>
 					{Object.values(kingdoms).map(k1 => (
