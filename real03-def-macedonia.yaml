@@ -6,6 +6,7 @@ environment:
 stream:
   host: 127.0.0.1
   port: 1339
+  every: 60
 viewport:
   enabled: true
   width: 800

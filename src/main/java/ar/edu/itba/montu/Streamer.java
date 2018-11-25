@@ -20,7 +20,6 @@ import ar.edu.itba.montu.war.kingdom.Kingdom;
 
 public class Streamer {
 
-	private static final long SEND_EVERY = 10; 
 	private static final Logger logger = LogManager.getLogger(Streamer.class);
 	private static Streamer instance;
 	
@@ -63,7 +62,7 @@ public class Streamer {
 		return instance;
 	}
 	
-	public void streamNow(final long timeEllapsed) {
+	public synchronized void streamNow(final long timeEllapsed) {
 		
 		if (ws == null) return;
 		
@@ -116,7 +115,7 @@ public class Streamer {
 	public void streamOnTick(final long timeEllapsed) {
 		if (ws == null) return;
 		
-		if (timeEllapsed % SEND_EVERY != 0) return;
+		if (timeEllapsed % App.getConfiguration().getStream().getEvery() != 0) return;
 		
 		streamNow(timeEllapsed);
 	}
