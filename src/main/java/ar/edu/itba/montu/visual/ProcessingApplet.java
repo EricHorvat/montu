@@ -50,7 +50,7 @@ public class ProcessingApplet extends PApplet {
   }
 
   @Override
-  public void draw() {
+  public synchronized void draw() {
     clear();
     colorMode(RGB);
 	

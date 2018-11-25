@@ -123,6 +123,9 @@ import static ar.edu.itba.montu.visual.ProcessingApplet.drawLabels;
     visualAgents.removeAll(visualAgents.stream().filter(va -> !va.locatableAgent.isAlive()).collect(Collectors.toList()));
     return visualAgents;
   }
-
-
+  
+  /*package*/ static void cleanAgents(){
+    /*If dead print animation or not print*/
+    visualAgents = visualAgents.stream().filter(va -> !va.locatableAgent.isAlive()).collect(Collectors.toList());
+  }
 }
