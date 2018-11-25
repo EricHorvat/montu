@@ -5,7 +5,7 @@ environment:
   strategy: DOMINATION_BY_OCCUPATION
 stream:
   host: 127.0.0.1
-  port: 1337
+  port: 1338
 viewport:
   enabled: true
   width: 800

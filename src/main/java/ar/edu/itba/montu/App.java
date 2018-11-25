@@ -37,6 +37,8 @@ public class App {
 	private static Configuration configuration;
 	
 	public static void main(String[] args) throws Exception {
+		
+		long time = System.currentTimeMillis();
 
 		if (args.length != 1) {
 			System.out.println("Usage: <file.yml>");
@@ -80,6 +82,7 @@ public class App {
 		}
 		logger.info("Starting war environment for {} minutes", config.getEnvironment().getTime());
 		warEnvironment.start(config.getEnvironment().getTime());
+		logger.info("Battle simulation lasted {} secs", (System.currentTimeMillis() - time)/1000.0);
 	}
 
 	public static Configuration getConfiguration() {

@@ -6,25 +6,25 @@ import org.apache.logging.log4j.Logger;
 
 public class AttackingAgentCharacteristics extends LocatableAgentCharacteristics {
   private Characteristic<Double> attackDistance;
-  private Characteristic<Integer> attackHarm;
+  private Characteristic<Double> attackHarm;
   
 	private static final Logger logger = LogManager.getLogger(AttackingAgentCharacteristics.class);
  
-	public AttackingAgentCharacteristics(LocatableAgentCharacteristics characteristic, double attackDistance, int attackHarm) {
+	public AttackingAgentCharacteristics(LocatableAgentCharacteristics characteristic, double attackDistance, double attackHarm) {
   	super(characteristic.viewDistance(), characteristic.healthPoints());
     this.attackDistance = Characteristic.withFixedValue(attackDistance);
-    this.attackHarm = Characteristic.withChangingValue(0, attackHarm);
+    this.attackHarm = Characteristic.withChangingValue(0.0, attackHarm);
   }
 
   public double attackDistance() {
     return attackDistance.value();
   }
 
-  public int attackHarm() {
+  public double attackHarm() {
     return attackHarm.value();
   }
 
-  public AttackingAgentCharacteristics attackHarm(int attackHarm) {
+  public AttackingAgentCharacteristics attackHarm(double attackHarm) {
   	this.attackHarm.updateValue(attackHarm);
   	return this;
   }

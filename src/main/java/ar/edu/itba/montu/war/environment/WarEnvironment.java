@@ -101,19 +101,20 @@ public class WarEnvironment {
 	}
 	
 	private void checkEndCondition(){
-		WarStrategy warStrategy = App.getConfiguration().getEnvironment().getStrategy();
-		if( warStrategy.equals(WarStrategy.DOMINATION_BY_DESTRUCTION)){
-			ended = locatableAgents().stream().filter(agent -> agent instanceof Castle).map(LocatableAgent::kingdom).distinct().count() <= 1;
-			ended &= locatableAgents().stream().filter(agent -> !(agent instanceof Castle)).map(agent -> ((Warrior)agent).status().equals(WarriorStatus.DEFENDING) || ((Warrior)agent).status().equals(WarriorStatus.UNASSIGNED)).reduce(Boolean::logicalAnd).orElse(true);
-		}else{
-			ended = locatableAgents().stream().map(LocatableAgent::kingdom).distinct().count() == 1;
-		}
+		ended = locatableAgents().stream().filter(agent -> agent instanceof Castle).map(LocatableAgent::kingdom).distinct().count() <= 1;
+		ended &= locatableAgents().stream().filter(agent -> !(agent instanceof Castle)).map(agent -> ((Warrior)agent).status().equals(WarriorStatus.DEFENDING) || ((Warrior)agent).status().equals(WarriorStatus.UNASSIGNED)).reduce(Boolean::logicalAnd).orElse(true);
 	}
 	
 	private void updateVisual(final long timeElapsed) {
 		ProcessingApplet.instance().noLoop();
 		ProcessingApplet.instance().redraw();
-		try{Thread.sleep(App.getConfiguration().getViewport().getUpdateEvery());}catch (InterruptedException e){}
+		long updateEvery = App.getConfiguration().getViewport().getUpdateEvery();
+		if (updateEvery > 0) {
+			try {
+				Thread.sleep(updateEvery);
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 
 	public List<Kingdom> kingdoms() {

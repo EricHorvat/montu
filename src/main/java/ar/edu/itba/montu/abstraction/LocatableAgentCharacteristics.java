@@ -2,14 +2,14 @@ package ar.edu.itba.montu.abstraction;
 
 public class LocatableAgentCharacteristics {
   private Characteristic<Double> viewDistance;
-  private Characteristic<Integer> healthPoints;
+  private Characteristic<Double> healthPoints;
 
-  /* package */ LocatableAgentCharacteristics(double viewDistance, int healthPoints) {
+  /* package */ LocatableAgentCharacteristics(double viewDistance, double healthPoints) {
     this.viewDistance = Characteristic.withFixedValue(viewDistance);
-    this.healthPoints = Characteristic.withChangingValue(0, healthPoints);
+    this.healthPoints = Characteristic.withChangingValue(0.0, healthPoints);
   }
   
-  public static LocatableAgentCharacteristics withViewDistanceAndHealthPoints(double viewDistance, int healthPoints) {
+  public static LocatableAgentCharacteristics withViewDistanceAndHealthPoints(double viewDistance, double healthPoints) {
   	return new LocatableAgentCharacteristics(viewDistance, healthPoints);
   }
 
@@ -17,11 +17,11 @@ public class LocatableAgentCharacteristics {
     return viewDistance.value();
   }
 
-  public int healthPoints() {
+  public double healthPoints() {
     return healthPoints.value();
   }
 
-  public LocatableAgentCharacteristics healthPoints(int value) {
+  public LocatableAgentCharacteristics healthPoints(double value) {
     healthPoints.updateValue(value);
     return this;
   }

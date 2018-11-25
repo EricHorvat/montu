@@ -228,8 +228,8 @@ public class Castle extends LocatableAgent implements Spawner {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, int harm) {
-		int hp = characteristics.healthPoints() - harm;
+	public void defend(LocatableAgent agent, double harm) {
+		double hp = characteristics.healthPoints() - harm;
 		kingdom().addEnemy(agent.kingdom());
 		if (hp < 0) {
 			if (WarEnvironment.getInstance().strategy().equals(WarStrategy.DOMINATION_BY_DESTRUCTION)) {

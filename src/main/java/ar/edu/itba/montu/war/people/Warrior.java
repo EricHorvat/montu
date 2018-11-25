@@ -219,8 +219,8 @@ public class Warrior extends MovingAgent {
 	}
 
 	@Override
-	public void defend(LocatableAgent agent, int harm) {
-		int hp = warriorCharacteristics.healthPoints() - harm;
+	public void defend(LocatableAgent agent, double harm) {
+		double hp = warriorCharacteristics.healthPoints() - harm;
 		if (hp < 0) {
 			logger.debug("Warrior of kingdom {} is dead", kingdom);
 			status = WarriorStatus.DEAD;
