@@ -5,14 +5,14 @@ environment:
   strategy: DOMINATION_BY_OCCUPATION
 stream:
   host: 127.0.0.1
-  port: 1337
+  port: 1338
   every: 60
 viewport:
-  enabled: true
+  enabled: false
   width: 800
   height: 800
   backgroundImage: balcan.png
-  updateEvery: 1
+  updateEvery: 5
 kingdoms:
   - name: Montenegro
     offenseCapacity: 62

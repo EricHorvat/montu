@@ -82,6 +82,7 @@ public class WarEnvironment {
 				updateVisual(timeElapsed);
 			}
 		}
+		logger.info("Time elapsed {}", timeElapsed);
 	}
 
 	private void tick(final long timeElapsed) {
