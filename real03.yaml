@@ -8,11 +8,11 @@ stream:
   port: 1338
   every: 60
 viewport:
-  enabled: false
+  enabled: true
   width: 800
   height: 800
   backgroundImage: balcan.png
-  updateEvery: 0
+  updateEvery: 5
 kingdoms:
   - name: Montenegro
     offenseCapacity: 62

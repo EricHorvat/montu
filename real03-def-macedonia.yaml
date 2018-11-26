@@ -12,10 +12,10 @@ viewport:
   width: 800
   height: 800
   backgroundImage: balcan.png
-  updateEvery: 0
+  updateEvery: 3
 kingdoms:
   - name: Montenegro
-    offenseCapacity: 62
+    offenseCapacity: 10
     color: 7962610
     warriorSpeed: 0.25770644019328637
     weakFriends: false
